@@ -100,7 +100,7 @@ function displayText(docid)
 	$.get('gettext?docID='+window.curDocID, function( data ) {				
 		
 		$('#viewerdiv').html(data);
-		$('#viewerdiv').width('60%');
+		$('#viewerdiv').width('100%');
 	}); 
 
 
@@ -189,11 +189,16 @@ function addIssueTag(containername,issuetag)
 function addIssuePanel(clienttaglist)
 {
 	 var container = $('#cblist');
-	 var arrayLength = clienttaglist.categoryList.length;
+	 var arrayLength = clienttaglist.taggingControls.length;
 	 for (var i = 0; i < arrayLength; i++) {
-	     var categoryList=clienttaglist.categoryList[i];
-	     var categoryName=categoryList.categoryName;
-	     container.append($('<div data-role=\"collapsible\"><h3>'+categoryName+'</h3><p>I\'m the collapsible content. By default I\'m closed, but you can click the header to open me.</p></div>'));
+	     var taggingControl=clienttaglist.taggingControls[i];
+	     var controlLength=taggingControl.categoryList.length;
+	     for(var j=0;j<controlLength;j++){
+	     	  var categoryName=taggingControl.categoryList[j].categoryName;
+	     	  container.append($('<div id='categoryName+' data-role=collapsible><h3>'+categoryName+'</h3><p>Im the collapsible content. By default Im closed, but you can click the header to open me.</p></div>'));
+	     }
+	     
+	      container.trigger("create");
 	 }
 }
 </script>
@@ -223,37 +228,37 @@ function addIssuePanel(clienttaglist)
 			addIssuePanel(data);
 		}); 
 	  
-	  addIssueTag('test1');
-	  addIssueTag('test2');
-	  addIssueTag('test3');
-	  addIssueTag('test4');
-	  addIssueTag('test5');
-	  addIssueTag('test6');
+	//  addIssueTag('test1');
+	 // addIssueTag('test2');
+	  //addIssueTag('test3');
+	 // addIssueTag('test4');
+	 // addIssueTag('test5');
+	 // addIssueTag('test6');
   
 	  $('#viewerdiv').html('HELLO WORLD');
 	
 		//first doc
-		$.get('nextdoc', function( data ) {				
-			updateEverythingBasedOnDocJSONResponse(data);
+	//	$.get('nextdoc', function( data ) {				
+	//		updateEverythingBasedOnDocJSONResponse(data);
 			
-			$("input:radio[name=viewerselect]").click(function() {
-			    var value = $(this).val();
+	//		$("input:radio[name=viewerselect]").click(function() {
+	//		    var value = $(this).val();
 			    
-				if(value=='text')
-				{
-					$('#viewerdiv').html('HELLO WORLD');
-					updateDisplay();
+	//			if(value=='text')
+	//			{
+	//				$('#viewerdiv').html('HELLO WORLD');
+	//				updateDisplay();
 				
-				}	
-				else
-				{
-					$('#viewerdiv').html('<canvas id="the-canvas" style="border:1px solid black;"/>');
-					updateDisplay();
-				}
+	//			}	
+	//			else
+	//			{
+	//				$('#viewerdiv').html('<canvas id="the-canvas" style="border:1px solid black;"/>');
+	//				updateDisplay();
+	//			}
 				
-			});
+	//		});
 			
-		}); 
+	//	}); 
 		
 
 	
@@ -283,13 +288,15 @@ function addIssuePanel(clienttaglist)
             		<h1>CloudReviewer</h1>
 	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
 				
-		<div data-role="navbar">
+	<!-- 	<div data-role="navbar">
 			<ul>
 				<li><a href="#review" data-prefetch="true" class="ui-btn-active ui-state-persist">Review</a></li>
 				<li><a href="#edittags" data-prefetch="true" >Tagging Setup</a></li>
 				<li><a href="edithl.html" data-prefetch="true" >Highlighting Setup</a></li>
 			</ul>
-		</div><!-- /navbar -->
+		</div><!-- /navbar -->  
+		-->
+		
 		
 		
         </div><!-- /header -->
@@ -301,8 +308,10 @@ function addIssuePanel(clienttaglist)
         	
         	<div id="welcomemsg"></div>
         	 <div id="getrequest"></div>
+        	 
+
       
-<div id="cblist" class="ui-grid-b">
+<div id="cblist">
 </div>
 
 
