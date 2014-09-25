@@ -1,0 +1,194 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://docreviewtool.appspot.com/_ah/api",
+  "name" : "taglistendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://docreviewtool.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "dleray.com",
+  "ownerName" : "dleray.com",
+  "packagePath" : "cloudreviewer.structures.taggingcontrol",
+  "methods" : {
+    "taglistendpoint.removeTagList" : {
+      "path" : "taglist/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.removeTagList",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "taglistendpoint.insertTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.insertTagList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taglistendpoint.getTagList" : {
+      "path" : "taglist/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.getTagList",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taglistendpoint.updateTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.updateTagList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taglistendpoint.listTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.listTagList",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "TagList" : {
+        "id" : "TagList",
+        "type" : "object",
+        "properties" : {
+          "controlID" : {
+            "type" : "string"
+          },
+          "issueTagIDs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CollectionResponse_TagList" : {
+        "id" : "CollectionResponse_TagList",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "TagList"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.removeTagList" : {
+      },
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.insertTagList" : {
+        "request" : {
+          "$ref" : "TagList"
+        },
+        "response" : {
+          "$ref" : "TagList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.getTagList" : {
+        "response" : {
+          "$ref" : "TagList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.updateTagList" : {
+        "request" : {
+          "$ref" : "TagList"
+        },
+        "response" : {
+          "$ref" : "TagList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.listTagList" : {
+        "response" : {
+          "$ref" : "CollectionResponse_TagList"
+        }
+      }
+    }
+  }
+}

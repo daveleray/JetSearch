@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+<servlet>
+		<servlet-name>CloudReviewerServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.CloudReviewerServlet</servlet-class>
+	</servlet>
+	
+
+		<servlet>
+		<servlet-name>LogOutURLServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.LogOutURLServlet</servlet-class>
+	</servlet>
+		<servlet>
+		<servlet-name>GoogleDriveAuthServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.GoogleDriveAuthServlet</servlet-class>
+	</servlet>
+		<servlet>
+		<servlet-name>TestServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.TestServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/test</url-pattern>
+		</servlet-mapping>
+	
+				<servlet-mapping>
+		<servlet-name>GoogleDriveAuthServlet</servlet-name>
+		<url-pattern>/googledriveauth</url-pattern>
+	</servlet-mapping>
+	
+			<servlet-mapping>
+		<servlet-name>CloudReviewerServlet</servlet-name>
+		<url-pattern>/cloudreviewer</url-pattern>
+	</servlet-mapping>
+	
+			<servlet>
+		<servlet-name>ApplyTagServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.TagServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>ApplyTagServlet</servlet-name>
+		<url-pattern>/applytag</url-pattern>
+		</servlet-mapping>
+		
+				<servlet>
+		<servlet-name>UserServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.UserServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>UserServlet</servlet-name>
+		<url-pattern>/usersetup</url-pattern>
+		</servlet-mapping>
+		
+		<servlet>
+		<servlet-name>PanelServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.PanelServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>PanelServlet</servlet-name>
+		<url-pattern>/panel</url-pattern>
+		</servlet-mapping>
+		
+		
+		<servlet>
+		<servlet-name>GetNextDocServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.GetNextDocServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>GetNextDocServlet</servlet-name>
+		<url-pattern>/nextdoc</url-pattern>
+		</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>GetPreviousDocServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.GetPreviousDocServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>GetPreviousDocServlet</servlet-name>
+		<url-pattern>/previousdoc</url-pattern>
+		</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>PDFServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.PDFServlet</servlet-class>
+		</servlet>
+		
+		<servlet-mapping>
+		<servlet-name>PDFServlet</servlet-name>
+		<url-pattern>/getpdf</url-pattern>
+		</servlet-mapping>
+		
+		<servlet>
+		<servlet-name>TextServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.TextServlet</servlet-class>
+		</servlet>
+		
+		<servlet-mapping>
+		<servlet-name>TextServlet</servlet-name>
+		<url-pattern>/gettext</url-pattern>
+		</servlet-mapping>
+		
+		
+		<servlet>
+		<servlet-name>Sync</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.GoogleDriveSync</servlet-class>
+		</servlet>
+		
+		<servlet-mapping>
+		<servlet-name>Sync</servlet-name>
+		<url-pattern>/sync</url-pattern>
+		</servlet-mapping>
+		
+	
+		<servlet-mapping>
+		<servlet-name>LogOutURLServlet</servlet-name>
+		<url-pattern>/getlo</url-pattern>
+	</servlet-mapping>
+	
+
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+
+    
+ <servlet>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+  <init-param>
+   <param-name>services</param-name>
+   <param-value>com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.structures.DocumentBatchEndpoint,com.dleray.cloudreviewer.structures.DocumentEndpoint,com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint,com.dleray.cloudreviewer.structures.IssueTagEndpoint,com.dleray.cloudreviewer.structures.TaggingControlEndpoint,com.dleray.cloudreviewer.structures.TaggingPanelEndpoint,com.dleray.cloudreviewer.structures.UserTagEndpoint,com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint</param-value>
+  </init-param>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <url-pattern>/_ah/spi/*</url-pattern>
+ </servlet-mapping>
+</web-app>

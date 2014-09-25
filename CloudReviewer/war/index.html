@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script src="build/pdf.js"></script>
+   <script src="jquery.fittext.js"></script>
+
+	<style type="text/css">
+	
+	viewerdiv{
+		width: 50%;
+	}
+	</style>
+   
+     <script>
+    // Specify the main script used to create a new PDF.JS web worker.
+    // In production, leave this undefined or change it to point to the
+    // combined `pdf.worker.js` file.
+    PDFJS.workerSrc = '../build/pdf.worker.js';
+ 	 </script>
+  
+
+
+  
+<script>
+	$(document).ready(function() {
+    $("#signoutButton").click(function(){  	
+    	$.get('getlo',function(data){
+
+    		window.location=data.URL;
+    	});        
+    }); 
+});
+</script>
+
+<script>
+$(document).ready(function() {
+	
+	$.get( "getlo", function( data ) {
+		var tmpObj = data.URL
+		if(!data.USER)
+			{
+				$("#signoutButton").html('SignIn');
+				window.location=data.URL;
+			}
+
+		});
+	
+});
+</script>
+
+<script>
+
+function displayPDF(docid)
+{
+	PDFJS.getDocument('getpdf?doctype=pdf&docID='+docid).then(function(pdf) {
+  	  
+		
+		   // Using promise to fetch the page
+ 	  pdf.getPage(1).then(function(page) {
+ 	    var scale = 1.5;
+ 	    var viewport = page.getViewport(scale);
+
+ 	    //
+ 	    // Prepare canvas using PDF page dimensions
+ 	    //
+ 	    var canvas = document.getElementById('the-canvas');
+ 	    var context = canvas.getContext('2d');
+ 	    canvas.height = viewport.height;
+ 	    canvas.width = viewport.width;
+
+ 	    //
+ 	    // Render PDF page into canvas context
+ 	    //
+ 	    var renderContext = {
+ 	      canvasContext: context,
+ 	      viewport: viewport
+ 	    };
+ 	    page.render(renderContext);
+ 	  });
+ 	});
+	
+}
+</script>
+
+<script>
+
+function displayText(docid)
+{
+	$.get('gettext?docID='+window.curDocID, function( data ) {				
+		
+		$('#viewerdiv').html(data);
+		$('#viewerdiv').width('60%');
+	}); 
+
+
+	//$("#viewerdiv").fitText();
+
+
+
+}
+</script>
+
+
+<script>
+function updateDisplay()
+{
+	  var viewerType = $('input:radio[name=viewerselect]:checked').val();
+	  
+	  if(viewerType=='pdf')
+		  {
+		 	 displayPDF(window.curDocID);
+		  }
+	  else
+		  {
+		  	  displayText(window.curDocID);
+		  }
+}
+</script>
+
+<script>
+	function updateEverythingBasedOnDocJSONResponse(data)
+	{
+		 		var response=data;
+				window.curDocID=response.docIdentifier;
+				  
+				var docInfoString="Document #"+(response.docInBatchIndex+1)+ " out of " + response.batchSize + "  ("+response.docIdentifier+")";
+				$('#docinfo').html(docInfoString);
+				
+				  //private Integer batchSize;
+				//private String batchID;
+				//private String docIdentifier;
+					//private Integer docInBatchIndex;
+	
+				  updateDisplay();
+	
+	}
+</script>	
+	
+	
+<script>
+function addIssueTag(containername,issuetag)
+{
+	 var container = $('#cblist');
+	   var inputs = container.find('input');
+	   var id = inputs.length+1;
+	   
+	   var column=id % 3;
+	   var classToUse="";
+	   switch(column)
+	   {
+	   case 0:
+		   	classToUse="ui-block-c"
+		   	break;
+	   case 1:
+		   	classToUse="ui-block-a"
+			   	break;
+	   case 2:
+		   classToUse="ui-block-b"
+			   	break;   
+	   }
+	   var butstring=issuetag;
+	   
+	  // $('<input />', { type: 'checkbox',class: classToUse, id: 'cb'+id, value: "test" }).appendTo(container);
+	  // $('<label />', { 'for': 'cb'+id, text: "test" }).appendTo(container);
+	   container.append($('<div id=divtest'+id+' class='+classToUse+'><input type=checkbox id=cb'+id+' value='+butstring+'><label for=cb'+id+'>'+butstring+'<label></div>'));
+	   
+	   $('#cb'+id).click(function(){  	
+		   var foo=id;
+		   var test='foo';
+	   });
+	   
+	   
+	   container.trigger("create");
+
+}
+</script>	
+<script>
+function addIssuePanel(clienttaglist)
+{
+	 var container = $('#cblist');
+	 var arrayLength = clienttaglist.categoryList.length;
+	 for (var i = 0; i < arrayLength; i++) {
+	     var categoryList=clienttaglist.categoryList[i];
+	     var categoryName=categoryList.categoryName;
+	     container.append($('<div data-role=\"collapsible\"><h3>'+categoryName+'</h3><p>I\'m the collapsible content. By default I\'m closed, but you can click the header to open me.</p></div>'));
+	 }
+}
+</script>
+<script>
+  // Bind the swipeHandler callback function to the swipe event on div.box
+  $(document).on('pageinit',function(event){
+  
+	  $(document).swiperight(function(){
+		  var test=window.curDocID;
+			//first, call next document
+			$.get('nextdoc?currentDocID='+window.curDocID, function( data ) {				
+				updateEverythingBasedOnDocJSONResponse(data);
+			}); 
+			});
+	    
+	  $(document).swipeleft(function(){
+		  var test=window.curDocID;
+			//first, call next document
+			$.get('previousdoc?currentDocID='+window.curDocID, function( data ) {				 
+				updateEverythingBasedOnDocJSONResponse(data);		
+			}); 
+			});
+	  	  
+	 
+		$.get('panel', function( data ) {				
+			
+			addIssuePanel(data);
+		}); 
+	  
+	  addIssueTag('test1');
+	  addIssueTag('test2');
+	  addIssueTag('test3');
+	  addIssueTag('test4');
+	  addIssueTag('test5');
+	  addIssueTag('test6');
+  
+	  $('#viewerdiv').html('HELLO WORLD');
+	
+		//first doc
+		$.get('nextdoc', function( data ) {				
+			updateEverythingBasedOnDocJSONResponse(data);
+			
+			$("input:radio[name=viewerselect]").click(function() {
+			    var value = $(this).val();
+			    
+				if(value=='text')
+				{
+					$('#viewerdiv').html('HELLO WORLD');
+					updateDisplay();
+				
+				}	
+				else
+				{
+					$('#viewerdiv').html('<canvas id="the-canvas" style="border:1px solid black;"/>');
+					updateDisplay();
+				}
+				
+			});
+			
+		}); 
+		
+
+	
+
+	
+	
+  });	
+</script>
+
+
+
+
+
+    <title>CloudReviewer</title>
+  </head>
+
+  <body>
+   
+  
+   
+
+   
+    
+        <div data-role="page" id="review">
+ 
+        <div data-role="header" data-id="foo1" data-position="fixed">
+            		<h1>CloudReviewer</h1>
+	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
+				
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#review" data-prefetch="true" class="ui-btn-active ui-state-persist">Review</a></li>
+				<li><a href="#edittags" data-prefetch="true" >Tagging Setup</a></li>
+				<li><a href="edithl.html" data-prefetch="true" >Highlighting Setup</a></li>
+			</ul>
+		</div><!-- /navbar -->
+		
+		
+        </div><!-- /header -->
+ 
+ 
+        <div data-role="content">
+         <input id = "signoutButton" data-inline="true" type="submit" value="Sign Out"/>
+         
+        	
+        	<div id="welcomemsg"></div>
+        	 <div id="getrequest"></div>
+      
+<div id="cblist" class="ui-grid-b">
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+
+<div id="docwrapper" style="border:3px solid black">
+
+    <fieldset data-role="controlgroup" data-type="horizontal">
+    <input type="radio" name="viewerselect" id="radio-choice-h-2a" value="text" checked="checked">
+    <label for="radio-choice-h-2a">Text</label>
+    <input type="radio" name="viewerselect" id="radio-choice-h-2b" value="pdf">
+    <label for="radio-choice-h-2b">PDF</label>
+	</fieldset>
+	<div id="docinfo">
+			</div>
+    		<div id="viewerdiv" style="border:1px solid black"> 
+    		</div>
+    		
+</div>
+    		
+		
+           
+            
+
+    
+        </div><!-- /content -->
+ 
+        <div data-role="footer">
+            <h4>&copy David LeRay 2014</h4>
+        </div><!-- /footer -->
+ 
+    </div><!-- /page -->
+    
+    
+    <div data-role="page" id="edittags">
+ 
+        <div data-role="header" data-id="foo1" data-position="fixed">
+            		<h1>CloudReviewer</h1>
+	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
+				
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#review" data-prefetch="true" >Review</a></li>
+				<li><a href="#edittags" data-prefetch="true" class="ui-btn-active ui-state-persist">Tagging Setup</a></li>
+				<li><a href="edithl.html" data-prefetch="true" >Highlighting Setup</a></li>
+			</ul>
+		</div><!-- /navbar -->
+		
+		
+        </div><!-- /header -->
+    
+        <div data-role="content">       
+        </div><!-- /content -->
+ 
+        <div data-role="footer">
+            <h4>&copy David LeRay 2014</h4>
+        </div><!-- /footer -->
+ 
+    </div><!-- /page -->
+    
+  </body>
+</html>
+
+
+

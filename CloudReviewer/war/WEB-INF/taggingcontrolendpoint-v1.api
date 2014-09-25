@@ -1,0 +1,188 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://docreviewtool.appspot.com/_ah/api",
+  "name" : "taggingcontrolendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://docreviewtool.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "dleray.com",
+  "ownerName" : "dleray.com",
+  "packagePath" : "cloudreviewer.structures",
+  "methods" : {
+    "taggingcontrolendpoint.removeTaggingControl" : {
+      "path" : "taggingcontrol/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.removeTaggingControl",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "taggingcontrolendpoint.updateTaggingControl" : {
+      "path" : "taggingcontrol",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.updateTaggingControl",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taggingcontrolendpoint.listTaggingControl" : {
+      "path" : "taggingcontrol",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.listTaggingControl",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taggingcontrolendpoint.getTaggingControl" : {
+      "path" : "taggingcontrol/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.getTaggingControl",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taggingcontrolendpoint.insertTaggingControl" : {
+      "path" : "taggingcontrol",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.insertTaggingControl",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "TaggingControl" : {
+        "id" : "TaggingControl",
+        "type" : "object",
+        "properties" : {
+          "controlID" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CollectionResponse_TaggingControl" : {
+        "id" : "CollectionResponse_TaggingControl",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "TaggingControl"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.removeTaggingControl" : {
+      },
+      "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.updateTaggingControl" : {
+        "request" : {
+          "$ref" : "TaggingControl"
+        },
+        "response" : {
+          "$ref" : "TaggingControl"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.listTaggingControl" : {
+        "response" : {
+          "$ref" : "CollectionResponse_TaggingControl"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.getTaggingControl" : {
+        "response" : {
+          "$ref" : "TaggingControl"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.TaggingControlEndpoint.insertTaggingControl" : {
+        "request" : {
+          "$ref" : "TaggingControl"
+        },
+        "response" : {
+          "$ref" : "TaggingControl"
+        }
+      }
+    }
+  }
+}

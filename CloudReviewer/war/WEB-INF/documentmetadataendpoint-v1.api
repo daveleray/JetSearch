@@ -1,0 +1,197 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://docreviewtool.appspot.com/_ah/api",
+  "name" : "documentmetadataendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://docreviewtool.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "dleray.com",
+  "ownerName" : "dleray.com",
+  "packagePath" : "cloudreviewer.structures",
+  "methods" : {
+    "documentmetadataendpoint.insertDocumentMetadata" : {
+      "path" : "documentmetadata",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.insertDocumentMetadata",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "documentmetadataendpoint.removeDocumentMetadata" : {
+      "path" : "documentmetadata/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.removeDocumentMetadata",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "documentmetadataendpoint.listDocumentMetadata" : {
+      "path" : "documentmetadata",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.listDocumentMetadata",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "documentmetadataendpoint.updateDocumentMetadata" : {
+      "path" : "documentmetadata",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.updateDocumentMetadata",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "documentmetadataendpoint.getDocumentMetadata" : {
+      "path" : "documentmetadata/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.getDocumentMetadata",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "DocumentMetadata" : {
+        "id" : "DocumentMetadata",
+        "type" : "object",
+        "properties" : {
+          "metadataColumnID" : {
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "possibleValues" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CollectionResponse_DocumentMetadata" : {
+        "id" : "CollectionResponse_DocumentMetadata",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DocumentMetadata"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.insertDocumentMetadata" : {
+        "request" : {
+          "$ref" : "DocumentMetadata"
+        },
+        "response" : {
+          "$ref" : "DocumentMetadata"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.removeDocumentMetadata" : {
+      },
+      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.listDocumentMetadata" : {
+        "response" : {
+          "$ref" : "CollectionResponse_DocumentMetadata"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.updateDocumentMetadata" : {
+        "request" : {
+          "$ref" : "DocumentMetadata"
+        },
+        "response" : {
+          "$ref" : "DocumentMetadata"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.getDocumentMetadata" : {
+        "response" : {
+          "$ref" : "DocumentMetadata"
+        }
+      }
+    }
+  }
+}
