@@ -6,8 +6,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.dleray.cloudreviewer.responses.ClientIssueTagCategory;
 import com.dleray.cloudreviewer.responses.ClientIssueTagSubCategory;
@@ -15,11 +17,14 @@ import com.dleray.cloudreviewer.responses.ClientTagList;
 import com.dleray.cloudreviewer.responses.ClientTaggingControl;
 import com.dleray.cloudreviewer.structures.IssueTag;
 import com.dleray.cloudreviewer.structures.IssueTagEndpoint;
-import com.dleray.cloudreviewer.structures.TaggingControl;
 
 @PersistenceCapable
-public class TagList extends TaggingControl {
+public class TagList {
 
+	@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private String controlID;
+	
 	@Persistent(defaultFetchGroup="true")
 	private ArrayList<String> issueTagIDs=new ArrayList();
 
@@ -31,7 +36,17 @@ public class TagList extends TaggingControl {
 		this.issueTagIDs = issueTagIDs;
 	}
 
-	@Override
+	
+
+
+	public String getControlID() {
+		return controlID;
+	}
+
+	public void setControlID(String controlID) {
+		this.controlID = controlID;
+	}
+
 	public ClientTaggingControl toClient() {
 		
 		ClientTagList output=new ClientTagList();

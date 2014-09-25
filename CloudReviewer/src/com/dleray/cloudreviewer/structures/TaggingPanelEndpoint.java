@@ -82,6 +82,11 @@ public class TaggingPanelEndpoint {
 		TaggingPanel taggingpanel = null;
 		try {
 			taggingpanel = mgr.getObjectById(TaggingPanel.class, id);
+			for(String s: taggingpanel.getTaggingControlIds())
+			{
+				Double a=5.0;
+			}
+			
 		} finally {
 			mgr.close();
 		}

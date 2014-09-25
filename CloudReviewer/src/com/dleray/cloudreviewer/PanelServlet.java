@@ -27,10 +27,24 @@ public class PanelServlet extends HttpServlet {
     		resp.getWriter().println("PLEASE SIGN IN");
         	return;
         }
+        CloudReviewerUser progUser;
         CloudReviewerUserEndpoint userEndpoint=new CloudReviewerUserEndpoint();
-        CloudReviewerUser progUser=userEndpoint.getCloudReviewerUser(req.getUserPrincipal().getName());
+		try {
+			progUser = userEndpoint.getCloudReviewerUser(req.getUserPrincipal().getName());
+		} catch (Exception e) {
+			progUser=new CloudReviewerUser();
+			progUser.setCurrentPanelID("taggingPanel-1");
+			progUser.setUserEmail(req.getUserPrincipal().getName());
+			userEndpoint.insertCloudReviewerUser(progUser);
+		}
         TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
-        TaggingPanel panel=tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
+        TaggingPanel panel;
+		try {
+			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
+		} catch (Exception e) {
+			PanelHandler.initDefaultPanel();
+			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
+		}
         
         
     	resp.setContentType("application/json");

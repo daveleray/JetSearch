@@ -77,11 +77,16 @@ public class TagListEndpoint {
 	 * @return The entity with primary key id.
 	 */
 	@ApiMethod(name = "getTagList")
-	public TagList getTagList(@Named("id") Long id) {
+	public TagList getTagList(@Named("id") String id) {
 		PersistenceManager mgr = getPersistenceManager();
 		TagList taglist = null;
 		try {
 			taglist = mgr.getObjectById(TagList.class, id);
+			for(String s: taglist.getIssueTagIDs())
+			{
+				Double a=5.0;
+			}
+			
 		} finally {
 			mgr.close();
 		}

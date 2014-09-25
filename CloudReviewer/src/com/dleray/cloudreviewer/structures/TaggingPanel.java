@@ -8,7 +8,8 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
-import com.google.gson.JsonElement;
+import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
+import com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint;
 
 @PersistenceCapable
 public class TaggingPanel {
@@ -39,10 +40,10 @@ public class TaggingPanel {
 	public ClientTaggingPanel toClient() {
 		ClientTaggingPanel output=new ClientTaggingPanel();
 		output.setPannelID(taggingID);
-		TaggingControlEndpoint endpoint=new TaggingControlEndpoint();
+		TagListEndpoint endpoint=new TagListEndpoint();
 		for(String s: taggingControlIds)
 		{
-			TaggingControl control=endpoint.getTaggingControl(s);
+			TagList control=endpoint.getTagList(s);
 			output.getTaggingControls().add(control.toClient());
 		}
 		return output;
