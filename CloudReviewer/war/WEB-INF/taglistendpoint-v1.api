@@ -75,27 +75,11 @@
       "request" : {
         "parameters" : {
           "id" : {
-            "type" : "int64",
+            "type" : "string",
             "required" : true
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "taglistendpoint.updateTagList" : {
-      "path" : "taglist",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.updateTagList",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -121,6 +105,22 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taglistendpoint.updateTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.updateTagList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -176,17 +176,17 @@
           "$ref" : "TagList"
         }
       },
+      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.listTagList" : {
+        "response" : {
+          "$ref" : "CollectionResponse_TagList"
+        }
+      },
       "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.updateTagList" : {
         "request" : {
           "$ref" : "TagList"
         },
         "response" : {
           "$ref" : "TagList"
-        }
-      },
-      "com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint.listTagList" : {
-        "response" : {
-          "$ref" : "CollectionResponse_TagList"
         }
       }
     }

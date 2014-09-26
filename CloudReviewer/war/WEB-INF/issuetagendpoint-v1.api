@@ -139,10 +139,10 @@
           "displayName" : {
             "type" : "string"
           },
-          "category" : {
+          "categoryDisplay" : {
             "type" : "string"
           },
-          "subCategory" : {
+          "subCategoryDisplay" : {
             "type" : "string"
           }
         }

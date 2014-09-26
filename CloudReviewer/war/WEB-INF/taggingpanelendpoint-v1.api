@@ -64,22 +64,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "taggingpanelendpoint.updateTaggingPanel" : {
-      "path" : "taggingpanel",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.updateTaggingPanel",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "taggingpanelendpoint.listTaggingPanel" : {
       "path" : "taggingpanel",
       "httpMethod" : "GET",
@@ -100,6 +84,22 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taggingpanelendpoint.updateTaggingPanel" : {
+      "path" : "taggingpanel",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.updateTaggingPanel",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -171,17 +171,17 @@
           "$ref" : "TaggingPanel"
         }
       },
+      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.listTaggingPanel" : {
+        "response" : {
+          "$ref" : "CollectionResponse_TaggingPanel"
+        }
+      },
       "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.updateTaggingPanel" : {
         "request" : {
           "$ref" : "TaggingPanel"
         },
         "response" : {
           "$ref" : "TaggingPanel"
-        }
-      },
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.listTaggingPanel" : {
-        "response" : {
-          "$ref" : "CollectionResponse_TaggingPanel"
         }
       },
       "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.getTaggingPanel" : {
