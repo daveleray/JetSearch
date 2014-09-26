@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script src="build/pdf.js"></script>
+   <script src="jquery.fittext.js"></script>
+
+<script>
+
+function addFolderToSomeDiv(container,folder)
+{
+	window.folderString=window.folderString+'<li>'+folder.folderName+'<ul>';
+	//container.append($('<li><h3>'+folder.folderName+'</h3><ul>'));
+	var localCopy=window.folderString;
+	 var numSubFolders=folder.subFolders.length;
+     for(var j=0;j<numSubFolders;j++){
+    	 addFolderToSomeDiv(container,folder.subFolders[j]);
+     }
+     
+     var numFiles=folder.files.length;
+     for(var j=0;j<numFiles;j++){
+    	 window.folderString=window.folderString+'<li>'+folder.files[j].displayName+'</li>';
+    	 //container.append($('<li><p>'+folder.files[j].displayName+'</p></li>'));
+     }
+     window.folderString=window.folderString+'</ul></li>';
+	// container.append($('</ul></li>'));
+}
+  //setup folders
+  $(document).on('pageinit',function(event){
+  
+			$.get('folders', function( data ) {				
+			
+				 var container = $('#folders');
+				 window.folderString='<ul data-role="listview" id="folderlist" data-theme="g">';
+				 addFolderToSomeDiv(container,data);
+				 window.folderString=window.folderString+'</ul>';
+				 container.append($(window.folderString));
+				 alert(window.folderString);
+				 container.trigger("create");
+			}); 
+			});
+</script>
+
+    <title>CloudReviewer</title>
+  </head>
+
+  <body>
+        <div data-role="page" id="review">
+ 
+        <div data-role="header" data-id="foo1" data-position="fixed">
+            		<h1>CloudReviewer</h1>
+	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
+				
+	<!-- 	<div data-role="navbar">
+			<ul>
+				<li><a href="#review" data-prefetch="true" class="ui-btn-active ui-state-persist">Review</a></li>
+				<li><a href="#edittags" data-prefetch="true" >Tagging Setup</a></li>
+				<li><a href="edithl.html" data-prefetch="true" >Highlighting Setup</a></li>
+			</ul>
+		</div><!-- /navbar -->  
+
+		
+		<div data-role="navbar">
+	<ul>
+		<li><a href="index.html" >Review</a></li>
+		<li><a href="folders.html" class="ui-btn-active ui-state-persist">Folders</a></li>
+	</ul>
+</div><!-- /navbar -->
+		
+        </div><!-- /header -->
+    
+    
+        <div data-role="content">
+    
+    	<div id="folders">
+    	
+    	</div>
+        </div><!-- /content -->
+ 
+        <div data-role="footer">
+            <h4>&copy David LeRay 2014</h4>
+        </div><!-- /footer -->
+ 
+    </div><!-- /page -->
+    
+  </body>
+</html>
+
+
+

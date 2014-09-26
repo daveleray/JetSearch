@@ -138,6 +138,12 @@
           },
           "currentPanelID" : {
             "type" : "string"
+          },
+          "currentBatch" : {
+            "type" : "string"
+          },
+          "currentDoc" : {
+            "type" : "string"
           }
         }
       },

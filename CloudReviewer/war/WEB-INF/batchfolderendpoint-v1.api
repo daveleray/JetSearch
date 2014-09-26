@@ -2,7 +2,7 @@
   "extends" : "thirdParty.api",
   "abstract" : false,
   "root" : "https://docreviewtool.appspot.com/_ah/api",
-  "name" : "documentbatchendpoint",
+  "name" : "batchfolderendpoint",
   "version" : "v1",
   "defaultVersion" : false,
   "adapter" : {
@@ -27,14 +27,14 @@
   "ownerName" : "dleray.com",
   "packagePath" : "cloudreviewer.structures",
   "methods" : {
-    "documentbatchendpoint.updateDocumentBatch" : {
-      "path" : "documentbatch",
+    "batchfolderendpoint.updateBatchFolder" : {
+      "path" : "batchfolder",
       "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.updateDocumentBatch",
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.updateBatchFolder",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -43,14 +43,51 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "documentbatchendpoint.listDocumentBatch" : {
-      "path" : "documentbatch",
+    "batchfolderendpoint.removeBatchFolder" : {
+      "path" : "batchfolder/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.removeBatchFolder",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "batchfolderendpoint.insertBatchFolder" : {
+      "path" : "batchfolder",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.insertBatchFolder",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "batchfolderendpoint.listBatchFolder" : {
+      "path" : "batchfolder",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.listDocumentBatch",
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.listBatchFolder",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -68,51 +105,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "documentbatchendpoint.insertDocumentBatch" : {
-      "path" : "documentbatch",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.insertDocumentBatch",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "documentbatchendpoint.removeDocumentBatch" : {
-      "path" : "documentbatch/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.removeDocumentBatch",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "documentbatchendpoint.getDocumentBatch" : {
-      "path" : "documentbatch/{id}",
+    "batchfolderendpoint.getBatchFolder" : {
+      "path" : "batchfolder/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.getDocumentBatch",
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.getBatchFolder",
       "request" : {
         "parameters" : {
           "id" : {
@@ -129,38 +129,29 @@
   },
   "descriptor" : {
     "schemas" : {
-      "DocumentBatch" : {
-        "id" : "DocumentBatch",
+      "BatchFolder" : {
+        "id" : "BatchFolder",
         "type" : "object",
         "properties" : {
-          "docbatchID" : {
+          "batchFolderID" : {
             "type" : "string"
           },
-          "docIDCollection" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "folderID" : {
+          "parentFolderID" : {
             "type" : "string"
           },
-          "batchName" : {
-            "type" : "string"
-          },
-          "userAssigned" : {
+          "displayName" : {
             "type" : "string"
           }
         }
       },
-      "CollectionResponse_DocumentBatch" : {
-        "id" : "CollectionResponse_DocumentBatch",
+      "CollectionResponse_BatchFolder" : {
+        "id" : "CollectionResponse_BatchFolder",
         "type" : "object",
         "properties" : {
           "items" : {
             "type" : "array",
             "items" : {
-              "$ref" : "DocumentBatch"
+              "$ref" : "BatchFolder"
             }
           },
           "nextPageToken" : {
@@ -170,32 +161,32 @@
       }
     },
     "methods" : {
-      "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.updateDocumentBatch" : {
+      "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.updateBatchFolder" : {
         "request" : {
-          "$ref" : "DocumentBatch"
+          "$ref" : "BatchFolder"
         },
         "response" : {
-          "$ref" : "DocumentBatch"
+          "$ref" : "BatchFolder"
         }
       },
-      "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.listDocumentBatch" : {
-        "response" : {
-          "$ref" : "CollectionResponse_DocumentBatch"
-        }
+      "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.removeBatchFolder" : {
       },
-      "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.insertDocumentBatch" : {
+      "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.insertBatchFolder" : {
         "request" : {
-          "$ref" : "DocumentBatch"
+          "$ref" : "BatchFolder"
         },
         "response" : {
-          "$ref" : "DocumentBatch"
+          "$ref" : "BatchFolder"
         }
       },
-      "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.removeDocumentBatch" : {
-      },
-      "com.dleray.cloudreviewer.structures.DocumentBatchEndpoint.getDocumentBatch" : {
+      "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.listBatchFolder" : {
         "response" : {
-          "$ref" : "DocumentBatch"
+          "$ref" : "CollectionResponse_BatchFolder"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.BatchFolderEndpoint.getBatchFolder" : {
+        "response" : {
+          "$ref" : "BatchFolder"
         }
       }
     }

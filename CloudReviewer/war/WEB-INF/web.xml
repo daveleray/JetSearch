@@ -43,6 +43,16 @@
 		<url-pattern>/applytag</url-pattern>
 		</servlet-mapping>
 		
+					<servlet>
+		<servlet-name>FolderServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.FolderServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>FolderServlet</servlet-name>
+		<url-pattern>/folders</url-pattern>
+		</servlet-mapping>
+		
+		
 				<servlet>
 		<servlet-name>CSVServlet</servlet-name>
 		<servlet-class>com.dleray.cloudreviewer.CSVServlet</servlet-class>
@@ -142,7 +152,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.structures.DocumentBatchEndpoint,com.dleray.cloudreviewer.structures.DocumentEndpoint,com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint,com.dleray.cloudreviewer.structures.IssueTagEndpoint,com.dleray.cloudreviewer.structures.TaggingPanelEndpoint,com.dleray.cloudreviewer.structures.UserTagEndpoint,com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint</param-value>
+   <param-value>com.dleray.cloudreviewer.structures.BatchFolderEndpoint,com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.structures.DocumentBatchEndpoint,com.dleray.cloudreviewer.structures.DocumentEndpoint,com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint,com.dleray.cloudreviewer.structures.IssueTagEndpoint,com.dleray.cloudreviewer.structures.TaggingPanelEndpoint,com.dleray.cloudreviewer.structures.UserTagEndpoint,com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint</param-value>
   </init-param>
  </servlet>
  <servlet-mapping>
