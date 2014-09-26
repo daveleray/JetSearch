@@ -21,6 +21,18 @@ public class DocumentHandler {
 	{
 		for(File f: allFiles)
 		{
+		
+			if(f.getMimeType().contains("folder"))
+			{
+				System.out.println("Skipping:" + f.getTitle());
+				continue;
+			}
+			System.out.println("Process:" + f.getOriginalFilename() + " id:" + f.getId() + " desc:"+ f.getDescription());
+			if(f.getOriginalFilename()==null)
+			{
+				Double a=5.0;
+			}
+			
 			String docIdentifier=f.getOriginalFilename().substring(0,f.getOriginalFilename().indexOf("."));
 			DocumentEndpoint endpoint=new DocumentEndpoint();
 			Document testForDoc;
@@ -79,7 +91,7 @@ public class DocumentHandler {
 			}
 		}
 		System.out.println("Last doc");
-		return docEndpoint.getDocument(currentID);
+		return docEndpoint.getDocument(docIDList.get(0));
 	}
 	public static Integer getDocInBatchIndex(DocumentBatch batchInput,SortStrategy strategy,String currentID)
 	{
@@ -104,7 +116,7 @@ public class DocumentHandler {
 			}
 		}
 		System.out.println("Not in batch:" + currentID);
-		return null;
+		return 0;
 	}
 	public static Document getPreviousDocument(DocumentBatch batchInput,SortStrategy strategy,String currentID)
 	{
@@ -124,7 +136,7 @@ public class DocumentHandler {
 			}
 		}
 		System.out.println("First doc");
-		return docEndpoint.getDocument(currentID);
+		return docEndpoint.getDocument(docIDList.get(0));
 	}
 	public static String getDocumentText(String docID,Drive googleDrive)
 	{

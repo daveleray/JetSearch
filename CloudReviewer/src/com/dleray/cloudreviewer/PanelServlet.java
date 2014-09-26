@@ -27,16 +27,7 @@ public class PanelServlet extends HttpServlet {
     		resp.getWriter().println("PLEASE SIGN IN");
         	return;
         }
-        CloudReviewerUser progUser;
-        CloudReviewerUserEndpoint userEndpoint=new CloudReviewerUserEndpoint();
-		try {
-			progUser = userEndpoint.getCloudReviewerUser(req.getUserPrincipal().getName());
-		} catch (Exception e) {
-			progUser=new CloudReviewerUser();
-			progUser.setCurrentPanelID("taggingPanel-1");
-			progUser.setUserEmail(req.getUserPrincipal().getName());
-			userEndpoint.insertCloudReviewerUser(progUser);
-		}
+        CloudReviewerUser progUser=UserHandler.getCurrentUser();
 		System.out.println("got user");
         TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
         TaggingPanel panel;

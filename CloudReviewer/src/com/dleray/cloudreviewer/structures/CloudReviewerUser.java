@@ -15,6 +15,12 @@ public class CloudReviewerUser {
 	@Persistent
 	private String currentPanelID;
 	
+	@Persistent 
+	private String currentBatch;
+	
+	@Persistent 
+	private String currentDoc;
+	
 
 	public String getCurrentPanelID() {
 		return currentPanelID;
@@ -30,6 +36,22 @@ public class CloudReviewerUser {
 
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+
+	public String getCurrentBatch() {
+		return currentBatch;
+	}
+
+	public void setCurrentBatch(String currentBatch) {
+		this.currentBatch = currentBatch;
+	}
+
+	public String getCurrentDoc() {
+		return currentDoc;
+	}
+
+	public void setCurrentDoc(String currentDoc) {
+		this.currentDoc = currentDoc;
 	}
 	
 }

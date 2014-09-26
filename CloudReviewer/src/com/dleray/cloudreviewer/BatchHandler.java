@@ -38,6 +38,8 @@ public class BatchHandler {
 			System.out.println("beginning doc loop");
 			DocumentBatch batch=new DocumentBatch();
 			batch.setDocbatchID("-1");
+			batch.setBatchName("Default");
+			batch.setFolderID("root");
 			for(Document d: allDocs.getItems())
 			{
 				batch.addDocIDToBatch(d.getDocumentIdentifier());

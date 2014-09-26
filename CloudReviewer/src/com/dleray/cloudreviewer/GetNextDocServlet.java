@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mortbay.util.ajax.JSON;
 
 import com.dleray.cloudreviewer.responses.DocJSONResponse;
+import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
 import com.dleray.cloudreviewer.structures.UserTag;
@@ -36,11 +37,11 @@ public class GetNextDocServlet extends HttpServlet  {
         	return;
         }
         System.out.println("PROCESSING");
-    
+        CloudReviewerUser user=UserHandler.getCurrentUser();
         String currentID=req.getParameter("currentDocID");
         if(currentID==null || currentID.contentEquals("undefined"))
         {
-        	currentID=null;
+        	currentID=user.getCurrentDoc();
         }
         System.out.println("Got past here");
         DocumentBatch batch=BatchHandler.getDefaultBatch();
