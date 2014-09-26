@@ -5,15 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import com.dleray.cloudreviewer.responses.DocJSONResponse;
+import com.dleray.cloudreviewer.structures.Document;
+import com.dleray.cloudreviewer.structures.DocumentBatch;
+import com.dleray.cloudreviewer.structures.UserTag;
+import com.dleray.cloudreviewer.structures.UserTagEndpoint;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import com.google.gson.Gson;
 
 public class DocHelper {
 
@@ -56,6 +63,25 @@ public class DocHelper {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	public static DocJSONResponse getJSONResponse(Document d,DocumentBatch batch)
+	{
+	      
+	   	 UserTagEndpoint endpoint=new UserTagEndpoint();	 
+		 ArrayList<UserTag> allTagsSoFar=endpoint.getUserTagsByDoc(d.getDocumentIdentifier());
+		 ArrayList<String> appliedTags=new ArrayList();
+		 for(UserTag u: allTagsSoFar)
+		 {
+			 appliedTags.add(u.getIssueTagID());
+		 }
+	        DocJSONResponse response=new DocJSONResponse();
+	        response.setBatchID(batch.getDocbatchID());
+	        response.setBatchSize(batch.getDocIDCollection().size());
+	        response.setAppliedTags(appliedTags);
+	        response.setDocInBatchIndex(DocumentHandler.getDocInBatchIndex(BatchHandler.getDefaultBatch(), null, d.getDocumentIdentifier()));
+	        response.setDocIdentifier(d.getDocumentIdentifier());
+
+	    	return response;
 	}
 	public static byte[] getBytes(InputStream is)
 	{

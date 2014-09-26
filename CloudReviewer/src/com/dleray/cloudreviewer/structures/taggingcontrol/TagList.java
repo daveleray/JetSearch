@@ -55,19 +55,19 @@ public class TagList {
 		for(String s: issueTagIDs)
 		{
 			IssueTag tag=endpoint.getIssueTag(s);
-			HashMap<String,HashSet<IssueTag>> subCategoryMap=allIssues.get(tag.getCategory());
+			HashMap<String,HashSet<IssueTag>> subCategoryMap=allIssues.get(tag.getCategoryDisplay());
 			if(subCategoryMap==null)
 			{
 				subCategoryMap=new HashMap();
 			}
-			HashSet<IssueTag> issueSet=subCategoryMap.get(tag.getSubCategory());
+			HashSet<IssueTag> issueSet=subCategoryMap.get(tag.getSubCategoryDisplay());
 			if(issueSet==null)
 			{
 				issueSet=new HashSet();
 			}
 			issueSet.add(tag);
-			subCategoryMap.put(tag.getSubCategory(), issueSet);
-			allIssues.put(tag.getCategory(), subCategoryMap);
+			subCategoryMap.put(tag.getSubCategoryDisplay(), issueSet);
+			allIssues.put(tag.getCategoryDisplay(), subCategoryMap);
 		}
 		
 		ArrayList<String> allCategories=new ArrayList(allIssues.keySet());

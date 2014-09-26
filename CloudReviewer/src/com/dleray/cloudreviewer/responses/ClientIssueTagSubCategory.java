@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class ClientIssueTagSubCategory {
 
 	private String subCategoryName;
+
+	private String subCategoryID;
 	
 	private ArrayList<ClientIssueTag> allTags=new ArrayList();
 
@@ -22,7 +24,14 @@ public class ClientIssueTagSubCategory {
 
 	public void setSubCategoryName(String subCategoryName) {
 		this.subCategoryName = subCategoryName;
+		this.subCategoryID=subCategoryName.replace(" ","");
 	}
+
+	public String getSubCategoryID() {
+		return subCategoryID;
+	}
+
+
 	
 	
 }

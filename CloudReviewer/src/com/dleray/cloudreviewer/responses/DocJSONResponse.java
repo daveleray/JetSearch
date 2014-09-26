@@ -1,11 +1,14 @@
 package com.dleray.cloudreviewer.responses;
 
+import java.util.ArrayList;
+
 public class DocJSONResponse {
 
 	private Integer batchSize;
 	private String batchID;
 	private String docIdentifier;
 	private Integer docInBatchIndex;
+	private ArrayList<String> appliedTags;
 	
 	public Integer getDocInBatchIndex() {
 		return docInBatchIndex;
@@ -31,6 +34,12 @@ public class DocJSONResponse {
 	}
 	public void setDocIdentifier(String docIdentifier) {
 		this.docIdentifier = docIdentifier;
+	}
+	public ArrayList<String> getAppliedTags() {
+		return appliedTags;
+	}
+	public void setAppliedTags(ArrayList<String> appliedTags) {
+		this.appliedTags = appliedTags;
 	}
 	
 }

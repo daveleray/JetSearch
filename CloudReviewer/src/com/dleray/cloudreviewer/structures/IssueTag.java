@@ -16,52 +16,91 @@ public class IssueTag {
 	
 	@Persistent
 	private String displayName;
-
+	
 	@Persistent
-	private String category;
+	private String categoryDisplay;
 	
 	@Persistent 
-	private String subCategory;
+	private String subCategoryDisplay;
 	
-	
-	public String getCategory() {
-		return category;
-	}
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
 
-	public String getSubCategory() {
-		return subCategory;
-	}
 
-	public void setSubCategory(String subCategory) {
-		this.subCategory = subCategory;
-	}
 
 	public String getTagID() {
 		return tagID;
 	}
 
+
+
+
+
 	public void setTagID(String tagID) {
 		this.tagID = tagID;
 	}
+
+
+
+
 
 	public String getDisplayName() {
 		return displayName;
 	}
 
+
+
+
+
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
 
+
+
+
+
+
+
+	public String getCategoryDisplay() {
+		return categoryDisplay;
+	}
+
+
+
+
+
+	public void setCategoryDisplay(String categoryDisplay) {
+		this.categoryDisplay = categoryDisplay;
+	}
+
+
+
+
+
+	public String getSubCategoryDisplay() {
+		return subCategoryDisplay;
+	}
+
+
+
+
+
+	public void setSubCategoryDisplay(String subCategoryDisplay) {
+		this.subCategoryDisplay = subCategoryDisplay;
+	}
+
+
+
+
+
 	public ClientIssueTag toClientIssueTag() {
 		
 		ClientIssueTag output=new ClientIssueTag();
-		output.setCategory(category);
+		output.setCategoryDisplayName(categoryDisplay);
+	
 		output.setDisplayName(displayName);
-		output.setSubCategory(subCategory);
+
+		output.setSubCategoryDisplayName(subCategoryDisplay);
 		output.setTagID(tagID);
 		return output;
 	}

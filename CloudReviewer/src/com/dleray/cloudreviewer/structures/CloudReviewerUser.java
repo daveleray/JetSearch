@@ -14,6 +14,7 @@ public class CloudReviewerUser {
 	
 	@Persistent
 	private String currentPanelID;
+	
 
 	public String getCurrentPanelID() {
 		return currentPanelID;

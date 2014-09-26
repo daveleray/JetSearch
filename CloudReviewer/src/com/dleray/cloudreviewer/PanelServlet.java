@@ -37,6 +37,7 @@ public class PanelServlet extends HttpServlet {
 			progUser.setUserEmail(req.getUserPrincipal().getName());
 			userEndpoint.insertCloudReviewerUser(progUser);
 		}
+		System.out.println("got user");
         TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
         TaggingPanel panel;
 		try {
