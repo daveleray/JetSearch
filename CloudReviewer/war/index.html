@@ -40,6 +40,15 @@
     		window.location=data.URL;
     	});        
     }); 
+    
+    $("#getExport").click(function(){  	
+    	
+    	
+    	$.get('getcsv',function(data){
+
+    		
+    	});        
+    }); 
 });
 </script>
 
@@ -134,6 +143,8 @@ function updateDisplay()
 		 		var response=data;
 				window.curDocID=response.docIdentifier;
 				  
+				
+				
 				var docInfoString="Document #"+(response.docInBatchIndex+1)+ " out of " + response.batchSize + "  ("+response.docIdentifier+")";
 				$('#docinfo').html(docInfoString);
 				
@@ -142,6 +153,27 @@ function updateDisplay()
 				//private String docIdentifier;
 					//private Integer docInBatchIndex;
 	
+				var container = $('#cblist');
+	   			var inputs = container.find('input');
+	   		 for (var i = 0; i < inputs.length; i++) {
+	   			 var thisInput=inputs[i];
+	   			 
+	   			 var inputIsApplied=false;
+	   			 for(var j=0;j<data.appliedTags.length;j++)
+	   			 {
+	   				if (data.appliedTags[j]==thisInput.id)
+	   				 {
+	   					inputIsApplied=true;
+	   				 	$(thisInput).prop("checked",true).checkboxradio('refresh');
+	   				 }		
+	   			 }
+	   			 if(!inputIsApplied)
+	   				 {
+	 	   				$(thisInput).prop("checked",false).checkboxradio('refresh');
+	   				 }
+	   			 
+	   		 }
+	   
 				  updateDisplay();
 	
 	}
@@ -149,9 +181,9 @@ function updateDisplay()
 	
 	
 <script>
-function addIssueTag(containername,issuetag)
+function addIssueTag(containername,issuetagdisplay,issuetagID)
 {
-	 var container = $('#cblist');
+	 var container = $('#'+containername);
 	   var inputs = container.find('input');
 	   var id = inputs.length+1;
 	   
@@ -169,15 +201,20 @@ function addIssueTag(containername,issuetag)
 		   classToUse="ui-block-b"
 			   	break;   
 	   }
-	   var butstring=issuetag;
+	  
 	   
 	  // $('<input />', { type: 'checkbox',class: classToUse, id: 'cb'+id, value: "test" }).appendTo(container);
 	  // $('<label />', { 'for': 'cb'+id, text: "test" }).appendTo(container);
-	   container.append($('<div id=divtest'+id+' class='+classToUse+'><input type=checkbox id=cb'+id+' value='+butstring+'><label for=cb'+id+'>'+butstring+'<label></div>'));
+	   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
 	   
-	   $('#cb'+id).click(function(){  	
-		   var foo=id;
-		   var test='foo';
+	   $('#divtest'+issuetagID).click(function(e){  	
+		   var issueID=e.target.htmlFor;
+		   var docID=window.curDocID;
+		   $.post("applytag",
+				    {
+				      tag:issueID,
+				      docid:docID
+				    });
 	   });
 	   
 	   
@@ -194,8 +231,27 @@ function addIssuePanel(clienttaglist)
 	     var taggingControl=clienttaglist.taggingControls[i];
 	     var controlLength=taggingControl.categoryList.length;
 	     for(var j=0;j<controlLength;j++){
+	     	  var categoryID=taggingControl.categoryList[j].categoryID;
 	     	  var categoryName=taggingControl.categoryList[j].categoryName;
-	     	  container.append($('<div id='categoryName+' data-role=collapsible><h3>'+categoryName+'</h3><p>Im the collapsible content. By default Im closed, but you can click the header to open me.</p></div>'));
+	     	  container.append($('<div id='+categoryID+' data-role=collapsible><h3>'+categoryName+'</h3></div>'));
+	     	
+	     	    var categoryHolder=$('#'+categoryID);
+	     		var thisCategoryList=taggingControl.categoryList[j];
+	     		var subCategoryLength=thisCategoryList.subcategories.length;
+	     		for(var k=0;k<subCategoryLength;k++)
+	     			{
+	     					var thisSubCategory=thisCategoryList.subcategories[k];
+	     					categoryHolder.append($('<div id='+thisSubCategory.subCategoryID+categoryID+' data-role=collapsible><h3>'+thisSubCategory.subCategoryName+'</h3></div>'));
+	     			
+	     					var subcategoryHolder=$('#'+thisSubCategory.subCategoryID+categoryID);
+	     					subcategoryHolder.append($('<div id=grid'+thisSubCategory.subCategoryID+categoryID+' class="ui-grid-b"></div>'));
+	     					
+	     					var numIssues=thisSubCategory.allTags.length;
+	     					for(var m=0;m<numIssues;m++)
+	     						{
+	     							addIssueTag('grid'+thisSubCategory.subCategoryID+categoryID,thisSubCategory.allTags[m].displayName,thisSubCategory.allTags[m].tagID);
+	     						}
+	     			}
 	     }
 	     
 	      container.trigger("create");
@@ -226,40 +282,38 @@ function addIssuePanel(clienttaglist)
 		$.get('panel', function( data ) {				
 			
 			addIssuePanel(data);
+			
+			
+			  $('#viewerdiv').html('HELLO WORLD');
+				
+				//first doc
+				$.get('nextdoc', function( data ) {				
+					updateEverythingBasedOnDocJSONResponse(data);
+					
+				$("input:radio[name=viewerselect]").click(function() {
+					    var value = $(this).val();
+					    
+						if(value=='text')
+						{
+							$('#viewerdiv').html('HELLO WORLD');
+							updateDisplay();
+						
+						}	
+						else
+						{
+							$('#viewerdiv').html('<canvas id="the-canvas" style="border:1px solid black;"/>');
+							updateDisplay();
+						}
+						
+					});
+					
+				}); 
+				
 		}); 
 	  
-	//  addIssueTag('test1');
-	 // addIssueTag('test2');
-	  //addIssueTag('test3');
-	 // addIssueTag('test4');
-	 // addIssueTag('test5');
-	 // addIssueTag('test6');
+
   
-	  $('#viewerdiv').html('HELLO WORLD');
-	
-		//first doc
-	//	$.get('nextdoc', function( data ) {				
-	//		updateEverythingBasedOnDocJSONResponse(data);
-			
-	//		$("input:radio[name=viewerselect]").click(function() {
-	//		    var value = $(this).val();
-			    
-	//			if(value=='text')
-	//			{
-	//				$('#viewerdiv').html('HELLO WORLD');
-	//				updateDisplay();
-				
-	//			}	
-	//			else
-	//			{
-	//				$('#viewerdiv').html('<canvas id="the-canvas" style="border:1px solid black;"/>');
-	//				updateDisplay();
-	//			}
-				
-	//		});
-			
-	//	}); 
-		
+
 
 	
 
@@ -304,7 +358,7 @@ function addIssuePanel(clienttaglist)
  
         <div data-role="content">
          <input id = "signoutButton" data-inline="true" type="submit" value="Sign Out"/>
-         
+         <input id = "getExport" data-inline="true" type="submit" value="Export CSV"/>
         	
         	<div id="welcomemsg"></div>
         	 <div id="getrequest"></div>
