@@ -24,6 +24,19 @@
 		<url-pattern>/test</url-pattern>
 		</servlet-mapping>
 	
+				<servlet>
+		<servlet-name>BatchServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.BatchServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>BatchServlet</servlet-name>
+		<url-pattern>/batches</url-pattern>
+		</servlet-mapping>
+		
+		
+		
+		
 				<servlet-mapping>
 		<servlet-name>GoogleDriveAuthServlet</servlet-name>
 		<url-pattern>/googledriveauth</url-pattern>
@@ -50,6 +63,15 @@
 		<servlet-mapping>
 		<servlet-name>FolderServlet</servlet-name>
 		<url-pattern>/folders</url-pattern>
+		</servlet-mapping>
+		
+		<servlet>
+		<servlet-name>DocMetadataServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.DocMetadataServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>DocMetadataServlet</servlet-name>
+		<url-pattern>/metadata</url-pattern>
 		</servlet-mapping>
 		
 		
@@ -85,22 +107,35 @@
 		
 		
 		<servlet>
-		<servlet-name>GetNextDocServlet</servlet-name>
-		<servlet-class>com.dleray.cloudreviewer.GetNextDocServlet</servlet-class>
+		<servlet-name>GetDocServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.DocServlet</servlet-class>
 		</servlet>
 		<servlet-mapping>
-		<servlet-name>GetNextDocServlet</servlet-name>
-		<url-pattern>/nextdoc</url-pattern>
+		<servlet-name>GetDocServlet</servlet-name>
+		<url-pattern>/doc</url-pattern>
 		</servlet-mapping>
 	
-		<servlet>
-		<servlet-name>GetPreviousDocServlet</servlet-name>
-		<servlet-class>com.dleray.cloudreviewer.GetPreviousDocServlet</servlet-class>
+		
+			<servlet>
+		<servlet-name>MetadataWorker</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.MetadataWorker</servlet-class>
 		</servlet>
 		<servlet-mapping>
-		<servlet-name>GetPreviousDocServlet</servlet-name>
-		<url-pattern>/previousdoc</url-pattern>
+		<servlet-name>MetadataWorker</servlet-name>
+		<url-pattern>/tasks/metadataworker</url-pattern>
 		</servlet-mapping>
+		
+		<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>tasks</web-resource-name>
+        <url-pattern>/tasks/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+    </auth-constraint>
+</security-constraint>
+
+		
 	
 		<servlet>
 		<servlet-name>PDFServlet</servlet-name>
@@ -152,7 +187,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.dleray.cloudreviewer.structures.BatchFolderEndpoint,com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.structures.DocumentBatchEndpoint,com.dleray.cloudreviewer.structures.DocumentEndpoint,com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint,com.dleray.cloudreviewer.structures.IssueTagEndpoint,com.dleray.cloudreviewer.structures.TaggingPanelEndpoint,com.dleray.cloudreviewer.structures.UserTagEndpoint,com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint</param-value>
+   <param-value>com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint,com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint,com.dleray.cloudreviewer.endpoints.DocumentEndpoint,com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint,com.dleray.cloudreviewer.endpoints.IssueTagEndpoint,com.dleray.cloudreviewer.endpoints.TagListEndpoint,com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint,com.dleray.cloudreviewer.endpoints.UserTagEndpoint</param-value>
   </init-param>
  </servlet>
  <servlet-mapping>

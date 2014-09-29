@@ -7,9 +7,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
 import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
-import com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint;
 
 @PersistenceCapable
 public class TaggingPanel {

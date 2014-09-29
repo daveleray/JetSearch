@@ -50,6 +50,7 @@ public class BatchFolder {
 		
 		ClientFolderStructure output=new ClientFolderStructure();
 		output.setFolderName(displayName);
+		output.setFolderID(batchFolderID);
 		for(BatchFolder f: fullSet)
 		{
 			if(f.parentFolderID.contentEquals(this.batchFolderID))
@@ -64,6 +65,7 @@ public class BatchFolder {
 				output.getFiles().add(b.toClient());
 			}
 		}
+		output.updateSimples();
 		return output;
 		
 	}

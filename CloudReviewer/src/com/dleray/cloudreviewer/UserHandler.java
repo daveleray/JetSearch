@@ -1,7 +1,7 @@
 package com.dleray.cloudreviewer;
 
+import com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
-import com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

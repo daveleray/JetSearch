@@ -1,13 +1,19 @@
 package com.dleray.cloudreviewer;
 
+import com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint;
+import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
-import com.dleray.cloudreviewer.structures.DocumentBatchEndpoint;
-import com.dleray.cloudreviewer.structures.DocumentEndpoint;
 import com.google.api.server.spi.response.CollectionResponse;
 
 public class BatchHandler {
 
+	public static DocumentBatch getBatchByID(String id)
+	{
+		DocumentBatchEndpoint endpoint=new DocumentBatchEndpoint();
+			DocumentBatch edefault=endpoint.getDocumentBatch(id);
+			return edefault;
+	}
 	public static DocumentBatch getDefaultBatch()
 	{
 		System.out.println("getting default batch");

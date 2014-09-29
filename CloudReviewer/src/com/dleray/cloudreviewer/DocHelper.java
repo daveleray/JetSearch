@@ -6,21 +6,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.responses.DocJSONResponse;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
+import com.dleray.cloudreviewer.structures.DocumentMetadata;
 import com.dleray.cloudreviewer.structures.UserTag;
-import com.dleray.cloudreviewer.structures.UserTagEndpoint;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.gson.Gson;
+import com.google.appengine.api.datastore.Text;
 
 public class DocHelper {
 
@@ -78,10 +83,48 @@ public class DocHelper {
 	        response.setBatchID(batch.getDocbatchID());
 	        response.setBatchSize(batch.getDocIDCollection().size());
 	        response.setAppliedTags(appliedTags);
-	        response.setDocInBatchIndex(DocumentHandler.getDocInBatchIndex(BatchHandler.getDefaultBatch(), null, d.getDocumentIdentifier()));
+	        response.setDocInBatchIndex(DocumentHandler.getDocInBatchIndex(batch, null, d.getDocumentIdentifier()));
 	        response.setDocIdentifier(d.getDocumentIdentifier());
 
 	    	return response;
+	}
+	public static DocumentMetadata getDocumentMetadataByID(String headerID,PersistenceManager mgr)
+	{
+		DocumentMetadata metadata = mgr.getObjectById(DocumentMetadata.class, headerID);
+		HashSet<String> values=metadata.getPossibleValues();
+		if(values==null)
+		{
+			values=new HashSet();
+		}
+		for(String s: values)
+		{
+			String toss=s;
+		}
+	
+		return metadata;
+	}
+	public static Document getDocumentByID(String docID,PersistenceManager mgr)
+	{
+		Document document = mgr.getObjectById(Document.class, docID);
+		if(document.getMetadataAndValuesNonSearchable()==null)
+		{
+			document.setMetadataAndValuesNonSearchable(new HashMap<String,Text>());
+		}
+		if(document.getMetadataAndValuesSearchable()==null)
+		{
+			document.setMetadataAndValuesSearchable(new HashMap<String,String>());
+		}
+		Set<String> force=document.getMetadataAndValuesNonSearchable().keySet();
+		Set<String> force2=document.getMetadataAndValuesSearchable().keySet();
+		for(String s: force)
+		{
+			document.getMetadataAndValuesNonSearchable().get(s);
+		}
+		for(String s: force2)
+		{
+			document.getMetadataAndValuesSearchable().get(s);
+		}
+		return document;
 	}
 	public static byte[] getBytes(InputStream is)
 	{

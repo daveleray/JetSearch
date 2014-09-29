@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.structures.UserTag;
-import com.dleray.cloudreviewer.structures.UserTagEndpoint;
 
 public class TagServlet extends HttpServlet {
 

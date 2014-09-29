@@ -27,6 +27,38 @@
   "ownerName" : "dleray.com",
   "packagePath" : "cloudreviewer.structures",
   "methods" : {
+    "taggingpanelendpoint.updateTaggingPanel" : {
+      "path" : "taggingpanel",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.updateTaggingPanel",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taggingpanelendpoint.insertTaggingPanel" : {
+      "path" : "taggingpanel",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.insertTaggingPanel",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "taggingpanelendpoint.removeTaggingPanel" : {
       "path" : "taggingpanel/{id}",
       "httpMethod" : "DELETE",
@@ -34,7 +66,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.removeTaggingPanel",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.removeTaggingPanel",
       "request" : {
         "parameters" : {
           "id" : {
@@ -48,17 +80,22 @@
         "body" : "empty"
       }
     },
-    "taggingpanelendpoint.insertTaggingPanel" : {
-      "path" : "taggingpanel",
-      "httpMethod" : "POST",
+    "taggingpanelendpoint.getTaggingPanel" : {
+      "path" : "taggingpanel/{id}",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.insertTaggingPanel",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.getTaggingPanel",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -71,7 +108,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.listTaggingPanel",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.listTaggingPanel",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -81,43 +118,6 @@
           "limit" : {
             "type" : "int32",
             "required" : false
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "taggingpanelendpoint.updateTaggingPanel" : {
-      "path" : "taggingpanel",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.updateTaggingPanel",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "taggingpanelendpoint.getTaggingPanel" : {
-      "path" : "taggingpanel/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.getTaggingPanel",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
           }
         },
         "body" : "empty"
@@ -161,9 +161,7 @@
       }
     },
     "methods" : {
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.removeTaggingPanel" : {
-      },
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.insertTaggingPanel" : {
+      "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.updateTaggingPanel" : {
         "request" : {
           "$ref" : "TaggingPanel"
         },
@@ -171,22 +169,24 @@
           "$ref" : "TaggingPanel"
         }
       },
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.listTaggingPanel" : {
+      "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.insertTaggingPanel" : {
+        "request" : {
+          "$ref" : "TaggingPanel"
+        },
+        "response" : {
+          "$ref" : "TaggingPanel"
+        }
+      },
+      "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.removeTaggingPanel" : {
+      },
+      "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.getTaggingPanel" : {
+        "response" : {
+          "$ref" : "TaggingPanel"
+        }
+      },
+      "com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint.listTaggingPanel" : {
         "response" : {
           "$ref" : "CollectionResponse_TaggingPanel"
-        }
-      },
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.updateTaggingPanel" : {
-        "request" : {
-          "$ref" : "TaggingPanel"
-        },
-        "response" : {
-          "$ref" : "TaggingPanel"
-        }
-      },
-      "com.dleray.cloudreviewer.structures.TaggingPanelEndpoint.getTaggingPanel" : {
-        "response" : {
-          "$ref" : "TaggingPanel"
         }
       }
     }

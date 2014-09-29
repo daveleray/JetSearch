@@ -11,12 +11,12 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
 import com.dleray.cloudreviewer.responses.ClientIssueTagCategory;
 import com.dleray.cloudreviewer.responses.ClientIssueTagSubCategory;
 import com.dleray.cloudreviewer.responses.ClientTagList;
 import com.dleray.cloudreviewer.responses.ClientTaggingControl;
 import com.dleray.cloudreviewer.structures.IssueTag;
-import com.dleray.cloudreviewer.structures.IssueTagEndpoint;
 
 @PersistenceCapable
 public class TagList {

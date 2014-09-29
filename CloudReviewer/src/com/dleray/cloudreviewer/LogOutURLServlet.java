@@ -22,7 +22,7 @@ public class LogOutURLServlet extends HttpServlet {
 		
 	     try {
 			UserService userService = UserServiceFactory.getUserService();
-
+			System.out.println("Request for login/logout url from:" + req.getUserPrincipal());
 			    String thisURL = req.getRequestURI();
 			    JSONObject json=new JSONObject();
 			    
@@ -37,7 +37,7 @@ public class LogOutURLServlet extends HttpServlet {
 			    }
 			    else
 			    {
-
+			    	System.out.println("detected null user!! send to logging in");
 			    	String loggingIn=userService.createLoginURL("/index.html");
 			    	json.put("URL",loggingIn);
 			    	String output=json.toString();

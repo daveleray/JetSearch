@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
+import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
+import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
-import com.dleray.cloudreviewer.structures.DocumentEndpoint;
 import com.dleray.cloudreviewer.structures.IssueTag;
-import com.dleray.cloudreviewer.structures.IssueTagEndpoint;
 import com.dleray.cloudreviewer.structures.UserTag;
-import com.dleray.cloudreviewer.structures.UserTagEndpoint;
 import com.google.api.server.spi.response.CollectionResponse;
 
 public class CSVServlet extends HttpServlet {

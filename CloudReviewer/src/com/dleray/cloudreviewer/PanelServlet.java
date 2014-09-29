@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint;
+import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
-import com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
-import com.dleray.cloudreviewer.structures.TaggingPanelEndpoint;
 import com.google.gson.Gson;
 
 public class PanelServlet extends HttpServlet {

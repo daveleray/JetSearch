@@ -34,7 +34,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.insertDocumentMetadata",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.insertDocumentMetadata",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -43,14 +43,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "documentmetadataendpoint.removeDocumentMetadata" : {
+    "documentmetadataendpoint.getDocumentMetadata" : {
       "path" : "documentmetadata/{id}",
-      "httpMethod" : "DELETE",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.removeDocumentMetadata",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.getDocumentMetadata",
       "request" : {
         "parameters" : {
           "id" : {
@@ -61,7 +61,23 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "documentmetadataendpoint.updateDocumentMetadata" : {
+      "path" : "documentmetadata",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.updateDocumentMetadata",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "documentmetadataendpoint.listDocumentMetadata" : {
@@ -71,7 +87,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.listDocumentMetadata",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.listDocumentMetadata",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -89,30 +105,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "documentmetadataendpoint.updateDocumentMetadata" : {
-      "path" : "documentmetadata",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.updateDocumentMetadata",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "documentmetadataendpoint.getDocumentMetadata" : {
+    "documentmetadataendpoint.removeDocumentMetadata" : {
       "path" : "documentmetadata/{id}",
-      "httpMethod" : "GET",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.getDocumentMetadata",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.removeDocumentMetadata",
       "request" : {
         "parameters" : {
           "id" : {
@@ -123,7 +123,7 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
@@ -164,7 +164,7 @@
       }
     },
     "methods" : {
-      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.insertDocumentMetadata" : {
+      "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.insertDocumentMetadata" : {
         "request" : {
           "$ref" : "DocumentMetadata"
         },
@@ -172,25 +172,25 @@
           "$ref" : "DocumentMetadata"
         }
       },
-      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.removeDocumentMetadata" : {
+      "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.getDocumentMetadata" : {
+        "response" : {
+          "$ref" : "DocumentMetadata"
+        }
       },
-      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.listDocumentMetadata" : {
+      "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.updateDocumentMetadata" : {
+        "request" : {
+          "$ref" : "DocumentMetadata"
+        },
+        "response" : {
+          "$ref" : "DocumentMetadata"
+        }
+      },
+      "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.listDocumentMetadata" : {
         "response" : {
           "$ref" : "CollectionResponse_DocumentMetadata"
         }
       },
-      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.updateDocumentMetadata" : {
-        "request" : {
-          "$ref" : "DocumentMetadata"
-        },
-        "response" : {
-          "$ref" : "DocumentMetadata"
-        }
-      },
-      "com.dleray.cloudreviewer.structures.DocumentMetadataEndpoint.getDocumentMetadata" : {
-        "response" : {
-          "$ref" : "DocumentMetadata"
-        }
+      "com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint.removeDocumentMetadata" : {
       }
     }
   }

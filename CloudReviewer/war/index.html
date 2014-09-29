@@ -9,7 +9,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+  <link rel="stylesheet" href="jquery.mobile-1.4.3.min.css">
    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script src="build/pdf.js"></script>
@@ -28,8 +28,197 @@
     // combined `pdf.worker.js` file.
     PDFJS.workerSrc = '../build/pdf.worker.js';
  	 </script>
-  
+ 
+ 
 
+      
+
+<style type="text/css">
+
+ 
+.ui-panel {
+    width: 40em;
+}
+ 
+.ui-panel.ui-panel-position-right {
+    width: 40em;
+}
+ 
+.ui-panel.ui-panel-closed {
+    width: 0;
+}
+ 
+.ui-panel-position-left {
+    left: -40em
+}
+ 
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay, .ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+    -webkit-transform: translate3d(-40em, 0, 0);
+    -moz-transform: translate3d(-40em, 0, 0);
+    transform: translate3d(-40em, 0, 0)
+}
+ 
+.ui-panel-position-right {
+    right: -40em
+}
+ 
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay, .ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
+    -webkit-transform: translate3d(40em, 0, 0);
+    -moz-transform: translate3d(40em, 0, 0);
+    transform: translate3d(40em, 0, 0)
+}
+ 
+.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open, .ui-panel-content-wrap-position-left.ui-panel-content-wrap-open, .ui-panel-dismiss-position-left.ui-panel-dismiss-open {
+    left: 40em;
+    right: -40em
+}
+ 
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal, .ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push, .ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal, .ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
+    -webkit-transform: translate3d(40em, 0, 0);
+    -moz-transform: translate3d(40em, 0, 0);
+    transform: translate3d(40em, 0, 0)
+}
+ 
+.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open, .ui-panel-content-wrap-position-right.ui-panel-content-wrap-open, .ui-panel-dismiss-position-right.ui-panel-dismiss-open {
+    left: -40em;
+    right: 40em
+}
+ 
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal, .ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push, .ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal, .ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
+    -webkit-transform: translate3d(-40em, 0, 0);
+    -moz-transform: translate3d(-40em, 0, 0);
+    transform: translate3d(-40em, 0, 0)
+}
+ 
+@media (min-width:55em) {
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+        margin-right: 40em
+    }
+ 
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right, .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+        margin-left: 40em
+    }
+}
+
+  .ui-panel.ui-panel-open {
+    position:fixed;
+}
+.ui-panel-inner {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+
+table{
+border-collapse:collapse;
+border:1px solid #FF0000;
+}
+
+table td{
+border:1px solid #FF0000;
+}
+
+
+
+/* wrap on wide viewports once open */
+
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+    margin-right: 40em;
+}
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+    margin-left: 40em;
+}
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal {
+    width: auto;	
+}
+
+/* disable "dismiss" on wide viewports */
+.ui-responsive-panel .ui-panel-dismiss-display-push {
+    display: none;
+}
+
+
+</style>
+
+<script>
+
+
+
+$(document).on("panelopen", "#rightpanel2", function(e, ui) {
+	updateTable();
+});
+
+
+</script>
+
+<script>
+
+function drawTable(data) {
+	
+	   var row = $("<tr />")
+	    $("#docdatatable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+	    
+	    for(var j=0;j<data.headers.length;j++)
+	    	{
+	    	row.append($("<td>" + data.headers[j] + "</td>"));
+	    	}
+	    
+	    
+    for (var i = 0; i < data.rows.length; i++) {
+        drawRow(data,i);
+    }
+    
+    $("#docdatatable").trigger("create");
+}
+
+function drawRow(data,rownum) {
+	var rowData=data.rows[rownum];
+    var row = $("<tr id="+rowData.info[1]+" />");
+    
+    $("#docdatatable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+    
+	  $('#'+rowData.info[1]).click(function(e){
+		  var test=window.curDocID;
+			//first, call next document
+			$.get('doc?currentDocID='+rowData.info[1]+'&folder='+window.selectedFolder+'&docdirection=current', function( data ) {				 
+				updateEverythingBasedOnDocJSONResponse(data);		
+			}); 
+			});
+    
+    for(var j=0;j<data.headers.length;j++)
+    	{
+    		row.append($("<td>" + rowData.info[j] + "</td>"));
+    	}
+}
+
+function getSearchParameters() {
+    var prmstr = window.location.search.substr(1);
+    return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+}
+
+function transformToAssocArray( prmstr ) {
+  var params = {};
+  var prmarr = prmstr.split("&");
+  for ( var i = 0; i < prmarr.length; i++) {
+      var tmparr = prmarr[i].split("=");
+      params[tmparr[0]] = tmparr[1];
+  }
+  return params;
+}
+</script>
 
   
 <script>
@@ -43,12 +232,11 @@
     
     $("#getExport").click(function(){  	
     	
-    	
-    	$.get('getcsv',function(data){
-
-    		
-    	});        
+    	window.location='getcsv';
+       
     }); 
+    
+    
 });
 </script>
 
@@ -135,6 +323,34 @@ function updateDisplay()
 		  	  displayText(window.curDocID);
 		  }
 }
+
+function updateTable()
+{
+	var table = document.getElementById("docdatatable");
+	
+	var colorToUse= "#365890";
+	
+
+	
+	for (var i = 0, row; row = table.rows[i]; i++) {
+	   //iterate through rows
+	   //rows would be accessed using the "row" variable assigned in the for loop
+	   		var testString=row.cells[1].innerText;
+	   	   if(testString== window.curDocID)
+		   {
+	   		    row.style.backgroundColor = colorToUse;
+                row.style.color = "#FFFFFF";
+		   }
+	   	   else
+	   		   {
+	   		   		if(row.style.backgroundColor=colorToUse)
+	   		   			{
+	   		   	    		row.style.backgroundColor = "#FFFFFF";
+	                		row.style.color = "#000000";
+	   		   			}
+	   		   }
+	}
+}
 </script>
 
 <script>
@@ -143,7 +359,9 @@ function updateDisplay()
 		 		var response=data;
 				window.curDocID=response.docIdentifier;
 				  
+			
 				
+				updateTable();
 				
 				var docInfoString="Document #"+(response.docInBatchIndex+1)+ " out of " + response.batchSize + "  ("+response.docIdentifier+")";
 				$('#docinfo').html(docInfoString);
@@ -221,7 +439,10 @@ function addIssueTag(containername,issuetagdisplay,issuetagID)
 	   container.trigger("create");
 
 }
-</script>	
+</script>
+
+
+	
 <script>
 function addIssuePanel(clienttaglist)
 {
@@ -260,35 +481,52 @@ function addIssuePanel(clienttaglist)
 </script>
 <script>
   // Bind the swipeHandler callback function to the swipe event on div.box
-  $(document).on('pageinit',function(event){
+  $(document).on('pagecreate',function(event){
   
-	  $(document).swiperight(function(){
+	  var browserParams=getSearchParameters();
+	  if(browserParams.folder == null)
+		  {
+		  		window.location="folders.html";
+		  }
+	  else
+		  {
+		  	window.selectedFolder=browserParams.folder;
+		  }
+	  $('#nextdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
-			$.get('nextdoc?currentDocID='+window.curDocID, function( data ) {				
+			$.get('doc?currentDocID='+window.curDocID+'&folder='+window.selectedFolder+'&docdirection=next', function( data ) {				
 				updateEverythingBasedOnDocJSONResponse(data);
 			}); 
 			});
 	    
-	  $(document).swipeleft(function(){
+	  $('#prevdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
-			$.get('previousdoc?currentDocID='+window.curDocID, function( data ) {				 
+			$.get('doc?currentDocID='+window.curDocID+'&folder='+window.selectedFolder+'&docdirection=prev', function( data ) {				 
 				updateEverythingBasedOnDocJSONResponse(data);		
 			}); 
 			});
 	  	  
-	 
+	
+	 	
 		$.get('panel', function( data ) {				
 			
 			addIssuePanel(data);
 			
 			
 			  $('#viewerdiv').html('HELLO WORLD');
+				var browserParams=getSearchParameters();
 				
 				//first doc
-				$.get('nextdoc', function( data ) {				
-					updateEverythingBasedOnDocJSONResponse(data);
+				$.get('doc?folder='+browserParams.folder+'&docdirection=next', function( data ) {
+				 	$.get('batches?batch='+window.selectedFolder, function(data2){
+			 			drawTable(data2);
+			 			$( "#rightpanel2" ).trigger( "updatelayout" );
+			 			updateEverythingBasedOnDocJSONResponse(data);
+			 	});
+				 	
+					
 					
 				$("input:radio[name=viewerselect]").click(function() {
 					    var value = $(this).val();
@@ -336,9 +574,9 @@ function addIssuePanel(clienttaglist)
 
    
     
-        <div data-role="page" id="review">
+        <div data-role="page" id="review" class="ui-responsive-panel">
  
-        <div data-role="header" data-id="foo1" data-position="fixed">
+        <div data-role="header" data-id="foo1">
             		<h1>CloudReviewer</h1>
 	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
 				
@@ -350,13 +588,10 @@ function addIssuePanel(clienttaglist)
 			</ul>
 		</div><!-- /navbar -->  
 
-		
-		<div data-role="navbar">
-	<ul>
-		<li><a href="index.html" class="ui-btn-active ui-state-persist">Review</a></li>
-		<li><a href="folders.html">Folders</a></li>
-	</ul>
-</div><!-- /navbar -->
+
+		<a data-ajax="false" href="index.html" class="ui-btn-active ">Review</a>
+		<a data-ajax="false" href="folders.html" >Folders</a>
+
 		
         </div><!-- /header -->
  
@@ -387,12 +622,34 @@ function addIssuePanel(clienttaglist)
 
 <div id="docwrapper" style="border:3px solid black">
 
-    <fieldset data-role="controlgroup" data-type="horizontal">
-    <input type="radio" name="viewerselect" id="radio-choice-h-2a" value="text" checked="checked">
-    <label for="radio-choice-h-2a">Text</label>
-    <input type="radio" name="viewerselect" id="radio-choice-h-2b" value="pdf">
-    <label for="radio-choice-h-2b">PDF</label>
-	</fieldset>
+    
+    <div id="topwrapper" style="border-bottom:3px solid black">
+    	<a href="#rightpanel2" id="doclistbutton" data-role="button" data-inline="true" data-mini="true">Doc List</a>
+    </div>
+    <div id="controlwrapper" class=ui-grid-c>
+    <div class="ui-block-a">    
+	    <fieldset data-role="controlgroup" data-type="horizontal">
+	    <input type="radio" name="viewerselect" id="radio-choice-h-2a" value="text" checked="checked">
+	    <label for="radio-choice-h-2a">Text</label>
+	    <input type="radio" name="viewerselect" id="radio-choice-h-2b" value="pdf">
+	    <label for="radio-choice-h-2b">PDF</label>
+		</fieldset>
+	</div>
+	<div class="ui-block-b"></div>
+	<div class="ui-block-c"></div>
+	
+    <div class="ui-block-d">
+    	<div data-role="controlgroup" data-type="horizontal">
+		<button id="prevdoc">Prev</button>
+		<button id="nextdoc">Next</button>
+		</div>
+    </div>
+    
+    </div>
+
+	
+	
+	
 	<div id="docinfo">
 			</div>
     		<div id="viewerdiv" style="border:1px solid black"> 
@@ -407,6 +664,19 @@ function addIssuePanel(clienttaglist)
     
         </div><!-- /content -->
  
+ 
+ 	<!-- rightpanel2  -->
+		<div data-role="panel" id="rightpanel2" data-dismissible="false" data-positionFixed="true" data-swipeClose="false" data-position="right" data-display="push" >
+			
+			
+           <!--<table id="docdatatable" data-role="table" data-mode="columntoggle"> /content -->
+            
+            <table id="docdatatable" data-role="table">
+            </table>
+            <a href="#demo-links" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="true">Close panel</a>
+
+		</div><!-- /rightpanel2 -->
+		
         <div data-role="footer">
             <h4>&copy David LeRay 2014</h4>
         </div><!-- /footer -->

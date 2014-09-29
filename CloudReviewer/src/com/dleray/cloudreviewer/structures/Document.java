@@ -24,10 +24,13 @@ public class Document {
 	private ArrayList<String> tagIDs=new ArrayList();
 
 	@Persistent(defaultFetchGroup="true")
-	private java.util.HashMap<DocumentMetadata,String> metadataAndValues=new java.util.HashMap();
+	private java.util.HashMap<String,String> metadataAndValuesSearchable=new java.util.HashMap();
 	
 	@Persistent
 	private Text extractedText;
+	
+	@Persistent(defaultFetchGroup="true")
+	private java.util.HashMap<String,Text> metadataAndValuesNonSearchable=new java.util.HashMap();
 	
 
 
@@ -66,14 +69,26 @@ public class Document {
 		this.tagIDs = tagIDs;
 	}
 
-	public java.util.HashMap<DocumentMetadata, String> getMetadataAndValues() {
-		return metadataAndValues;
+	public java.util.HashMap<String, String> getMetadataAndValuesSearchable() {
+		return metadataAndValuesSearchable;
 	}
 
-	public void setMetadataAndValues(
-			java.util.HashMap<DocumentMetadata, String> metadataAndValues) {
-		this.metadataAndValues = metadataAndValues;
+	public void setMetadataAndValuesSearchable(
+			java.util.HashMap<String, String> metadataAndValuesSearchable) {
+		this.metadataAndValuesSearchable = metadataAndValuesSearchable;
 	}
+
+	public java.util.HashMap<String, Text> getMetadataAndValuesNonSearchable() {
+		return metadataAndValuesNonSearchable;
+	}
+
+	public void setMetadataAndValuesNonSearchable(
+			java.util.HashMap<String, Text> metadataAndValuesNonSearchable) {
+		this.metadataAndValuesNonSearchable = metadataAndValuesNonSearchable;
+	}
+
+	
+
 
 
 	

@@ -10,16 +10,18 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+   <link rel="stylesheet" href="jqm-icon-pack-fa.css">
    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-    <script src="build/pdf.js"></script>
-   <script src="jquery.fittext.js"></script>
+
+
 
 <script>
 
+
 function addFolderToSomeDiv(container,folder)
 {
-	window.folderString=window.folderString+'<li>'+folder.folderName+'<ul>';
+	window.folderString=window.folderString+'<div data-collapsed-icon="folder" and data-expanded-icon="folder-open" data-mini="true" data-theme="a" data-content-theme="a" data-role="collapsible" id="'+folder.folderName+'"><h3>'+folder.folderName+'</h3>';
 	//container.append($('<li><h3>'+folder.folderName+'</h3><ul>'));
 	var localCopy=window.folderString;
 	 var numSubFolders=folder.subFolders.length;
@@ -29,69 +31,239 @@ function addFolderToSomeDiv(container,folder)
      
      var numFiles=folder.files.length;
      for(var j=0;j<numFiles;j++){
-    	 window.folderString=window.folderString+'<li>'+folder.files[j].displayName+'</li>';
+    	 window.folderString=window.folderString+'<a data-ajax="false" href=index.html?folder='+folder.files[j].batchID+'>'+folder.files[j].displayName+'</a><br>';
     	 //container.append($('<li><p>'+folder.files[j].displayName+'</p></li>'));
      }
-     window.folderString=window.folderString+'</ul></li>';
+     window.folderString=window.folderString+'</div>';
 	// container.append($('</ul></li>'));
 }
-  //setup folders
-  $(document).on('pageinit',function(event){
-  
-			$.get('folders', function( data ) {				
+
+function recalculateFolders()
+{
+	$("#folders").empty();
+	$("#folderid").empty();
+	$("#parent_folderid").empty();
+	$.get('folders', function( data ) {				
+		
+		 var container = $('#folders');
+		// window.folderString='<div data-role="collapsible" id="folderlist" data-theme="g"><h3>Files</h3>';
+		window.folderString='';
+		 addFolderToSomeDiv(container,data);
+		// window.folderString=window.folderString+'</div>';
+		 container.append($(window.folderString));
+		 container.trigger("create");
 			
-				 var container = $('#folders');
-				 window.folderString='<ul data-role="listview" id="folderlist" data-theme="g">';
-				 addFolderToSomeDiv(container,data);
-				 window.folderString=window.folderString+'</ul>';
-				 container.append($(window.folderString));
-				 alert(window.folderString);
-				 container.trigger("create");
-			}); 
+		addTheFolderOptions(data,"folderid");
+		addTheFolderOptions(data,"parent_folderid");
+		
+	});
+
+
+}
+
+function addTheFolderOptions(data,divid)
+{
+	 for(var j=0;j<data.simpleFolderDisplay.length;j++)
+	 {
+	 	var o = new Option(data.simpleFolderDisplay[j], data.simpleFolderIDs[j]);
+		/// jquerify the DOM object 'o' so we can use the html method
+		$(o).html(data.simpleFolderDisplay[j]);
+		$("#"+divid).append(o);
+	 }
+}
+
+  //setup folders
+  $(document).on('pagecreate',function(event){
+  
+	  if(window.pageinit)
+		 {
+		  return;
+		 }
+	  	
+	  $("#submitformbutton").click(function(event2){  
+		 	 event2.stopPropagation();
+		    var postData = $('#addbatchform').serializeArray();
+		    var formURL = "batches";
+		    $.ajax(
+		    {
+		        url : formURL,
+		        type: "POST",
+		        data : postData,
+		        success:function(data, textStatus, jqXHR) 
+		        {
+		        						
+					$('#batchname').val("MyBatch");
+					$('#docids').val("");
+				 	 $('#folderid').val("root");
+					
+		        	recalculateFolders();
+		        	$( ":mobile-pagecontainer" ).pagecontainer( "change", "#folderspage", { } );
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) 
+		        {
+		            //if fails      
+		        }
+		    });
+  
+		});
+		 //submitformbutton
+	  
+		 
+		 //submitformbutton_folder
+	  $("#submitformbutton_folder").click(function(event2){  
+		 	 event2.stopPropagation();
+		    var postData = $('#addfolderform').serializeArray();
+		    var formURL = "folders";
+		    $.ajax(
+		    {
+		        url : formURL,
+		        type: "POST",
+		        data : postData,
+		        success:function(data, textStatus, jqXHR) 
+		        {
+		        						
+					$('#foldername').val("MyFolder");
+				 	 $('#parent_folderid').val("root");	
+		        	recalculateFolders();
+		        	$( ":mobile-pagecontainer" ).pagecontainer( "change", "#folderspage", { } );
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) 
+		        {
+		            //if fails      
+		        }
+		    });
+  
+		});
+		 //submitformbutton		 
+		 
+	  	///added new function
+		$.get( "getlo", function( data ) {
+			var tmpObj = data.URL
+			if(!data.USER)
+				{
+					window.location=data.URL;
+				}
+			if(window.pageinit)
+				{
+				
+				}
+			else
+				{					
+							recalculateFolders();
+							window.pageinit=true;
+				}
+ 
 			});
+
+		});
 </script>
+
+
 
     <title>CloudReviewer</title>
   </head>
 
   <body>
-        <div data-role="page" id="review">
+        <div data-role="page" id="folderspage">
  
         <div data-role="header" data-id="foo1" data-position="fixed">
             		<h1>CloudReviewer</h1>
-	<!-- <a href="index.html" data-icon="gear" class="ui-btn-right">Options</a> -->
-				
-	<!-- 	<div data-role="navbar">
-			<ul>
-				<li><a href="#review" data-prefetch="true" class="ui-btn-active ui-state-persist">Review</a></li>
-				<li><a href="#edittags" data-prefetch="true" >Tagging Setup</a></li>
-				<li><a href="edithl.html" data-prefetch="true" >Highlighting Setup</a></li>
-			</ul>
-		</div><!-- /navbar -->  
-
 		
-		<div data-role="navbar">
-	<ul>
-		<li><a href="index.html" >Review</a></li>
-		<li><a href="folders.html" class="ui-btn-active ui-state-persist">Folders</a></li>
-	</ul>
-</div><!-- /navbar -->
+		<a data-ajax="false" href="index.html" >Review</a>
+		<a data-ajax="false" href="folders.html" class="ui-btn-active">Folders</a>
 		
         </div><!-- /header -->
     
     
         <div data-role="content">
     
-    	<div id="folders">
-    	
-    	</div>
+			    	<div id="folders">
+			    	
+			    	</div>
+	<a href="#popup" data-role="button" data-transition="pop">Add new Batch by Doc IDs</a>
+	<a href="#newfolder" data-role="button" data-transition="pop">Add new Folder</a>
         </div><!-- /content -->
  
-        <div data-role="footer">
+ 
+ 
+        <div data-role="footer" data-position="fixed">
             <h4>&copy David LeRay 2014</h4>
         </div><!-- /footer -->
  
     </div><!-- /page -->
+    
+    
+    
+    <!-- Start of second page: #popup -->
+<div data-role="page" id="popup">
+
+	<div data-role="header" data-theme="e">
+		<h1>New Batch</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+		<form id="addbatchform" > 
+				
+			<div data-role="fieldcontain">
+	         <label for="batchname">Batch Name:</label>
+	         <input type="text" name="batchname" id="batchname" value="MyBatch"  />
+			</div>
+			
+			<div data-role="fieldcontain">
+			<label for="docids">Document IDs:</label>
+			<textarea data-role="none" cols="40" rows="15" name="docids" id="docids"></textarea>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="folderid" class="select">Choose folder:</label>
+				<select name="folderid" id="folderid">
+				</select>
+			</div>
+	
+		 </form>
+			<button id="submitformbutton" data-theme="b" name="submit" value="submit-value">Submit</button>		
+		
+		<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back">Cancel</a></p>	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		  <h4>&copy David LeRay 2014</h4>
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+
+       <!-- Start of third page: #popup -->
+<div data-role="page" id="newfolder">
+
+	<div data-role="header" data-theme="e">
+		<h1>New Folder</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+		<form id="addfolderform" > 
+				
+			<div data-role="fieldcontain">
+	         <label for="foldername">Folder Name:</label>
+	         <input type="text" name="foldername" id="foldername" value="MyFolder"  />
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="parent_folderid" class="select">Choose Parent Folder:</label>
+				<select name="parent_folderid" id="parent_folderid">
+				</select>
+			</div>
+	
+		 </form>
+			<button id="submitformbutton_folder" data-theme="b" name="submit" value="submit-value">Add Folder</button>		
+		
+		<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back">Cancel</a></p>	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		  <h4>&copy David LeRay 2014</h4>
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+   
+   
     
   </body>
 </html>

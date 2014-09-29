@@ -50,7 +50,7 @@ public class DocumentBatch {
 		HashSet<String> output=new HashSet();
 		for(Text t: this.docIDCollection)
 		{
-			output.add(t.toString());
+			output.add(t.getValue());
 		}
 		return output;
 	}

@@ -27,26 +27,17 @@
   "ownerName" : "dleray.com",
   "packagePath" : "cloudreviewer.structures",
   "methods" : {
-    "usertagendpoint.listUserTag" : {
+    "usertagendpoint.insertUserTag" : {
       "path" : "usertag",
-      "httpMethod" : "GET",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.listUserTag",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.insertUserTag",
       "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -59,7 +50,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.removeUserTag",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.removeUserTag",
       "request" : {
         "parameters" : {
           "id" : {
@@ -80,47 +71,10 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.getUserTagsByDoc",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.getUserTagsByDoc",
       "request" : {
         "parameters" : {
           "docid" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "usertagendpoint.insertUserTag" : {
-      "path" : "usertag",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.insertUserTag",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "usertagendpoint.getUserTag" : {
-      "path" : "usertag/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.getUserTag",
-      "request" : {
-        "parameters" : {
-          "id" : {
             "type" : "string",
             "required" : true
           }
@@ -138,10 +92,56 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.UserTagEndpoint.updateUserTag",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.updateUserTag",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "usertagendpoint.listUserTag" : {
+      "path" : "usertag",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.listUserTag",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "usertagendpoint.getUserTag" : {
+      "path" : "usertag/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.getUserTag",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -150,21 +150,6 @@
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_UserTag" : {
-        "id" : "CollectionResponse_UserTag",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "UserTag"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "UserTag" : {
         "id" : "UserTag",
         "type" : "object",
@@ -201,22 +186,40 @@
             }
           }
         }
+      },
+      "CollectionResponse_UserTag" : {
+        "id" : "CollectionResponse_UserTag",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "UserTag"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.listUserTag" : {
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.insertUserTag" : {
+        "request" : {
+          "$ref" : "UserTag"
+        },
         "response" : {
-          "$ref" : "CollectionResponse_UserTag"
+          "$ref" : "UserTag"
         }
       },
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.removeUserTag" : {
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.removeUserTag" : {
       },
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.getUserTagsByDoc" : {
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.getUserTagsByDoc" : {
         "response" : {
           "$ref" : "UserTagCollection"
         }
       },
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.insertUserTag" : {
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.updateUserTag" : {
         "request" : {
           "$ref" : "UserTag"
         },
@@ -224,15 +227,12 @@
           "$ref" : "UserTag"
         }
       },
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.getUserTag" : {
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.listUserTag" : {
         "response" : {
-          "$ref" : "UserTag"
+          "$ref" : "CollectionResponse_UserTag"
         }
       },
-      "com.dleray.cloudreviewer.structures.UserTagEndpoint.updateUserTag" : {
-        "request" : {
-          "$ref" : "UserTag"
-        },
+      "com.dleray.cloudreviewer.endpoints.UserTagEndpoint.getUserTag" : {
         "response" : {
           "$ref" : "UserTag"
         }

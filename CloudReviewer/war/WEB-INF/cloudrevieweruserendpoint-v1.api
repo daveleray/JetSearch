@@ -27,17 +27,22 @@
   "ownerName" : "dleray.com",
   "packagePath" : "cloudreviewer.structures",
   "methods" : {
-    "cloudrevieweruserendpoint.updateCloudReviewerUser" : {
-      "path" : "cloudrevieweruser",
-      "httpMethod" : "PUT",
+    "cloudrevieweruserendpoint.getCloudReviewerUser" : {
+      "path" : "cloudrevieweruser/{id}",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.updateCloudReviewerUser",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.getCloudReviewerUser",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -50,7 +55,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.listCloudReviewerUser",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.listCloudReviewerUser",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -75,7 +80,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.removeCloudReviewerUser",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.removeCloudReviewerUser",
       "request" : {
         "parameters" : {
           "id" : {
@@ -87,6 +92,22 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "cloudrevieweruserendpoint.updateCloudReviewerUser" : {
+      "path" : "cloudrevieweruser",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.updateCloudReviewerUser",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "cloudrevieweruserendpoint.insertCloudReviewerUser" : {
@@ -96,31 +117,10 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.insertCloudReviewerUser",
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.insertCloudReviewerUser",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "cloudrevieweruserendpoint.getCloudReviewerUser" : {
-      "path" : "cloudrevieweruser/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.getCloudReviewerUser",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -164,22 +164,19 @@
       }
     },
     "methods" : {
-      "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.updateCloudReviewerUser" : {
-        "request" : {
-          "$ref" : "CloudReviewerUser"
-        },
+      "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.getCloudReviewerUser" : {
         "response" : {
           "$ref" : "CloudReviewerUser"
         }
       },
-      "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.listCloudReviewerUser" : {
+      "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.listCloudReviewerUser" : {
         "response" : {
           "$ref" : "CollectionResponse_CloudReviewerUser"
         }
       },
-      "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.removeCloudReviewerUser" : {
+      "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.removeCloudReviewerUser" : {
       },
-      "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.insertCloudReviewerUser" : {
+      "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.updateCloudReviewerUser" : {
         "request" : {
           "$ref" : "CloudReviewerUser"
         },
@@ -187,7 +184,10 @@
           "$ref" : "CloudReviewerUser"
         }
       },
-      "com.dleray.cloudreviewer.structures.CloudReviewerUserEndpoint.getCloudReviewerUser" : {
+      "com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint.insertCloudReviewerUser" : {
+        "request" : {
+          "$ref" : "CloudReviewerUser"
+        },
         "response" : {
           "$ref" : "CloudReviewerUser"
         }

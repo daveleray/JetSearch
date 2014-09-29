@@ -1,11 +1,11 @@
 package com.dleray.cloudreviewer;
 
+import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
+import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
+import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
 import com.dleray.cloudreviewer.structures.IssueTag;
-import com.dleray.cloudreviewer.structures.IssueTagEndpoint;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
-import com.dleray.cloudreviewer.structures.TaggingPanelEndpoint;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
-import com.dleray.cloudreviewer.structures.taggingcontrol.TagListEndpoint;
 import com.google.api.server.spi.response.CollectionResponse;
 
 public class PanelHandler {

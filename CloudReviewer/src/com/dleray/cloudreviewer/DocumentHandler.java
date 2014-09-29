@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
-import com.dleray.cloudreviewer.structures.DocumentEndpoint;
 import com.dleray.cloudreviewer.structures.SortStrategy;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files.Get;
@@ -19,15 +19,19 @@ public class DocumentHandler {
 	
 	public static void processDriveFileList(java.util.List<File> allFiles,Drive gDrive)
 	{
+		Integer numFilesAttempt=0;
+		Integer numFilesInStorage=0;
+		Integer numNewFiles=0;
+		
 		for(File f: allFiles)
 		{
-		
+			numFilesAttempt+=1;
 			if(f.getMimeType().contains("folder"))
 			{
 				System.out.println("Skipping:" + f.getTitle());
 				continue;
 			}
-			System.out.println("Process:" + f.getOriginalFilename() + " id:" + f.getId() + " desc:"+ f.getDescription());
+			//System.out.println("Process:" + f.getOriginalFilename() + " id:" + f.getId() + " desc:"+ f.getDescription());
 			if(f.getOriginalFilename()==null)
 			{
 				Double a=5.0;
@@ -38,11 +42,13 @@ public class DocumentHandler {
 			Document testForDoc;
 			try {
 				testForDoc = endpoint.getDocument(docIdentifier);
+				numFilesInStorage+=1;
 			} catch (Exception e) {
 				testForDoc=null;
 			}
 			if(testForDoc==null)
 			{
+				numNewFiles+=1;
 				System.out.println("Adding new document:" + f.getOriginalFilename());
 				testForDoc=new Document();
 				testForDoc.setDocumentIdentifier(docIdentifier);
@@ -55,7 +61,7 @@ public class DocumentHandler {
 				{
 
 					String text=DocHelper.getTextData(f, gDrive);
-					System.out.println("Added File txt of:" + f.getOriginalFilename() + " with size:" + f.getFileSize());
+					//System.out.println("Added File txt of:" + f.getOriginalFilename() + " with size:" + f.getFileSize());
 					Text t=new Text(text);
 					testForDoc.setExtractedText(t);
 				}
@@ -68,6 +74,10 @@ public class DocumentHandler {
 			}
 		
 		}
+		System.out.println("NumFilesAttempted:"+numFilesAttempt);
+		System.out.println("NumFilesInStorage:"+numFilesInStorage);
+		System.out.println("NumFilesAdded:"+numNewFiles);
+	
 		
 	}
 	
@@ -79,6 +89,8 @@ public class DocumentHandler {
 		
 		if(currentID==null)
 		{
+			System.out.println(docIDList);
+			System.out.println("getting:" + docIDList.get(0));
 			return docEndpoint.getDocument(docIDList.get(0));
 		}
 		for(int i=0;i<docIDList.size();i++)
