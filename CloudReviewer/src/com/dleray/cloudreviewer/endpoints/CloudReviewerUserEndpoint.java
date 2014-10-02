@@ -36,10 +36,7 @@ public class CloudReviewerUserEndpoint {
 	public CollectionResponse<CloudReviewerUser> listCloudReviewerUser(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
 		List<CloudReviewerUser> execute = null;
@@ -137,11 +134,7 @@ public class CloudReviewerUserEndpoint {
 	@ApiMethod(name = "updateCloudReviewerUser")
 	public CloudReviewerUser updateCloudReviewerUser(
 			CloudReviewerUser cloudrevieweruser) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
-		
+
 		PersistenceManager mgr = getPersistenceManager();
 		try {
 			if (!containsCloudReviewerUser(cloudrevieweruser)) {

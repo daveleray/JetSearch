@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,25 +43,35 @@ public class BatchServlet extends HttpServlet{
 		 
 		 DocumentEndpoint docendpoint=new DocumentEndpoint();
 		 ArrayList<Document> allDocs=new ArrayList();
+		 System.out.println("Collecting Docs");
+		 PersistenceManager pm=PMF.get().getPersistenceManager();
+		 
 		 for(String doc: docIDs)
 		 {
-			 Document d=docendpoint.getDocument(doc);
+			 Document d=pm.getObjectById(Document.class,doc);
 			 allDocs.add(d);
-			 for(String s: d.getMetadataAndValuesNonSearchable().keySet())
+			 if(d.getMetadataAndValuesNonSearchable()!=null)
 			 {
-				 allHeaders.add(s);
+				 for(String s: d.getMetadataAndValuesNonSearchable().keySet())
+				 {
+					 allHeaders.add(s);
+				 }
 			 }
-			 for(String s: d.getMetadataAndValuesSearchable().keySet())
+			 if(d.getMetadataAndValuesSearchable()!=null)
 			 {
-				 allHeaders.add(s);
+				 for(String s: d.getMetadataAndValuesSearchable().keySet())
+				 {
+					 allHeaders.add(s);
+				 }
 			 }
+		
 		 }
 		 ArrayList<String> sortedHeaders=new ArrayList(allHeaders);
 		 Collections.sort(sortedHeaders);
 		
 		 
 		 
-		 
+		 System.out.println("Building Rows");
 		 ArrayList<ClientBatchMetadataRow> outputRows=new ArrayList();
 		 Integer num=0;
 		 for(Document d: allDocs)
@@ -72,11 +83,11 @@ public class BatchServlet extends HttpServlet{
 			 info.add(d.getDocumentIdentifier());
 			 for(String s: sortedHeaders)
 			 {
-				 if(d.getMetadataAndValuesSearchable().keySet().contains(s))
+				 if(d.getMetadataAndValuesSearchable()!=null && d.getMetadataAndValuesSearchable().keySet().contains(s))
 				 {
 					 info.add(d.getMetadataAndValuesSearchable().get(s));
 				 }
-				 else if(d.getMetadataAndValuesNonSearchable().keySet().contains(s))
+				 else if(d.getMetadataAndValuesNonSearchable()!=null && d.getMetadataAndValuesNonSearchable().keySet().contains(s))
 				 {
 					 info.add(d.getMetadataAndValuesNonSearchable().get(s).getValue());
 				 }
@@ -88,16 +99,17 @@ public class BatchServlet extends HttpServlet{
 			 thisRow.setInfo(info);
 			 outputRows.add(thisRow);
 		 }
+		 pm.close();
 		 sortedHeaders.add(0,"ID");
 		 sortedHeaders.add(0,"#");
 		 output.setHeaders(sortedHeaders);
 		 output.setRows(outputRows);
-	
+		 System.out.println("Sending Rows");
 	    	resp.setContentType("application/json");
 	    	Gson gson=new Gson();
 	    	String sending=gson.toJson(output);
 	    	resp.getWriter().println(sending);
-			System.out.println("\tRESPONSE:"+sending);
+	    	System.out.println("Sent batch of size:" + outputRows.size());
 	}
 
 	@Override
@@ -105,30 +117,34 @@ public class BatchServlet extends HttpServlet{
 			throws ServletException, IOException {
 		
 		
-		   // Read from request
-	    StringBuilder buffer = new StringBuilder();
-	    BufferedReader reader = req.getReader();
-	    String line;
-	    while ((line = reader.readLine()) != null) {
-	        buffer.append(line);
-	    }
-	    String data = buffer.toString();
-	    String[] params=data.split("&");
-	    HashMap<String,String> paramMap=new HashMap();
-	    for(String p : params)
-	    {
-	    	String[] pairing=p.split("=");
-	    	if(pairing.length>1)
-	    	{
-	    		paramMap.put(pairing[0],pairing[1]);
-	    	}
-	    	
-	    }
-		String batchName = paramMap.get("batchname");
-		String folderID=paramMap.get("folderid");
+//		   // Read from request
+//	    StringBuilder buffer = new StringBuilder();
+//	    BufferedReader reader = req.getReader();
+//	    String line;
+//	    while ((line = reader.readLine()) != null) {
+//	        buffer.append(line);
+//	    }
+//	    String data = buffer.toString();
+//	    String[] params=data.split("&");
+//	    HashMap<String,String> paramMap=new HashMap();
+//	    for(String p : params)
+//	    {
+//	    	String[] pairing=p.split("=");
+//	    	if(pairing.length>1)
+//	    	{
+//	    		paramMap.put(pairing[0],pairing[1]);
+//	    	}
+//	    	
+//	    }
+		String batchName = req.getParameter("batchname");
+		String folderID=req.getParameter("folderid");
 		String docbatchID = batchName+folderID;
 		
-		String alldocs=paramMap.get("docids");
+		String alldocs=req.getParameter("docids");
+		if(alldocs==null)
+		{
+			alldocs="";
+		}
 		String[] enterParsedDocs=alldocs.split("%0D%0A");
 		String[] commaParsedDocs=alldocs.split(",");
 		

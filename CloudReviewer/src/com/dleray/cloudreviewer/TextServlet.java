@@ -2,6 +2,7 @@ package com.dleray.cloudreviewer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.dleray.cloudreviewer.structures.Document;
+import com.dleray.cloudreviewer.structures.HighlightingList;
+import com.dleray.cloudreviewer.structures.HighlightingListEndpoint;
+import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.services.drive.Drive;
 
 public class TextServlet extends HttpServlet {
@@ -75,18 +79,30 @@ public class TextServlet extends HttpServlet {
 		
 		HashMap<String,ArrayList<String>> output=new HashMap();
 		
+		HighlightingListEndpoint endpoint=new HighlightingListEndpoint();
+		CollectionResponse<HighlightingList> lists=endpoint.listHighlightingList("", 1000);
+		
+		for(HighlightingList list: lists.getItems())
+		{
 			ArrayList<String> firstList=new ArrayList();
-			firstList.add("Satili");
-			firstList.add("Reiling");
-			firstList.add("Dolaway");
-			firstList.add("Glorioso");
-			output.put("FFFF00",firstList);
+			for(String kw: list.getKeywords())
+			{
+				firstList.add(kw);
+			}
+			if(output.get(list.getHexColor())==null)
+					{
+				output.put(list.getHexColor(),firstList);
+					}
+			else
+			{
+				output.get(list.getHexColor()).addAll(firstList);
+			}
 			
-			ArrayList<String> secondList=new ArrayList();
-			secondList.add("discussion");
-			secondList.add("already");
-			output.put("99FF99", secondList);
-			return output;
+		}
+		
+		return output;
+			
+	
 	}
 	
 

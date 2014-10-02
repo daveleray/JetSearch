@@ -16,18 +16,38 @@ public class TaggingPanel {
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private String taggingID;
+	private Long taggingID;
+	
+	@Persistent
+	private String displayName;
 	
 	@Persistent(defaultFetchGroup="true")
 	private ArrayList<String> taggingControlIds=new ArrayList();
 
-	public String getTaggingID() {
+	
+
+	
+	public Long getTaggingID() {
 		return taggingID;
 	}
 
-	public void setTaggingID(String taggingID) {
+
+	public void setTaggingID(Long taggingID) {
 		this.taggingID = taggingID;
 	}
+
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+
+	
 
 	public ArrayList<String> getTaggingControlIds() {
 		return taggingControlIds;
@@ -39,12 +59,20 @@ public class TaggingPanel {
 
 	public ClientTaggingPanel toClient() {
 		ClientTaggingPanel output=new ClientTaggingPanel();
-		output.setPannelID(taggingID);
+		output.setPannelID(taggingID+"");
 		TagListEndpoint endpoint=new TagListEndpoint();
 		for(String s: taggingControlIds)
 		{
 			TagList control=endpoint.getTagList(s);
 			output.getTaggingControls().add(control.toClient());
+		}
+		if(displayName!=null)
+		{
+			output.setDisplayName(displayName);
+		}
+		else
+		{
+			output.setDisplayName(taggingID+"");
 		}
 		return output;
 	}

@@ -36,10 +36,8 @@ public class TaggingPanelEndpoint {
 	public CollectionResponse<TaggingPanel> listTaggingPanel(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+		
+
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
 		List<TaggingPanel> execute = null;
@@ -83,10 +81,7 @@ public class TaggingPanelEndpoint {
 	 */
 	@ApiMethod(name = "getTaggingPanel")
 	public TaggingPanel getTaggingPanel(@Named("id") String id) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+
 		PersistenceManager mgr = getPersistenceManager();
 		TaggingPanel taggingpanel = null;
 		try {
@@ -112,10 +107,7 @@ public class TaggingPanelEndpoint {
 	 */
 	@ApiMethod(name = "insertTaggingPanel")
 	public TaggingPanel insertTaggingPanel(TaggingPanel taggingpanel) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+
 		PersistenceManager mgr = getPersistenceManager();
 		try {
 			if (containsTaggingPanel(taggingpanel)) {

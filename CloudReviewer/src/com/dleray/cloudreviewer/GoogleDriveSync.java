@@ -12,6 +12,9 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class GoogleDriveSync extends HttpServlet {
 
@@ -26,15 +29,22 @@ public class GoogleDriveSync extends HttpServlet {
         java.util.List<File> result = new ArrayList<File>();
         Files.List request = googleDrive.files().list();
         request.setQ("trashed=false");
-        request.setMaxResults(1000);
+        request.setMaxResults(50);
 
      
         do {
             try {
               FileList files = request.execute();
-
-              result.addAll(files.getItems());
-              System.out.println("next page token:"+files.getNextPageToken());
+              String tokenForWorker=files.getNextPageToken();
+              if(tokenForWorker!=null)
+              {
+      			Queue queue = QueueFactory.getDefaultQueue();
+  				System.out.println("farming:" + tokenForWorker);
+	  				TaskOptions options=TaskOptions.Builder.withUrl("/tasks/syncworker");
+		        options.param("drivetoken",tokenForWorker);
+		        	queue.add(options);
+              }
+  	
               request.setPageToken(files.getNextPageToken());
             } catch (IOException e) {
               System.out.println("An error occurred: " + e);
@@ -44,8 +54,8 @@ public class GoogleDriveSync extends HttpServlet {
                    request.getPageToken().length() > 0);
         
 	
-        System.out.println("detected this many GDrive Files:" + result.size());
-		DocumentHandler.processDriveFileList(result,googleDrive);
+        System.out.println("done farming out syncs");
+
 		
 		return;
 	}

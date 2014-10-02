@@ -2,6 +2,7 @@ package com.dleray.cloudreviewer;
 
 import java.io.IOException;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +29,34 @@ public class PanelServlet extends HttpServlet {
         	return;
         }
         CloudReviewerUser progUser=UserHandler.getCurrentUser();
-		System.out.println("got user");
+/*		System.out.println("got user");
         TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
         TaggingPanel panel;
+        
+        String panelID;
+        if(req.getParameter("panelid")==null || req.getParameter("panelid").contentEquals("undefined"))
+        {
+        	panelID=progUser.getCurrentPanelID();
+        }
+        else
+        {
+        	panelID=req.getParameter("panelid");
+        	progUser.setCurrentPanelID(panelID);
+        	PersistenceManager pm=PMF.get().getPersistenceManager();
+        	pm.makePersistent(progUser);
+        	pm.close();
+        }
 		try {
 			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
-		} catch (Exception e) {
-			PanelHandler.initDefaultPanel();
-			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
-		}
-        
+		} catch (Exception e) {*/
+			Long defaultID=PanelHandler.initDefaultPanel();
+			progUser.setCurrentPanelID(defaultID+"");
+			PersistenceManager pm=PMF.get().getPersistenceManager();
+			pm.makePersistent(progUser);
+			
+			TaggingPanel panel = pm.getObjectById(TaggingPanel.class,defaultID);
+		//}
+			pm.close();
         
     	resp.setContentType("application/json");
     	Gson gson=new Gson();

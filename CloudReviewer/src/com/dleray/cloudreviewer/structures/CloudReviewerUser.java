@@ -1,5 +1,7 @@
 package com.dleray.cloudreviewer.structures;
 
+import java.util.HashSet;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -21,6 +23,17 @@ public class CloudReviewerUser {
 	@Persistent 
 	private String currentDoc;
 	
+	@Persistent
+	private HashSet<String> highlightingIDs;
+	
+
+	public HashSet<String> getHighlightingIDs() {
+		return highlightingIDs;
+	}
+
+	public void setHighlightingIDs(HashSet<String> highlightingIDs) {
+		this.highlightingIDs = highlightingIDs;
+	}
 
 	public String getCurrentPanelID() {
 		return currentPanelID;

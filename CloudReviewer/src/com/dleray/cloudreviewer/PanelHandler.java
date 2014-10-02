@@ -1,5 +1,7 @@
 package com.dleray.cloudreviewer;
 
+import javax.jdo.PersistenceManager;
+
 import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
 import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
 import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
@@ -10,29 +12,44 @@ import com.google.api.server.spi.response.CollectionResponse;
 
 public class PanelHandler {
 
-	public static void initDefaultPanel()
+	public static Long initDefaultPanel()
 	{
+		
 		TaggingPanelEndpoint endpoint=new TaggingPanelEndpoint();
-		try {
-			endpoint.getTaggingPanel("taggingPanel-1");
-		} catch (Exception e) {
+		CollectionResponse<TaggingPanel> output=endpoint.listTaggingPanel("", 1000);
+		if(output.getItems().size()>0)
+		{
+			return output.getItems().iterator().next().getTaggingID();
+		}
+		else			
+		{
 			IssueTagEndpoint tagEndpoint=new IssueTagEndpoint();
 			CollectionResponse<IssueTag> allIssueTags=tagEndpoint.listIssueTag("",1000);
-			TaggingPanel defaultPanel=new TaggingPanel();
 			
-					TagListEndpoint tlEndpoint=new TagListEndpoint();
+			
+			TaggingPanel defaultPanel=new TaggingPanel();
+			PersistenceManager pm=PMF.get().getPersistenceManager();
+				
 					TagList taglist=new TagList();
 					taglist.setControlID("taggingList-1");
 					for(IssueTag issetag: allIssueTags.getItems())
 					{
-						taglist.getIssueTagIDs().add(issetag.getTagID());
+						taglist.getIssueTagIDs().add(issetag.getId()+"");
 					}
-					tlEndpoint.insertTagList(taglist);
+				
+					pm.makePersistent(taglist);
 			
-					defaultPanel.setTaggingID("taggingPanel-1");
 					defaultPanel.getTaggingControlIds().add(taglist.getControlID());
-			endpoint.insertTaggingPanel(defaultPanel);
+					
+					pm.makePersistent(defaultPanel);
+					System.out.println("Made default panel");
+					pm.close();
+					return defaultPanel.getTaggingID();
 		}
+			
+			
+	
+		
 		
 	}
 }

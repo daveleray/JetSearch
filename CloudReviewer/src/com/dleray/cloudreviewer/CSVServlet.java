@@ -48,7 +48,7 @@ public class CSVServlet extends HttpServlet {
 		    	String outputString="";
 		        for(IssueTag t: allIssues)
 		        {
-		        	outputString=outputString+","+t.getTagID();
+		        	outputString=outputString+","+t.getId();
 		        }
 		        UserTagEndpoint userEndpoint=new UserTagEndpoint();
 		        for(Document d: output.getItems())
@@ -61,7 +61,7 @@ public class CSVServlet extends HttpServlet {
 		        		boolean foundTag=false;
 		        		for(UserTag u: doctags)
 		        		{
-		        			if(u.getIssueTagID().contentEquals(t.getTagID()))
+		        			if(u.getIssueTagID().contentEquals(t.getId()+""))
 		        			{
 		        				foundTag=true;
 		        			}
@@ -94,7 +94,7 @@ public class CSVServlet extends HttpServlet {
 		@Override
 		public int compare(IssueTag o1, IssueTag o2) {
 			// TODO Auto-generated method stub
-			return o1.getTagID().compareTo(o2.getTagID());
+			return o1.getId().compareTo(o2.getId());
 		}
 		
 	}

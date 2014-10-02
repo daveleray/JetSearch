@@ -5,9 +5,12 @@ import java.util.ArrayList;
 public class ClientTagList extends ClientTaggingControl {
 
 	private String id;
+	private String displayName;
+	
 	
 	private ArrayList<ClientIssueTagCategory> categoryList=new ArrayList();
 
+	
 	public String getId() {
 		return id;
 	}
@@ -22,6 +25,14 @@ public class ClientTagList extends ClientTaggingControl {
 
 	public void setTagList(ArrayList<ClientIssueTagCategory> tagList) {
 		this.categoryList = tagList;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	

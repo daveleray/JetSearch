@@ -64,26 +64,26 @@ public class FolderServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		   // Read from request
-	    StringBuilder buffer = new StringBuilder();
-	    BufferedReader reader = req.getReader();
-	    String line;
-	    while ((line = reader.readLine()) != null) {
-	        buffer.append(line);
-	    }
-	    String data = buffer.toString();
-	    String[] params=data.split("&");
-	    HashMap<String,String> paramMap=new HashMap();
-	    for(String p : params)
-	    {
-	    	String[] pairing=p.split("=");
-	    	if(pairing.length>1)
-	    	{
-	    		paramMap.put(pairing[0],pairing[1]);
-	    	}
-	    	
-	    }
-		String parentFolder = paramMap.get("parent_folderid");
-		String folderName=paramMap.get("foldername");
+//	    StringBuilder buffer = new StringBuilder();
+//	    BufferedReader reader = req.getReader();
+//	    String line;
+//	    while ((line = reader.readLine()) != null) {
+//	        buffer.append(line);
+//	    }
+//	    String data = buffer.toString();
+//	    String[] params=data.split("&");
+//	    HashMap<String,String> paramMap=new HashMap();
+//	    for(String p : params)
+//	    {
+//	    	String[] pairing=p.split("=");
+//	    	if(pairing.length>1)
+//	    	{
+//	    		paramMap.put(pairing[0],pairing[1]);
+//	    	}
+//	    	
+//	    }
+		String parentFolder =req.getParameter("parent_folderid");
+		String folderName=req.getParameter("foldername");
 		String folderID = parentFolder+folderName;
 
 		BatchFolder folderToStore=new BatchFolder();

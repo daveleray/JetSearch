@@ -1,8 +1,6 @@
 package com.dleray.cloudreviewer.endpoints;
 
-import com.dleray.cloudreviewer.Auth;
 import com.dleray.cloudreviewer.PMF;
-import com.dleray.cloudreviewer.Auth.AccessLevel;
 import com.dleray.cloudreviewer.structures.IssueTag;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -36,10 +34,7 @@ public class IssueTagEndpoint {
 	public CollectionResponse<IssueTag> listIssueTag(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
 		List<IssueTag> execute = null;
@@ -82,11 +77,7 @@ public class IssueTagEndpoint {
 	 * @return The entity with primary key id.
 	 */
 	@ApiMethod(name = "getIssueTag")
-	public IssueTag getIssueTag(@Named("id") String id) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
+	public IssueTag getIssueTag(@Named("id") Long id) {
 		PersistenceManager mgr = getPersistenceManager();
 		IssueTag issuetag = null;
 		try {
@@ -107,10 +98,6 @@ public class IssueTagEndpoint {
 	 */
 	@ApiMethod(name = "insertIssueTag")
 	public IssueTag insertIssueTag(IssueTag issuetag) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
 		PersistenceManager mgr = getPersistenceManager();
 		try {
 			if (containsIssueTag(issuetag)) {
@@ -133,10 +120,6 @@ public class IssueTagEndpoint {
 	 */
 	@ApiMethod(name = "updateIssueTag")
 	public IssueTag updateIssueTag(IssueTag issuetag) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return null;
-		}
 		PersistenceManager mgr = getPersistenceManager();
 		try {
 			if (!containsIssueTag(issuetag)) {
@@ -156,11 +139,7 @@ public class IssueTagEndpoint {
 	 * @param id the primary key of the entity to be deleted.
 	 */
 	@ApiMethod(name = "removeIssueTag")
-	public void removeIssueTag(@Named("id") String id) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return ;
-		}
+	public void removeIssueTag(@Named("id") Long id) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
 			IssueTag issuetag = mgr.getObjectById(IssueTag.class, id);
@@ -171,14 +150,10 @@ public class IssueTagEndpoint {
 	}
 
 	private boolean containsIssueTag(IssueTag issuetag) {
-		if(!Auth.isAuthorized(AccessLevel.ADMIN))
-		{
-			return false;
-		}
 		PersistenceManager mgr = getPersistenceManager();
 		boolean contains = true;
 		try {
-			mgr.getObjectById(IssueTag.class, issuetag.getTagID());
+			mgr.getObjectById(IssueTag.class, issuetag.getId());
 		} catch (javax.jdo.JDOObjectNotFoundException ex) {
 			contains = false;
 		} finally {

@@ -25,6 +25,17 @@ public class TagList {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private String controlID;
 	
+	@Persistent
+	private String displayName;
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
 	@Persistent(defaultFetchGroup="true")
 	private ArrayList<String> issueTagIDs=new ArrayList();
 
@@ -47,14 +58,14 @@ public class TagList {
 		this.controlID = controlID;
 	}
 
-	public ClientTaggingControl toClient() {
+	public ClientTagList toClient() {
 		
 		ClientTagList output=new ClientTagList();
 		IssueTagEndpoint endpoint=new IssueTagEndpoint();
 		HashMap<String,HashMap<String,HashSet<IssueTag>>> allIssues=new HashMap();
 		for(String s: issueTagIDs)
 		{
-			IssueTag tag=endpoint.getIssueTag(s);
+			IssueTag tag=endpoint.getIssueTag(Long.parseLong(s));
 			HashMap<String,HashSet<IssueTag>> subCategoryMap=allIssues.get(tag.getCategoryDisplay());
 			if(subCategoryMap==null)
 			{
@@ -69,7 +80,16 @@ public class TagList {
 			subCategoryMap.put(tag.getSubCategoryDisplay(), issueSet);
 			allIssues.put(tag.getCategoryDisplay(), subCategoryMap);
 		}
+		output.setId(this.controlID);
 		
+		if(displayName!=null)
+		{
+			output.setDisplayName(displayName);
+		}
+		else
+		{
+			output.setDisplayName(this.controlID);
+		}
 		ArrayList<String> allCategories=new ArrayList(allIssues.keySet());
 		Collections.sort(allCategories);
 		issueTagComparator comparator=new issueTagComparator();

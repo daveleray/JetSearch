@@ -10,9 +10,9 @@ import com.dleray.cloudreviewer.responses.ClientIssueTag;
 @PersistenceCapable
 public class IssueTag {
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private String tagID;
+	 @PrimaryKey
+	    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	    private Long id;
 	
 	@Persistent
 	private String displayName;
@@ -27,16 +27,21 @@ public class IssueTag {
 
 
 
-	public String getTagID() {
-		return tagID;
+
+
+
+
+
+	public Long getId() {
+		return id;
 	}
 
 
 
 
 
-	public void setTagID(String tagID) {
-		this.tagID = tagID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 
@@ -101,7 +106,7 @@ public class IssueTag {
 		output.setDisplayName(displayName);
 
 		output.setSubCategoryDisplayName(subCategoryDisplay);
-		output.setTagID(tagID);
+		output.setTagID(id+"");
 		return output;
 	}
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+import javax.jdo.PersistenceManager;
+
 import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
@@ -22,6 +24,7 @@ public class DocumentHandler {
 		Integer numFilesAttempt=0;
 		Integer numFilesInStorage=0;
 		Integer numNewFiles=0;
+		PersistenceManager mgr=PMF.get().getPersistenceManager();
 		
 		for(File f: allFiles)
 		{
@@ -38,10 +41,10 @@ public class DocumentHandler {
 			}
 			
 			String docIdentifier=f.getOriginalFilename().substring(0,f.getOriginalFilename().indexOf("."));
-			DocumentEndpoint endpoint=new DocumentEndpoint();
+
 			Document testForDoc;
 			try {
-				testForDoc = endpoint.getDocument(docIdentifier);
+				testForDoc = DocHelper.getDocumentByID(docIdentifier, mgr);
 				numFilesInStorage+=1;
 			} catch (Exception e) {
 				testForDoc=null;
@@ -65,12 +68,8 @@ public class DocumentHandler {
 					Text t=new Text(text);
 					testForDoc.setExtractedText(t);
 				}
-				try {
-					endpoint.insertDocument(testForDoc);
-				} catch (Exception e) {
-					endpoint.updateDocument(testForDoc);
-				}
-				
+	
+				mgr.makePersistent(testForDoc);
 			}
 		
 		}
@@ -89,8 +88,7 @@ public class DocumentHandler {
 		
 		if(currentID==null)
 		{
-			System.out.println(docIDList);
-			System.out.println("getting:" + docIDList.get(0));
+	
 			return docEndpoint.getDocument(docIDList.get(0));
 		}
 		for(int i=0;i<docIDList.size();i++)
@@ -111,17 +109,17 @@ public class DocumentHandler {
 		DocumentEndpoint docEndpoint=new DocumentEndpoint();
 		ArrayList<String> docIDList=getSortedDocIDs(batchInput);
 		
-		System.out.println("Getting Doc in batch index with currentID:" + currentID);
+	
 		if(currentID==null)
 		{
-			System.out.println("null = 0");
+		
 			return 0;
 		}
-		System.out.println("Looping over these doc IDs:"+ docIDList);
+
 		for(int i=0;i<docIDList.size();i++)
 		{
 			String thisDocInBatch=docIDList.get(i);
-			System.out.println("\t\t"+thisDocInBatch + " is index:" + i);
+
 			if(thisDocInBatch.contentEquals(currentID))
 			{
 				return i;
