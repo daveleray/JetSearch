@@ -24,6 +24,27 @@
 		<url-pattern>/test</url-pattern>
 		</servlet-mapping>
 	
+						<servlet>
+		<servlet-name>HighlightingServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.HighlightingServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>HighlightingServlet</servlet-name>
+		<url-pattern>/highlights</url-pattern>
+		</servlet-mapping>
+		
+								<servlet>
+		<servlet-name>AddHighlightListServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.AddHighlightListServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>AddHighlightListServlet</servlet-name>
+		<url-pattern>/solohighlight</url-pattern>
+		</servlet-mapping>
+		
+		
 				<servlet>
 		<servlet-name>BatchServlet</servlet-name>
 		<servlet-class>com.dleray.cloudreviewer.BatchServlet</servlet-class>
@@ -34,6 +55,15 @@
 		<url-pattern>/batches</url-pattern>
 		</servlet-mapping>
 		
+						<servlet>
+		<servlet-name>AddIssueServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.AddIssueServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>AddIssueServlet</servlet-name>
+		<url-pattern>/addissue</url-pattern>
+		</servlet-mapping>
 		
 		
 		
@@ -55,6 +85,34 @@
 		<servlet-name>ApplyTagServlet</servlet-name>
 		<url-pattern>/applytag</url-pattern>
 		</servlet-mapping>
+		
+					<servlet>
+		<servlet-name>PanelOptionsServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.PanelOptionsServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>PanelOptionsServlet</servlet-name>
+		<url-pattern>/paneloptions</url-pattern>
+		</servlet-mapping>
+		
+						<servlet>
+		<servlet-name>TaggingControlsServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.TaggingControlsServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>TaggingControlsServlet</servlet-name>
+		<url-pattern>/taggingcontrols</url-pattern>
+		</servlet-mapping>
+		
+								<servlet>
+		<servlet-name>IssueTagServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.IssueTagServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>IssueTagServlet</servlet-name>
+		<url-pattern>/issuetags</url-pattern>
+		</servlet-mapping>
+		
 		
 					<servlet>
 		<servlet-name>FolderServlet</servlet-name>
@@ -125,6 +183,16 @@
 		<url-pattern>/tasks/metadataworker</url-pattern>
 		</servlet-mapping>
 		
+			<servlet>
+		<servlet-name>SyncWorker</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.SyncWorker</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>SyncWorker</servlet-name>
+		<url-pattern>/tasks/syncworker</url-pattern>
+		</servlet-mapping>
+		
+		
 		<security-constraint>
     <web-resource-collection>
         <web-resource-name>tasks</web-resource-name>
@@ -187,7 +255,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint,com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint,com.dleray.cloudreviewer.endpoints.DocumentEndpoint,com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint,com.dleray.cloudreviewer.endpoints.IssueTagEndpoint,com.dleray.cloudreviewer.endpoints.TagListEndpoint,com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint,com.dleray.cloudreviewer.endpoints.UserTagEndpoint</param-value>
+   <param-value>com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint,com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint,com.dleray.cloudreviewer.endpoints.DocumentEndpoint,com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint,com.dleray.cloudreviewer.endpoints.IssueTagEndpoint,com.dleray.cloudreviewer.endpoints.TagListEndpoint,com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint,com.dleray.cloudreviewer.endpoints.UserTagEndpoint,com.dleray.cloudreviewer.structures.HighlightingListEndpoint</param-value>
   </init-param>
  </servlet>
  <servlet-mapping>

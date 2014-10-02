@@ -79,7 +79,7 @@
       "request" : {
         "parameters" : {
           "id" : {
-            "type" : "string",
+            "type" : "int64",
             "required" : true
           }
         },
@@ -100,7 +100,7 @@
       "request" : {
         "parameters" : {
           "id" : {
-            "type" : "string",
+            "type" : "int64",
             "required" : true
           }
         },
@@ -148,8 +148,9 @@
         "id" : "IssueTag",
         "type" : "object",
         "properties" : {
-          "tagID" : {
-            "type" : "string"
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
           },
           "displayName" : {
             "type" : "string"

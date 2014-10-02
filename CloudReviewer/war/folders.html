@@ -15,7 +15,21 @@
   <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 
 
-
+     <style type='text/css'>
+    <!--
+        html { background-color: #333; }
+        @media only screen and (min-width: 600px){
+            .ui-page {
+                width: 600px !important;
+                margin: 0 auto !important;
+                position: relative !important;
+                border-right: 5px #666 outset !important;
+                border-left: 5px #666 outset !important;
+            }
+        }
+    -->
+    </style>
+    
 <script>
 
 
@@ -82,28 +96,41 @@ function addTheFolderOptions(data,divid)
 	  	
 	  $("#submitformbutton").click(function(event2){  
 		 	 event2.stopPropagation();
-		    var postData = $('#addbatchform').serializeArray();
-		    var formURL = "batches";
-		    $.ajax(
-		    {
-		        url : formURL,
-		        type: "POST",
-		        data : postData,
-		        success:function(data, textStatus, jqXHR) 
-		        {
+
+// 			String batchName = req.getParameter("batchname");
+// 			String folderID=req.getParameter("folderid");
+// 			String docbatchID = batchName+folderID;
+// 			String alldocs=req.getParameter("docids");
+		    
+		    //	String parentFolder =req.getParameter("parent_folderid");
+			//String folderName=req.getParameter("foldername");
+		
+		    $.post("batches",
+				    {
+		    		  batchname:$('#batchname').val(),
+				      folderid:$('#folderid').val(),
+				      docids:$('#docids').val()
+				    });
+// 		    $.ajax(
+// 		    {
+// 		        url : formURL,
+// 		        type: "POST",
+// 		        data : postData,
+// 		        success:function(data, textStatus, jqXHR) 
+// 		        {
 		        						
-					$('#batchname').val("MyBatch");
-					$('#docids').val("");
-				 	 $('#folderid').val("root");
+// 					$('#batchname').val("MyBatch");
+// 					$('#docids').val("");
+// 				 	 $('#folderid').val("root");
 					
-		        	recalculateFolders();
-		        	$( ":mobile-pagecontainer" ).pagecontainer( "change", "#folderspage", { } );
-		        },
-		        error: function(jqXHR, textStatus, errorThrown) 
-		        {
-		            //if fails      
-		        }
-		    });
+// 		        	recalculateFolders();
+// 		        	$( ":mobile-pagecontainer" ).pagecontainer( "change", "#folderspage", { } );
+// 		        },
+// 		        error: function(jqXHR, textStatus, errorThrown) 
+// 		        {
+// 		            //if fails      
+// 		        }
+// 		    });
   
 		});
 		 //submitformbutton
@@ -112,26 +139,16 @@ function addTheFolderOptions(data,divid)
 		 //submitformbutton_folder
 	  $("#submitformbutton_folder").click(function(event2){  
 		 	 event2.stopPropagation();
-		    var postData = $('#addfolderform').serializeArray();
-		    var formURL = "folders";
-		    $.ajax(
-		    {
-		        url : formURL,
-		        type: "POST",
-		        data : postData,
-		        success:function(data, textStatus, jqXHR) 
-		        {
-		        						
-					$('#foldername').val("MyFolder");
-				 	 $('#parent_folderid').val("root");	
-		        	recalculateFolders();
-		        	$( ":mobile-pagecontainer" ).pagecontainer( "change", "#folderspage", { } );
-		        },
-		        error: function(jqXHR, textStatus, errorThrown) 
-		        {
-		            //if fails      
-		        }
-		    });
+
+				
+				
+// 				String parentFolder =req.getParameter("parent_folderid");
+// 				String folderName=req.getParameter("foldername");
+		    $.post("folders",
+				    {
+		    		  foldername:$('#foldername').val(),
+		    		  parent_folderid:$('#parent_folderid').val()
+				    });
   
 		});
 		 //submitformbutton		 
@@ -169,9 +186,12 @@ function addTheFolderOptions(data,divid)
         <div data-role="header" data-id="foo1" data-position="fixed">
             		<h1>CloudReviewer</h1>
 		
-		<a data-ajax="false" href="index.html" >Review</a>
-		<a data-ajax="false" href="folders.html" class="ui-btn-active">Folders</a>
-		
+				 <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+	    <a data-ajax="false" href="highlights.html" data-role="button" data-icon="pencil" >Highlighting</a>
+	    <a data-ajax="false" href="panels.html" data-role="button" data-icon="list" >Panels</a>
+		<a data-ajax="false" data-role="button" data-icon="book" href="index.html" >Review</a>
+		<a data-ajax="false" data-role="button" class="ui-btn-active " data-icon="folder" href="folders.html" >Folders</a>
+		</div>
         </div><!-- /header -->
     
     

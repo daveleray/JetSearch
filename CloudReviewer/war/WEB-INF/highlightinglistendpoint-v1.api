@@ -1,0 +1,201 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://docreviewtool.appspot.com/_ah/api",
+  "name" : "highlightinglistendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://docreviewtool.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "dleray.com",
+  "ownerName" : "dleray.com",
+  "packagePath" : "cloudreviewer.structures",
+  "methods" : {
+    "highlightinglistendpoint.insertHighlightingList" : {
+      "path" : "highlightinglist",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.insertHighlightingList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "highlightinglistendpoint.listHighlightingList" : {
+      "path" : "highlightinglist",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.listHighlightingList",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "highlightinglistendpoint.updateHighlightingList" : {
+      "path" : "highlightinglist",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.updateHighlightingList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "highlightinglistendpoint.getHighlightingList" : {
+      "path" : "highlightinglist/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.getHighlightingList",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "highlightinglistendpoint.removeHighlightingList" : {
+      "path" : "highlightinglist/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.removeHighlightingList",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "HighlightingList" : {
+        "id" : "HighlightingList",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "highlightListDisplayName" : {
+            "type" : "string"
+          },
+          "hexColor" : {
+            "type" : "string"
+          },
+          "keywords" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CollectionResponse_HighlightingList" : {
+        "id" : "CollectionResponse_HighlightingList",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "HighlightingList"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.insertHighlightingList" : {
+        "request" : {
+          "$ref" : "HighlightingList"
+        },
+        "response" : {
+          "$ref" : "HighlightingList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.listHighlightingList" : {
+        "response" : {
+          "$ref" : "CollectionResponse_HighlightingList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.updateHighlightingList" : {
+        "request" : {
+          "$ref" : "HighlightingList"
+        },
+        "response" : {
+          "$ref" : "HighlightingList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.getHighlightingList" : {
+        "response" : {
+          "$ref" : "HighlightingList"
+        }
+      },
+      "com.dleray.cloudreviewer.structures.HighlightingListEndpoint.removeHighlightingList" : {
+      }
+    }
+  }
+}

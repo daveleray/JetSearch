@@ -1,4 +1,11 @@
-<!-- Indices written at Fri, 26 Sep 2014 08:40:23 EDT -->
+<!-- Indices written at Thu, 2 Oct 2014 09:34:52 EDT -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="UserTag" ancestor="false" source="auto">
+        <property name="document" direction="asc"/>
+        <property name="dateInMili" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

@@ -1,0 +1,489 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+   <link rel="stylesheet" href="jqm-icon-pack-fa.css">
+   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+
+     <style type='text/css'>
+    <!--
+        html { background-color: #333; }
+        @media only screen and (min-width: 600px){
+            .ui-page {
+                width: 600px !important;
+                margin: 0 auto !important;
+                position: relative !important;
+                border-right: 5px #666 outset !important;
+                border-left: 5px #666 outset !important;
+            }
+        }
+    -->
+    </style>
+
+<script>
+///added new function
+$.get( "getlo", function( data ) {
+	var tmpObj = data.URL
+	if(!data.USER)
+		{
+			window.location=data.URL;
+		}
+	if(window.pageinit)
+		{
+		
+		}
+	else
+		{					
+					window.pageinit=true;
+		}
+});
+</script>
+
+
+<script>
+
+//setup folders
+$(document).on( "pagecontainerbeforeshow", function(){
+	$("#panel-list").empty();
+	$("#mainlist").empty();
+	$("#taglist").empty();
+	var count = $("#panel-list").children().length;
+	var count2 = $("#mainlist").children().length;
+	var count3 = $("#taglist").children().length;
+	
+	var checkforinit=window.initpanel;
+	if(checkforinit)
+		{
+		  
+		}
+	else
+		{
+		  $("#panel-list").change(function(){
+			  var selected = $("#panel-list").val(); // or this.value
+			  		
+			  		displayPanel(selected);
+			});
+		  
+		  $("#addissuebutton").click(function(){
+// 			  String tagID=req.getParameter("tagID");
+// 				String displayName=req.getParameter("displayName");
+// 				String subCategoryDisplay=req.getParameter("subCategoryDisplay");
+// 				String categoryDisplay=req.getParameter("categoryDisplay");
+// 			  <fieldset>
+// 				<div data-role="fieldcontain">
+// 			         <label for="tagname">Tag Name: </label>
+// 			         <input type="text" name="tagname" id="tagname" value="Some Tag"  />
+// 					</div>
+					
+// 							<div data-role="fieldcontain">
+// 			         <label for="tagcat">Category:</label>
+// 			         <input type="text" name="tagcat" id="tagcat" value="Depo Prep Review"  />
+// 					</div>
+					
+// 							<div data-role="fieldcontain">
+// 			         <label for="tagsubcat">Subcategory:</label>
+// 			         <input type="text" name="tagsubcat" id="tagsubcat" value="LeRay"  />
+// 					</div>
+// 					<button type="submit" data-theme="b" name="submit" id="addissuebutton">Submit</button>
+// 				</fieldset>
+				var display=$("#tagname").val();
+				var subcat=$("#tagsubcat").val();
+				var cat= $("#tagcat").val();
+			  $.get( "addissue", { displayName: display, subCategoryDisplay: subcat , categoryDisplay:cat } )
+			  .done(function( data ) {
+			     window.location='#edittaglist';
+			  });
+				
+		  })
+		  window.initpanel=true;
+		}
+	
+	  
+	  $.get("paneloptions",function(data){
+		 
+
+			 for(var j=0;j<data.length;j++)
+			 {
+				 var thispanel=data[j];
+			 	var o = new Option(thispanel.displayName, thispanel.taggingID);
+				/// jquerify the DOM object 'o' so we can use the html method
+				$(o).html(thispanel.displayName);
+				$("#panel-list").append(o);
+			 }
+			 $("#panel-list").trigger("create");
+	
+			
+			 $("#panel-list").trigger("change");
+	  });
+	  
+
+
+
+		 
+
+		 
+
+
+});
+
+function displayPanel(panelid)
+{
+
+	window.panelid=panelid;
+	$.get('panel?panelid='+panelid, function( data ) {				
+		
+		window.fullpanel=data;
+		addIssuePanel(data);
+		createOnOffOptionsPanel();
+	});
+	
+}
+function createOnOffOptionsIssueTags(selected_taglist)
+{
+	 var container = $('#taglist');
+	
+	
+	 
+	 var taggingcontrol=null;
+	  
+	  for(var k=0;k<window.alltaggingcontrols.length;k++)
+		  {
+		  		if(window.alltaggingcontrols[k].id==selected_taglist)
+		  			{
+		  			taggingcontrol=window.alltaggingcontrols[k];
+		  			}
+		  }
+		$.get('issuetags', function( data ) {
+			 container.empty();
+			
+			 for(var i=0;i<data.length;i++)
+			 {					
+			 	var name=data[i].displayName;
+			 	var id=data[i].tagID;
+				container.append($('<div class="ui-block-a" id='+id+'-a ><h3>'+name+'</h3></div>'));
+				container.append($('<div class="ui-block-c" id='+id+'-b ><select id='+id+'-flip'+' data-role="slider"><option value="off">Off</option><option value="on">On</option></select></div>'));
+	
+				$("#"+id+'-flip').attr("issueid",id);
+				$("#"+id+'-button').attr("issueid",id);
+			 }
+		  	 container.trigger("create");
+		  	 
+		  	 
+			 for(var i=0;i<data.length;i++)
+			 {
+			 	var id=data[i].tagID;
+			 	   
+			 	for(var j=0;j<taggingcontrol.categoryList.length;j++)
+			 		{
+			 		  var thiscategory=taggingcontrol.categoryList[j];
+			 			for(var k=0;k<thiscategory.subcategories.length;k++)
+			 				{
+			 					var thissubcategory=thiscategory.subcategories[k];
+			 					
+			 					for(var m=0;m<thissubcategory.allTags.length;m++)
+			 						{
+			 							var testMatch=thissubcategory.allTags[m].tagID;
+						 				if(testMatch==id)
+						 				{
+						 				 $("#"+id+'-flip').val('on').slider("refresh");
+						 				}
+			 						}
+			 				}
+			 		
+			 		}
+			 	 //window.fullpanel		 
+			 	  $("#"+id+'-flip').change(function(){
+					  var selected = $(this).val(); // or this.value
+					  $.post('issuetags', { taglistid: taggingcontrol.id ,issueid: $(this).attr("issueid"), status : selected}, 
+							    function(returnedData){
+							         console.log(returnedData);
+							});
+					  
+				  });
+			 }
+		});
+	
+
+}
+
+function createOnOffOptionsPanel()
+{
+	 var container = $('#taggingcontrollist');
+	 
+	 
+		$.get('taggingcontrols', function( data ) {
+			
+		     window.alltaggingcontrols=data;
+		     container.empty();
+			 for(var i=0;i<data.length;i++)
+			 {
+			 	var name=data[i].id;
+			 	
+				container.append($('<div class="ui-block-a" id='+name+'-a ><h3>'+name+'</h3></div>'));
+				container.append($('<div class="ui-block-b" id='+name+'-b ><select id='+name+'-flip'+' data-role="slider"><option value="off">Off</option><option value="on">On</option></select></div>'));
+				container.append($('<div class="ui-block-c" id='+name+'-c ><button id='+name+'-button>Edit</button></div>'));
+				$("#"+name+'-flip').attr("taggingcontrolid",name);
+				$("#"+name+'-button').attr("taggingcontrolid",name);
+			 }
+		  	 container.trigger("create");
+		  	 
+			 for(var i=0;i<data.length;i++)
+			 {
+			 	var name=data[i].id;
+			 	   
+			 	for(var j=0;j<window.fullpanel.taggingControls.length;j++)
+			 		{
+			 			var testMatch=window.fullpanel.taggingControls[j].id;
+			 			if(testMatch==name)
+			 				{
+			 				 $("#"+name+'-flip').val('on').slider("refresh");
+			 				}
+			 		}
+			 	 //handle flip
+			 	  $("#"+name+'-flip').change(function(){
+					  var selected = $(this).val(); // or this.value
+					  var thistaggingid=$(this).attr("taggingcontrolid");
+					  
+					  $.post('taggingcontrols', { panelid: window.panelid, taglistid: thistaggingid, status : selected}, 
+							    function(returnedData){
+							         console.log(returnedData);
+							});
+					  
+				  });
+			 	 
+			 	 //handle edit
+			 	 $("#"+name+'-button').click(function(){
+			 
+			 		createOnOffOptionsIssueTags(name);
+			 		window.location.href = "#edittaglist";
+			 	 });
+			 }
+		});
+	
+
+}
+function addIssuePanel(clienttaglist)
+{
+	 var container = $('#mainlist');
+	 container.empty();
+	 var arrayLength = clienttaglist.taggingControls.length;
+	 for (var i = 0; i < arrayLength; i++) {
+	     var taggingControl=clienttaglist.taggingControls[i];
+	     var controlLength=taggingControl.categoryList.length;
+	     for(var j=0;j<controlLength;j++){
+	     	  var categoryID=taggingControl.categoryList[j].categoryID;
+	     	  var categoryName=taggingControl.categoryList[j].categoryName;
+	     	  container.append($('<div id='+categoryID+' data-role=collapsible><h3>'+categoryName+'</h3></div>'));
+	     	
+	     	    var categoryHolder=$('#'+categoryID);
+	     		var thisCategoryList=taggingControl.categoryList[j];
+	     		var subCategoryLength=thisCategoryList.subcategories.length;
+	     		for(var k=0;k<subCategoryLength;k++)
+	     			{
+	     					var thisSubCategory=thisCategoryList.subcategories[k];
+	     					categoryHolder.append($('<div id='+thisSubCategory.subCategoryID+categoryID+' data-role=collapsible><h3>'+thisSubCategory.subCategoryName+'</h3></div>'));
+	     			
+	     					var subcategoryHolder=$('#'+thisSubCategory.subCategoryID+categoryID);
+	     					subcategoryHolder.append($('<div id=grid'+thisSubCategory.subCategoryID+categoryID+' class="ui-grid-b"></div>'));
+	     					
+	     					var numIssues=thisSubCategory.allTags.length;
+	     					for(var m=0;m<numIssues;m++)
+	     						{
+	     							addIssueTag('grid'+thisSubCategory.subCategoryID+categoryID,thisSubCategory.allTags[m].displayName,thisSubCategory.allTags[m].tagID);
+	     						}
+	     			}
+	     }
+	     
+	      container.trigger("create");
+	 }
+}
+
+function addIssueTag(containername,issuetagdisplay,issuetagID)
+{
+	 var container = $('#'+containername);
+	   var inputs = container.find('input');
+	   var id = inputs.length+1;
+	   
+	   var column=id % 3;
+	   var classToUse="";
+	   switch(column)
+	   {
+	   case 0:
+		   	classToUse="ui-block-c"
+		   	break;
+	   case 1:
+		   	classToUse="ui-block-a"
+			   	break;
+	   case 2:
+		   classToUse="ui-block-b"
+			   	break;   
+	   }
+	  
+	   
+	  // $('<input />', { type: 'checkbox',class: classToUse, id: 'cb'+id, value: "test" }).appendTo(container);
+	  // $('<label />', { 'for': 'cb'+id, text: "test" }).appendTo(container);
+	   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
+	   
+	   $('#divtest'+issuetagID).click(function(e){  	
+		   var issueID=e.target.htmlFor;
+		   var docID=window.curDocID;
+		   $.post("applytag",
+				    {
+				      tag:issueID,
+				      docid:docID
+				    });
+	   });
+	   
+	   
+	   container.trigger("create");
+
+}
+</script>
+
+
+
+
+    <title>CloudReviewer</title>
+  </head>
+
+  <body>
+        <div data-role="page" id="panelspage">
+ 
+        <div data-role="header" data-id="foo1" data-position="fixed">
+            		<h1>CloudReviewer</h1>
+		
+		 <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+	    <a  data-ajax="false" href="highlights.html" data-role="button" data-icon="pencil" >Highlighting</a>
+	    <a  data-ajax="false" href="panels.html" data-role="button" data-icon="list" class="ui-btn-active ">Panels</a>
+		<a data-ajax="false" data-role="button" data-icon="book" href="index.html" >Review</a>
+		<a data-ajax="false" data-role="button" data-icon="folder" href="folders.html" >Folders</a>
+		</div>
+	   
+		
+        </div><!-- /header -->
+    
+    
+        <div data-role="content">
+    
+			    	<div id="panels">
+											    	<div data-role="fieldcontain">
+								   <label for="panel-list" class="select">Select Panel:</label>
+								   <select name="panel-list" id="panel-list">
+					
+								   </select>
+								</div>
+			    	</div>
+			    	
+								    	      
+					<div id="mainlist" style="border:1px solid black">
+					</div>
+			    	
+			    	<a href="#editpanel" data-role="button" data-transition="pop">Edit Panel</a>
+		
+        </div><!-- /content -->
+ 
+ 
+ 
+        <div data-role="footer" data-position="fixed">
+            <h4>&copy David LeRay 2014</h4>
+        </div><!-- /footer -->
+ 
+    </div><!-- /page -->
+    
+    
+    
+    <!-- Start of second page: #editpanel -->
+<div data-role="page" id="editpanel">
+
+	<div data-role="header" data-theme="e">
+		<h1>Edit Panel</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+					<div id="taggingcontrollist" class="ui-grid-b">
+	
+					</div><!-- /grid-b -->
+
+		<p><a href="#panelspage" data-rel="back" data-role="button" data-inline="true" data-icon="back">Back</a></p>	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		  <h4>&copy David LeRay 2014</h4>
+	</div><!-- /footer -->
+</div><!-- /page editpanel -->
+
+   
+      <!-- Start of second page: #edittaglist -->
+<div data-role="page" id="edittaglist">
+
+	<div data-role="header" data-theme="e">
+		<h1>Edit Tag List</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+					<div id="taglist" class="ui-grid-b">
+	
+					</div><!-- /grid-b -->
+
+		<a href="#newtag" data-role="button">Add Issue Tag</a>
+		
+		<p><a href="#editpanel" data-rel="back" data-role="button" data-inline="true" data-icon="back">Back</a></p>	
+		
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		  <h4>&copy David LeRay 2014</h4>
+	</div><!-- /footer -->
+</div><!-- /page edittaglist -->
+
+
+        <!-- Start of second page: #edittaglist -->
+<div data-role="page" id="newtag">
+
+	<div data-role="header" data-theme="e">
+		<h1>Add Tag</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+				
+		<form>
+	<fieldset>
+		<div data-role="fieldcontain">
+	         <label for="tagname">Tag Name: </label>
+	         <input type="text" name="tagname" id="tagname" value="Some Tag"  />
+			</div>
+			
+					<div data-role="fieldcontain">
+	         <label for="tagcat">Category:</label>
+	         <input type="text" name="tagcat" id="tagcat" value="Depo Prep Review"  />
+			</div>
+			
+					<div data-role="fieldcontain">
+	         <label for="tagsubcat">Subcategory:</label>
+	         <input type="text" name="tagsubcat" id="tagsubcat" value="LeRay"  />
+			</div>
+			<button type="submit" data-theme="b" name="submit" id="addissuebutton">Submit</button>
+		</fieldset>
+		</form>	
+		<p><a href="#editpanel" data-rel="back" data-role="button" data-inline="true" data-icon="back">Back</a></p>	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		  <h4>&copy David LeRay 2014</h4>
+	</div><!-- /footer -->
+</div><!-- /page edittaglist -->
+  
+  </body>
+</html>
+
+
+

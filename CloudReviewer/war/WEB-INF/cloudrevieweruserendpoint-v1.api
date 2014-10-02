@@ -144,6 +144,12 @@
           },
           "currentDoc" : {
             "type" : "string"
+          },
+          "highlightingIDs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           }
         }
       },

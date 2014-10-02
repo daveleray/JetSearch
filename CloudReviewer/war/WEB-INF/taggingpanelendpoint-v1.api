@@ -134,6 +134,10 @@
         "type" : "object",
         "properties" : {
           "taggingID" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "displayName" : {
             "type" : "string"
           },
           "taggingControlIds" : {
