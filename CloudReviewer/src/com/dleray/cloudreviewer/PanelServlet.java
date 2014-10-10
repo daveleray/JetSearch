@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint;
-import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 
 public class PanelServlet extends HttpServlet {
@@ -50,11 +50,13 @@ public class PanelServlet extends HttpServlet {
 			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
 		} catch (Exception e) {*/
 			Long defaultID=PanelHandler.initDefaultPanel();
+			Key k=KeyFactory.createKey(TaggingPanel.class.getSimpleName(), defaultID);
+			System.out.println("Default Panel ID:" + defaultID);
 			progUser.setCurrentPanelID(defaultID+"");
 			PersistenceManager pm=PMF.get().getPersistenceManager();
 			pm.makePersistent(progUser);
 			
-			TaggingPanel panel = pm.getObjectById(TaggingPanel.class,defaultID);
+			TaggingPanel panel = pm.getObjectById(TaggingPanel.class,k);
 		//}
 			pm.close();
         

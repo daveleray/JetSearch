@@ -14,11 +14,12 @@ public class PanelHandler {
 
 	public static Long initDefaultPanel()
 	{
-		
+		System.out.println("initializing default panel");
 		TaggingPanelEndpoint endpoint=new TaggingPanelEndpoint();
 		CollectionResponse<TaggingPanel> output=endpoint.listTaggingPanel("", 1000);
 		if(output.getItems().size()>0)
 		{
+			System.out.println("TaggingPanel already found. no need to init.  ");
 			return output.getItems().iterator().next().getTaggingID();
 		}
 		else			
@@ -43,6 +44,7 @@ public class PanelHandler {
 					
 					pm.makePersistent(defaultPanel);
 					System.out.println("Made default panel");
+					System.out.println("Default ID:" + defaultPanel.getTaggingID());
 					pm.close();
 					return defaultPanel.getTaggingID();
 		}

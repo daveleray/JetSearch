@@ -147,7 +147,7 @@ public class BatchServlet extends HttpServlet{
 		}
 		String[] enterParsedDocs=alldocs.split("%0D%0A");
 		String[] commaParsedDocs=alldocs.split(",");
-		
+		String[] newlineParsedDocs=alldocs.split("\n");
 		HashSet<String> docIDCollection=new HashSet();
 		if(enterParsedDocs.length>1)
 		{
@@ -156,9 +156,16 @@ public class BatchServlet extends HttpServlet{
 				docIDCollection.add(s);
 			}
 		}
-		else
+		else if(commaParsedDocs.length>1)
 		{
 			for(String s: commaParsedDocs)
+			{
+				docIDCollection.add(s);
+			}
+		}
+		else
+		{
+			for(String s: newlineParsedDocs)
 			{
 				docIDCollection.add(s);
 			}

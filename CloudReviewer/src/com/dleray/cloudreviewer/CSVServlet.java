@@ -36,8 +36,7 @@ public class CSVServlet extends HttpServlet {
         
 		resp.setContentType("application/download");
 		resp.setHeader("Content-Disposition","attachment;filename=\"" + "test.csv" + "\"");
-		    try
-		    {
+	
 		    	DocumentEndpoint endpoint=new DocumentEndpoint();
 		    	CollectionResponse<Document> output=endpoint.listDocument("", 1000);
 		    	
@@ -48,19 +47,30 @@ public class CSVServlet extends HttpServlet {
 		    	String outputString="";
 		        for(IssueTag t: allIssues)
 		        {
-		        	outputString=outputString+","+t.getId();
+		        	outputString=outputString+","+t.getDisplayName();
 		        }
+		        System.out.println("done issue tagging list");
 		        UserTagEndpoint userEndpoint=new UserTagEndpoint();
 		        for(Document d: output.getItems())
 		        {
 		        	outputString=outputString+"\n"+d.getDocumentIdentifier()+",";
+		        	ArrayList<UserTag> doctags=userEndpoint.getUserTagsByDoc(d.getDocumentIdentifier());
+		        	System.out.println(doctags.size() + " doctags detected for " + d.getDocumentIdentifier());
 		        	for(IssueTag t: allIssues)
-		        	{
-		        		System.out.println(d.getTagIDs());
-		        		ArrayList<UserTag> doctags=userEndpoint.getUserTagsByDoc(d.getDocumentIdentifier());
+		        	{		
 		        		boolean foundTag=false;
 		        		for(UserTag u: doctags)
 		        		{
+		        			if(u.getIssueTagID()==null)
+		        			{
+		        				System.out.println(u.getUsertagID() + " is null issue tag id");
+		        				continue;
+		        			}
+		        			if(t.getId()==null)
+		        			{
+		        				System.out.println(t.getDisplayName() + " has null id");
+		        				continue;
+		        			}
 		        			if(u.getIssueTagID().contentEquals(t.getId()+""))
 		        			{
 		        				foundTag=true;
@@ -80,11 +90,8 @@ public class CSVServlet extends HttpServlet {
 		        outputStream.write(outputString.getBytes());
 		        outputStream.flush();
 		        outputStream.close();
-		    }
-		    catch(Exception e)
-		    {
-		        System.out.println(e.toString());
-		    }
+		    
+	
 		    
 	}
 

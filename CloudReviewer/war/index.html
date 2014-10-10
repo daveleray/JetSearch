@@ -359,12 +359,8 @@ function updateTable()
 	function updateEverythingBasedOnDocJSONResponse(data)
 	{
 		 		var response=data;
-				window.curDocID=response.docIdentifier;
-				  
-			
-				
+				window.curDocID=response.docIdentifier;			
 				updateTable();
-				
 				var docInfoString="Document #"+(response.docInBatchIndex+1)+ " out of " + response.batchSize + "  ("+response.docIdentifier+")";
 				$('#docinfo').html(docInfoString);
 				
@@ -372,12 +368,10 @@ function updateTable()
 				//private String batchID;
 				//private String docIdentifier;
 					//private Integer docInBatchIndex;
-	
 				var container = $('#cblist');
 	   			var inputs = container.find('input');
 	   		 for (var i = 0; i < inputs.length; i++) {
 	   			 var thisInput=inputs[i];
-	   			 
 	   			 var inputIsApplied=false;
 	   			 for(var j=0;j<data.appliedTags.length;j++)
 	   			 {
@@ -391,9 +385,7 @@ function updateTable()
 	   				 {
 	 	   				$(thisInput).prop("checked",false).checkboxradio('refresh');
 	   				 }
-	   			 
 	   		 }
-	   
 				  updateDisplay();
 	
 	}
@@ -427,8 +419,9 @@ function addIssueTag(containername,issuetagdisplay,issuetagID)
 	  // $('<label />', { 'for': 'cb'+id, text: "test" }).appendTo(container);
 	   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
 	   
-	   $('#divtest'+issuetagID).click(function(e){  	
-		   var issueID=e.target.htmlFor;
+	   $('#divtest'+issuetagID).change(function(){  
+
+		   var issueID= $('#divtest'+issuetagID).attr("issueid");
 		   var docID=window.curDocID;
 		   $.post("applytag",
 				    {
@@ -436,7 +429,8 @@ function addIssueTag(containername,issuetagdisplay,issuetagID)
 				      docid:docID
 				    });
 	   });
-	   
+	   $('#divtest'+issuetagID).attr("issueid",issuetagID);
+   
 	   
 	   container.trigger("create");
 

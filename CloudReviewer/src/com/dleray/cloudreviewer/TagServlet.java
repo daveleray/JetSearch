@@ -33,7 +33,12 @@ public class TagServlet extends HttpServlet {
         
 		 String currentDoc=req.getParameter("docid");
 		 String currentTag=req.getParameter("tag");
+		 if(currentDoc==null || currentTag==null)
+		 {
+			 throw new ServletException("INVALID TAG INPUT!!");
+		 }
 		 String user=req.getUserPrincipal().getName();
+		 System.out.println("Add tag:" + currentDoc + " // " + currentTag + " // " + user);
 		 UserTagEndpoint endpoint=new UserTagEndpoint();
 		 UserTag tag=new UserTag();
 		 tag.setUsertagID(currentDoc+currentTag);
@@ -46,15 +51,24 @@ public class TagServlet extends HttpServlet {
 		 boolean alreadyTagged=false;
 		 for(UserTag u: allTagsSoFar)
 		 {
-			 if(u.getIssueTagID().equals(currentTag))
+			 System.out.println(u.getUsertagID() + " Consider tag:" + u.getDocument() + " // " + u.getIssueTagID() + " // " + u.getUsername());
+			 if(u.getIssueTagID()==null)
+			 {
+	
+				 endpoint.removeUserTag(u.getUsertagID());
+				 System.out.println("null tag removed");
+			 }
+			 else if(u.getIssueTagID().equals(currentTag) && u.getDocument().equals(currentDoc))
 			 {
 				 alreadyTagged=true;
 				 endpoint.removeUserTag(u.getUsertagID());
+				 System.out.println("tag removed as identical");
 			 }
 		 }
 		 if(!alreadyTagged)
 		 {
 			 endpoint.insertUserTag(tag);
+			 System.out.println("tag added");
 		 }
 		 
 	}
