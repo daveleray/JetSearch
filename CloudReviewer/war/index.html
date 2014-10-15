@@ -11,6 +11,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" href="jquery.mobile-1.4.3.min.css">
    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+   <script type="text/javascript" src="sessvars.js"></script>
+   
       <link rel="stylesheet" href="jqm-icon-pack-fa.css">
       
   <script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
@@ -195,7 +197,7 @@ function drawRow(data,rownum) {
 	  $('#'+rowData.info[1]).click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
-			$.get('doc?currentDocID='+rowData.info[1]+'&folder='+window.selectedFolder+'&docdirection=current', function( data ) {				 
+			$.get('doc?currentDocID='+rowData.info[1]+'&folder='+sessvars.selectedFolder+'&docdirection=current', function( data ) {				 
 				updateEverythingBasedOnDocJSONResponse(data);		
 			}); 
 			});
@@ -488,18 +490,22 @@ function addIssuePanel(clienttaglist)
   $(document).on('pagecreate',function(event){
   
 	  var browserParams=getSearchParameters();
-	  if(browserParams.folder == null)
+	
+	  if(sessvars.selectedFolder==null && browserParams.folder == null)
 		  {
 		  		window.location="folders.html";
 		  }
 	  else
 		  {
-		  	window.selectedFolder=browserParams.folder;
+		    if(browserParams.folder!=null)
+		    	{
+		    	sessvars.selectedFolder=browserParams.folder;
+		    	}
 		  }
 	  $('#nextdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
-			$.get('doc?currentDocID='+window.curDocID+'&folder='+window.selectedFolder+'&docdirection=next', function( data ) {				
+			$.get('doc?currentDocID='+window.curDocID+'&folder='+sessvars.selectedFolder+'&docdirection=next', function( data ) {				
 				updateEverythingBasedOnDocJSONResponse(data);
 			}); 
 			});
@@ -507,7 +513,7 @@ function addIssuePanel(clienttaglist)
 	  $('#prevdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
-			$.get('doc?currentDocID='+window.curDocID+'&folder='+window.selectedFolder+'&docdirection=prev', function( data ) {				 
+			$.get('doc?currentDocID='+window.curDocID+'&folder='+sessvars.selectedFolder+'&docdirection=prev', function( data ) {				 
 				updateEverythingBasedOnDocJSONResponse(data);		
 			}); 
 			});
@@ -523,9 +529,9 @@ function addIssuePanel(clienttaglist)
 				var browserParams=getSearchParameters();
 				
 				//first doc
-				$.get('doc?folder='+browserParams.folder+'&docdirection=next', function( data ) {
+				$.get('doc?folder='+sessvars.selectedFolder+'&docdirection=next', function( data ) {
 					updateEverythingBasedOnDocJSONResponse(data);
-				 	$.get('batches?batch='+window.selectedFolder, function(data2){
+				 	$.get('batches?batch='+sessvars.selectedFolder, function(data2){
 			 			drawTable(data2);
 			 			$( "#rightpanel2" ).trigger( "updatelayout" );
 			 			

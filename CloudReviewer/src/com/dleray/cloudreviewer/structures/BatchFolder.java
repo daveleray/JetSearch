@@ -55,17 +55,18 @@ public class BatchFolder {
 		{
 			if(f.parentFolderID.contentEquals(this.batchFolderID))
 			{
-				output.getSubFolders().add(f.toClient(fullSet, fullBatches));
+				output.getChildren().add(f.toClient(fullSet, fullBatches));
 			}
 		}
 		for(DocumentBatch b: fullBatches)
 		{
 			if(b.getFolderID()!=null && b.getFolderID().contentEquals(this.batchFolderID))
 			{
-				output.getFiles().add(b.toClient());
+				output.getChildren().add(b.toClientFolder());
 			}
 		}
 		output.updateSimples();
+		
 		return output;
 		
 	}

@@ -8,6 +8,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.dleray.cloudreviewer.responses.ClientBatch;
+import com.dleray.cloudreviewer.responses.ClientFolderStructure;
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
@@ -92,6 +93,14 @@ public class DocumentBatch {
 		ClientBatch output=new ClientBatch();
 		output.setBatchID(this.docbatchID);
 		output.setDisplayName(this.batchName);
+		return output;
+	}
+	public ClientFolderStructure toClientFolder()
+	{
+		ClientFolderStructure output=new ClientFolderStructure();
+		output.setFolderName(this.batchName);
+		output.setFolderID(this.docbatchID);
+		output.setFolder(false);
 		return output;
 	}
 	

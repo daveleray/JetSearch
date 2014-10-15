@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint;
 import com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint;
 import com.dleray.cloudreviewer.responses.ClientFolderStructure;
+import com.dleray.cloudreviewer.responses.JSTreeFolder;
 import com.dleray.cloudreviewer.structures.BatchFolder;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
@@ -35,6 +36,8 @@ public class FolderServlet extends HttpServlet {
 	    		resp.getWriter().println("PLEASE SIGN IN");
 	        	return;
 	        }
+		   
+		String nodeID=req.getParameter("id");
 		System.out.println("Request for folders from:" + req.getUserPrincipal().getName());  
 		CloudReviewerUser user=UserHandler.getCurrentUser();
 		
@@ -46,6 +49,8 @@ public class FolderServlet extends HttpServlet {
 		
 		BatchFolder root=batchEndpoint.getBatchFolder("root");
 		ClientFolderStructure toSend=root.toClient(output.getItems(), thisBatch.getItems());
+		
+
 		
 		
 		resp.setContentType("application/json");

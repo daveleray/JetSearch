@@ -4,27 +4,35 @@ import java.util.ArrayList;
 
 public class ClientFolderStructure {
 
+	private boolean isFolder=true;
 	
-	private String folderName;
-	
-	private ArrayList<ClientFolderStructure> subFolders=new ArrayList();
+	private String text;
+	private String icon=null;
+
 
 	private ArrayList<String> simpleFolderDisplay=new ArrayList();
 	private ArrayList<String> simpleFolderIDs=new ArrayList();
 	
-	private ArrayList<ClientBatch> files=new ArrayList();
-
-	private String folderID;
+	private ArrayList<ClientFolderStructure> children=new ArrayList();
+	private String id;
 	
-	public ArrayList<ClientFolderStructure> getSubFolders() {
-		return subFolders;
-	}
 
-	public void setSubFolders(ArrayList<ClientFolderStructure> subFolders) {
-		this.subFolders = subFolders;
-		
-	}
 
+
+	public ArrayList<ClientFolderStructure> getChildren() {
+		return children;
+	}
+	public boolean isFolder() {
+		return isFolder;
+	}
+	public void setFolder(boolean isFolder) {
+		if(!isFolder)
+		{
+			icon="glyphicon glyphicon-file";
+		}
+		this.isFolder = isFolder;
+	}
+	
 	public void updateSimples()
 	{
 		simpleFolderDisplay=processAllDisplays(this,"");
@@ -35,14 +43,18 @@ public class ClientFolderStructure {
 		ArrayList<String> output=new ArrayList();
 
 	
-			String outputstr=ongoingString+"/"+someFolder.folderName;
+			String outputstr=ongoingString+"/"+someFolder.text;
 			output.add(outputstr);
 	
 	
-			for(ClientFolderStructure s: someFolder.subFolders)
+			for(ClientFolderStructure s: someFolder.children)
 			{
-				String ongoing=ongoingString+"/"+someFolder.folderName;
-				output.addAll(processAllDisplays(s,ongoing));
+				if(s.isFolder)
+				{
+					String ongoing=ongoingString+"/"+someFolder.text;
+					output.addAll(processAllDisplays(s,ongoing));
+				}
+				
 			}
 		
 		return output;
@@ -50,30 +62,31 @@ public class ClientFolderStructure {
 	private static ArrayList<String> processAllIDs(ClientFolderStructure someFolder)
 	{
 		ArrayList<String> output=new ArrayList();
-			output.add(someFolder.folderID);
-			for(ClientFolderStructure s: someFolder.subFolders)
+			output.add(someFolder.id);
+			for(ClientFolderStructure s: someFolder.children)
 			{
-				output.addAll(processAllIDs(s));
+				if(s.isFolder)
+				{
+					output.addAll(processAllIDs(s));
+				}
+				
 			}
 		
 		return output;
 	}
 	
 	
-	public ArrayList<ClientBatch> getFiles() {
-		return files;
-	}
 
-	public void setFiles(ArrayList<ClientBatch> files) {
-		this.files = files;
-	}
 
+	public void setChildren(ArrayList<ClientFolderStructure> children) {
+		this.children = children;
+	}
 	public String getFolderName() {
-		return folderName;
+		return text;
 	}
 
 	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+		this.text = folderName;
 	}
 
 	public ArrayList<String> getSimpleFolderDisplay() {
@@ -88,7 +101,7 @@ public class ClientFolderStructure {
 
 	public void setFolderID(String batchFolderID) {
 		// TODO Auto-generated method stub
-		this.folderID=batchFolderID;
+		this.id=batchFolderID;
 	}
 
 

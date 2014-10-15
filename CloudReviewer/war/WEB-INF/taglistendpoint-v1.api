@@ -48,22 +48,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "taglistendpoint.insertTagList" : {
-      "path" : "taglist",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TagListEndpoint.insertTagList",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "taglistendpoint.removeTagList" : {
       "path" : "taglist/{id}",
       "httpMethod" : "DELETE",
@@ -83,6 +67,38 @@
       },
       "response" : {
         "body" : "empty"
+      }
+    },
+    "taglistendpoint.insertTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TagListEndpoint.insertTagList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "taglistendpoint.updateTagList" : {
+      "path" : "taglist",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TagListEndpoint.updateTagList",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "taglistendpoint.listTagList" : {
@@ -105,22 +121,6 @@
           }
         },
         "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "taglistendpoint.updateTagList" : {
-      "path" : "taglist",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.dleray.cloudreviewer.endpoints.TagListEndpoint.updateTagList",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -169,6 +169,8 @@
           "$ref" : "TagList"
         }
       },
+      "com.dleray.cloudreviewer.endpoints.TagListEndpoint.removeTagList" : {
+      },
       "com.dleray.cloudreviewer.endpoints.TagListEndpoint.insertTagList" : {
         "request" : {
           "$ref" : "TagList"
@@ -177,19 +179,17 @@
           "$ref" : "TagList"
         }
       },
-      "com.dleray.cloudreviewer.endpoints.TagListEndpoint.removeTagList" : {
-      },
-      "com.dleray.cloudreviewer.endpoints.TagListEndpoint.listTagList" : {
-        "response" : {
-          "$ref" : "CollectionResponse_TagList"
-        }
-      },
       "com.dleray.cloudreviewer.endpoints.TagListEndpoint.updateTagList" : {
         "request" : {
           "$ref" : "TagList"
         },
         "response" : {
           "$ref" : "TagList"
+        }
+      },
+      "com.dleray.cloudreviewer.endpoints.TagListEndpoint.listTagList" : {
+        "response" : {
+          "$ref" : "CollectionResponse_TagList"
         }
       }
     }
