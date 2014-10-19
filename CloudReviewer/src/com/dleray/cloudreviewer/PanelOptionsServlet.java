@@ -2,13 +2,15 @@ package com.dleray.cloudreviewer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
 import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
@@ -31,13 +33,15 @@ public class PanelOptionsServlet extends HttpServlet {
 	        }
 	        CloudReviewerUser progUser=UserHandler.getCurrentUser();
 			System.out.println("got user");
-	        TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
-	        CollectionResponse<TaggingPanel> panels;
+
+			PersistenceManager pm=PMF.get().getPersistenceManager();
+			Query q = pm.newQuery(TaggingPanel.class);
 		
-			panels = tagPanelEndpoint.listTaggingPanel("", 1000);
+			List<TaggingPanel> output=(List<TaggingPanel>) q.execute();
+			
 				
 			ArrayList<ClientTaggingPanel> options=new ArrayList();
-			for(TaggingPanel p: panels.getItems())
+			for(TaggingPanel p: output)
 			{
 				options.add(p.toClient());
 			}

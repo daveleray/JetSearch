@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
 import com.dleray.cloudreviewer.responses.ClientTagList;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
@@ -22,10 +21,8 @@ public class TaggingControlsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		TagListEndpoint endpoint=new TagListEndpoint();
-		CollectionResponse<TagList > output=endpoint.listTagList("", 1000);
 		ArrayList<ClientTagList> toClient=new ArrayList();
-		for(TagList t: output.getItems())
+		for(TagList t:PMFManager.getAllTagLists())
 		{
 			toClient.add(t.toClient());
 		}

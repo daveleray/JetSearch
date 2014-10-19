@@ -8,14 +8,15 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.responses.DocJSONResponse;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
@@ -52,6 +53,29 @@ public class DocHelper {
 			e.printStackTrace(System.out);
 		}
 	}
+	public static void sendNativeFileToBrowser(File f,Drive googleDrive, HttpServletResponse resp)
+	{
+    	try {
+			byte[] buffer = new byte[(int) f.getFileSize().intValue()];
+			GenericUrl url = new GenericUrl(f.getDownloadUrl());
+			HttpResponse response = googleDrive.getRequestFactory()
+			            .buildGetRequest(url).execute();
+			InputStream is = response.getContent();
+			byte[] bytes = getBytes(is);
+			
+
+			resp.addHeader("Content-Disposition", "attachment; filename=" + f.getOriginalFilename());
+			resp.setContentLength((int) bytes.length);
+
+			OutputStream responseOutputStream = resp.getOutputStream();
+
+			responseOutputStream.write(bytes);
+		} catch (IOException e) {
+			System.out.println("Error");
+			e.printStackTrace(System.out);
+		}
+	}
+	
 	public static String getTextData(File f,Drive googleDrive)
 	{
 		try {
@@ -71,9 +95,29 @@ public class DocHelper {
 	}
 	public static DocJSONResponse getJSONResponse(Document d,DocumentBatch batch)
 	{
-	      
-	   	 UserTagEndpoint endpoint=new UserTagEndpoint();	 
-		 ArrayList<UserTag> allTagsSoFar=endpoint.getUserTagsByDoc(d.getDocumentIdentifier());
+	     PersistenceManager pm=PMF.get().getPersistenceManager();
+	     ArrayList<UserTag> output=new ArrayList();
+	 	
+			Query q = pm.newQuery(UserTag.class);
+			q.setFilter("document == documentParam");
+			
+			q.declareParameters("String documentParam");
+			 ArrayList<UserTag> allTagsSoFar=new ArrayList();
+			 
+			try {
+				  List<UserTag> results = (List<UserTag>) q.execute(d.getDocumentIdentifier());
+				  
+				  if (!results.isEmpty()) {
+				    for (UserTag p : results) {
+				      allTagsSoFar.add(p);
+				    }
+				  } else {
+				    // Handle "no results" case
+				  }
+				} finally {
+				  q.closeAll();
+				}
+			
 		 ArrayList<String> appliedTags=new ArrayList();
 		 for(UserTag u: allTagsSoFar)
 		 {

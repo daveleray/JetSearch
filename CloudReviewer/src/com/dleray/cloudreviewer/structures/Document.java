@@ -32,7 +32,17 @@ public class Document {
 	@Persistent(defaultFetchGroup="true")
 	private java.util.HashMap<String,Text> metadataAndValuesNonSearchable=new java.util.HashMap();
 	
+	@Persistent
+	private String originalExtension;
+	
 
+	public String getOriginalExtension() {
+		return originalExtension;
+	}
+
+	public void setOriginalExtension(String originalExtension) {
+		this.originalExtension = originalExtension;
+	}
 
 	public Text getExtractedText() {
 		return extractedText;

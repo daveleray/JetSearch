@@ -11,15 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
-import com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentMetadata;
 import com.dleray.cloudreviewer.structures.MetadataHolder;
 import com.google.appengine.api.datastore.Text;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 public class MetadataWorker extends HttpServlet {
 

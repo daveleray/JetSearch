@@ -34,6 +34,18 @@
 		<url-pattern>/highlights</url-pattern>
 		</servlet-mapping>
 		
+		
+								<servlet>
+		<servlet-name>FileURLServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.FileURLServlet</servlet-class>
+	    </servlet>
+	
+		<servlet-mapping>
+		<servlet-name>FileURLServlet</servlet-name>
+		<url-pattern>/fileloc</url-pattern>
+		</servlet-mapping>
+		
+		
 								<servlet>
 		<servlet-name>AddHighlightListServlet</servlet-name>
 		<servlet-class>com.dleray.cloudreviewer.AddHighlightListServlet</servlet-class>
@@ -43,6 +55,18 @@
 		<servlet-name>AddHighlightListServlet</servlet-name>
 		<url-pattern>/solohighlight</url-pattern>
 		</servlet-mapping>
+		
+		
+									<servlet>
+		<servlet-name>SettingsServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.SettingsServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>SettingsServlet</servlet-name>
+		<url-pattern>/updatesettings</url-pattern>
+		</servlet-mapping>	
+		
 		
 		
 				<servlet>
@@ -69,7 +93,7 @@
 		
 				<servlet-mapping>
 		<servlet-name>GoogleDriveAuthServlet</servlet-name>
-		<url-pattern>/googledriveauth</url-pattern>
+		<url-pattern>/init</url-pattern>
 	</servlet-mapping>
 	
 			<servlet-mapping>
@@ -255,7 +279,7 @@
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
-   <param-value>com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint,com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint,com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint,com.dleray.cloudreviewer.endpoints.DocumentEndpoint,com.dleray.cloudreviewer.endpoints.DocumentMetadataEndpoint,com.dleray.cloudreviewer.endpoints.IssueTagEndpoint,com.dleray.cloudreviewer.endpoints.TagListEndpoint,com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint,com.dleray.cloudreviewer.endpoints.UserTagEndpoint,com.dleray.cloudreviewer.structures.HighlightingListEndpoint</param-value>
+   <param-value/>
   </init-param>
  </servlet>
  <servlet-mapping>

@@ -2,12 +2,13 @@ package com.dleray.cloudreviewer.structures;
 
 import java.util.ArrayList;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
+import com.dleray.cloudreviewer.PMF;
 import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
 
@@ -60,10 +61,11 @@ public class TaggingPanel {
 	public ClientTaggingPanel toClient() {
 		ClientTaggingPanel output=new ClientTaggingPanel();
 		output.setPannelID(taggingID+"");
-		TagListEndpoint endpoint=new TagListEndpoint();
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		
 		for(String s: taggingControlIds)
 		{
-			TagList control=endpoint.getTagList(s);
+			TagList control=pm.getObjectById(TagList.class,s);
 			output.getTaggingControls().add(control.toClient());
 		}
 		if(displayName!=null)
@@ -74,6 +76,7 @@ public class TaggingPanel {
 		{
 			output.setDisplayName(taggingID+"");
 		}
+		pm.close();
 		return output;
 	}
 	

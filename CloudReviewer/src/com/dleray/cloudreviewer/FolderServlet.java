@@ -1,24 +1,19 @@
 package com.dleray.cloudreviewer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.BatchFolderEndpoint;
-import com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint;
 import com.dleray.cloudreviewer.responses.ClientFolderStructure;
-import com.dleray.cloudreviewer.responses.JSTreeFolder;
 import com.dleray.cloudreviewer.structures.BatchFolder;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
-import com.google.api.server.spi.response.CollectionResponse;
 import com.google.gson.Gson;
 
 public class FolderServlet extends HttpServlet {
@@ -41,14 +36,21 @@ public class FolderServlet extends HttpServlet {
 		System.out.println("Request for folders from:" + req.getUserPrincipal().getName());  
 		CloudReviewerUser user=UserHandler.getCurrentUser();
 		
-		BatchFolderEndpoint batchEndpoint=new BatchFolderEndpoint();
-		CollectionResponse<BatchFolder> output=batchEndpoint.listBatchFolder("", 1000);
+	
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(BatchFolder.class);
 		
-		DocumentBatchEndpoint batchDocEndpoint=new DocumentBatchEndpoint();
-		CollectionResponse<DocumentBatch> thisBatch=batchDocEndpoint.listDocumentBatch("", 1000);
+		List<BatchFolder> output=(List<BatchFolder>) q.execute();
+
 		
-		BatchFolder root=batchEndpoint.getBatchFolder("root");
-		ClientFolderStructure toSend=root.toClient(output.getItems(), thisBatch.getItems());
+		Query q2 = pm.newQuery(DocumentBatch.class);
+		List<DocumentBatch> output2=(List<DocumentBatch>) q2.execute();
+		
+
+		
+		BatchFolder root=pm.getObjectById(BatchFolder.class,"root");
+		
+		ClientFolderStructure toSend=root.toClient(output,output2);
 		
 
 		
@@ -96,8 +98,9 @@ public class FolderServlet extends HttpServlet {
 		folderToStore.setDisplayName(folderName);
 		folderToStore.setParentFolderID(parentFolder);
 
-		BatchFolderEndpoint endpoint=new BatchFolderEndpoint();
-		endpoint.insertBatchFolder(folderToStore);
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		pm.makePersistent(folderToStore);
+		pm.close();
 		System.out.println("Successfully created folder:" + folderName + " in folder:"+parentFolder);
 		
 	}

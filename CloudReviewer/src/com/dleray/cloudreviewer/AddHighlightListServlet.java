@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.HighlightingList;
-import com.dleray.cloudreviewer.structures.HighlightingListEndpoint;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 
 public class AddHighlightListServlet extends HttpServlet {

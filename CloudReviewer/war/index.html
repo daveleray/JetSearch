@@ -21,8 +21,68 @@
 
 	<style type="text/css">
 	
-	viewerdiv{
-		width: 50%;
+	#viewerdiv{
+		border:1px solid black";
+		height: 950px;
+		
+		overflow: scroll;
+		overflow-x:hidden;
+	}
+	
+	.subcategory_display
+	{
+	   
+		border: 2px solid #3388cc;
+   	   border-radius: 15px 15px 0 0 ;
+   	   margin-bottom: 15px;
+	} 
+	
+	.buttonholder{
+		padding: 10px;
+	}
+	.subcategory_header
+	{
+		width: 100%;
+		border-radius: 15px 15px 0 0 ;
+		background-color: #3388cc;
+		text-align: center;
+		color: white;
+		font-size: 16px;
+		padding: 5px 0px 5px 3px;
+		margin-left: -2px;
+		margin-top: -2px;
+	}
+	
+	#docwrapper{		
+		   border-radius: 10px 10px 0 0 ;
+		   border: 2px solid #3388cc;
+	}
+	#topwrapper{
+	padding: 5px;
+	 border-radius: 10px 10px 0 0 ;
+	 background-color: #E9E9E9;
+	}
+	
+	#controlwrapper{
+	padding: 5px;
+	}
+	#docinfo{
+	padding: 5px;
+	background-color: #3388cc;
+	color: white;
+	width: 500px;
+	border-radius: 5px 5px 0 0 ;
+	margin-left: -5px;
+	margin-bottom: -3px;
+	}
+
+	#cblist{
+		
+		width: 100%;
+		overflow: scroll;
+		overflow-y:hidden;
+		margin-bottom: 10px;
+		padding-bottom:5px;
 	}
 	</style>
 
@@ -258,14 +318,44 @@ $(document).ready(function() {
 		});
 	
 });
+
+
 </script>
 
 <script>
 
+
+function displayNative(docid)
+{
+	
+	
+	$.get('fileloc?doctype=native&docID='+docid,function(data)
+			{
+
+					var view_url=data;
+					$('#viewerdiv').html('<iframe src='+view_url+' style="width:100%;height:900px"></iframe>');
+					$('#viewerdiv').width('100%');
+					  var interval = setInterval(function(){
+					        $.mobile.loading('hide');
+					        clearInterval(interval);
+					    },1);
+			});
+	
+
+}
 function displayPDF(docid)
 {
-	PDFJS.getDocument('getpdf?doctype=pdf&docID='+docid).then(function(pdf) {
+	var pdf_url="viewer.html?file="+'getpdf'+escape('?'+'doctype=bates&docID='+docid);	
+	$('#viewerdiv').html('<iframe src='+pdf_url+' style="width:100%;height:900px"></iframe>');
+	$('#viewerdiv').width('100%');
+	  var interval = setInterval(function(){
+	        $.mobile.loading('hide');
+	        clearInterval(interval);
+	    },1);    
+	
+/* 	PDFJS.getDocument('getpdf?doctype=pdf&docID='+docid).then(function(pdf) {
   	  
+	
 		
 		   // Using promise to fetch the page
  	  pdf.getPage(1).then(function(page) {
@@ -289,7 +379,13 @@ function displayPDF(docid)
  	    };
  	    page.render(renderContext);
  	  });
- 	});
+		   
+	  var interval = setInterval(function(){
+	        $.mobile.loading('hide');
+	        clearInterval(interval);
+	    },1);    
+		   
+ 	}); */
 	
 }
 </script>
@@ -298,10 +394,17 @@ function displayPDF(docid)
 
 function displayText(docid)
 {
+
+	 
 	$.get('gettext?docID='+window.curDocID, function( data ) {				
 		
 		$('#viewerdiv').html(data);
 		$('#viewerdiv').width('100%');
+		
+		  var interval = setInterval(function(){
+		        $.mobile.loading('hide');
+		        clearInterval(interval);
+		    },1); 
 	}); 
 
 
@@ -318,9 +421,13 @@ function updateDisplay()
 {
 	  var viewerType = $('input:radio[name=viewerselect]:checked').val();
 	  
-	  if(viewerType=='pdf')
+	  if(viewerType=='bates')
 		  {
 		 	 displayPDF(window.curDocID);
+		  }
+	  else if(viewerType=='native')
+		  {
+		  	  displayNative(window.curDocID);
 		  }
 	  else
 		  {
@@ -394,51 +501,6 @@ function updateTable()
 </script>	
 	
 	
-<script>
-function addIssueTag(containername,issuetagdisplay,issuetagID)
-{
-	 var container = $('#'+containername);
-	   var inputs = container.find('input');
-	   var id = inputs.length+1;
-	   
-	   var column=id % 3;
-	   var classToUse="";
-	   switch(column)
-	   {
-	   case 0:
-		   	classToUse="ui-block-c"
-		   	break;
-	   case 1:
-		   	classToUse="ui-block-a"
-			   	break;
-	   case 2:
-		   classToUse="ui-block-b"
-			   	break;   
-	   }
-	  
-	   
-	  // $('<input />', { type: 'checkbox',class: classToUse, id: 'cb'+id, value: "test" }).appendTo(container);
-	  // $('<label />', { 'for': 'cb'+id, text: "test" }).appendTo(container);
-	   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
-	   
-	   $('#divtest'+issuetagID).change(function(){  
-
-		   var issueID= $('#divtest'+issuetagID).attr("issueid");
-		   var docID=window.curDocID;
-		   $.post("applytag",
-				    {
-				      tag:issueID,
-				      docid:docID
-				    });
-	   });
-	   $('#divtest'+issuetagID).attr("issueid",issuetagID);
-   
-	   
-	   container.trigger("create");
-
-}
-</script>
-
 
 	
 <script>
@@ -446,21 +508,24 @@ function addIssuePanel(clienttaglist)
 {
 	 var container = $('#cblist');
 	 var arrayLength = clienttaglist.taggingControls.length;
+	 
+	 container.append($('<table><tr>'));
+	 
 	 for (var i = 0; i < arrayLength; i++) {
 	     var taggingControl=clienttaglist.taggingControls[i];
 	     var controlLength=taggingControl.categoryList.length;
 	     
 	     //<h2 style="text-align: center">'+taggingControl.displayName+'</h2>
 	     //style="border:1px solid black"
-	     container.append($('<div id='+taggingControl.id+'><div>'));
+	    // container.append($('<div id='+taggingControl.id+'><div>'));
 	     
-	     controlcontainer=$('#'+taggingControl.id);
-	     controlcontainer.trigger("create");
+	  //   controlcontainer=$('#'+taggingControl.id);
+	  //   controlcontainer.trigger("create");
 	     
 	     for(var j=0;j<controlLength;j++){
 	     	  var categoryID=taggingControl.categoryList[j].categoryID;
 	     	  var categoryName=taggingControl.categoryList[j].categoryName;
-	     	   controlcontainer.append($('<div id='+categoryID+' data-role=collapsible><h3>'+categoryName+'</h3></div>'));
+	     	 //  controlcontainer.append($('<div id='+categoryID+' data-role=collapsible><h3>'+categoryName+'</h3></div>'));
 	     	
 	     	    var categoryHolder=$('#'+categoryID);
 	     		var thisCategoryList=taggingControl.categoryList[j];
@@ -468,21 +533,62 @@ function addIssuePanel(clienttaglist)
 	     		for(var k=0;k<subCategoryLength;k++)
 	     			{
 	     					var thisSubCategory=thisCategoryList.subcategories[k];
-	     					categoryHolder.append($('<div id='+thisSubCategory.subCategoryID+categoryID+' data-role=collapsible><h3>'+thisSubCategory.subCategoryName+'</h3></div>'));
+	     					container.append($('<td><div class=subcategory_display id='+thisSubCategory.subCategoryID+categoryID+'><div class=subcategory_header>'+thisSubCategory.subCategoryName+'</div></div></td>'));
 	     			
 	     					var subcategoryHolder=$('#'+thisSubCategory.subCategoryID+categoryID);
-	     					subcategoryHolder.append($('<div id=grid'+thisSubCategory.subCategoryID+categoryID+' class="ui-grid-b"></div>'));
+	     					subcategoryHolder.append($('<div id=grid'+thisSubCategory.subCategoryID+categoryID+' class="buttonholder ui-grid-b"></div>'));
 	     					
 	     					var numIssues=thisSubCategory.allTags.length;
 	     					for(var m=0;m<numIssues;m++)
 	     						{
-	     							addIssueTag('grid'+thisSubCategory.subCategoryID+categoryID,thisSubCategory.allTags[m].displayName,thisSubCategory.allTags[m].tagID);
+	     							var issuetagdisplay=thisSubCategory.allTags[m].displayName;
+	     							var issuetagID=thisSubCategory.allTags[m].tagID;
+	     							var containername='grid'+thisSubCategory.subCategoryID+categoryID;
+	     							
+	     							 var container = $('#'+containername);
+	     							   var inputs = container.find('input');
+	     							   var id = inputs.length+1;
+	     							   
+	     							   var column=id % 3;
+	     							   var classToUse="";
+	     							   switch(column)
+	     							   {
+	     							   case 0:
+	     								   	classToUse="ui-block-c"
+	     								   	break;
+	     							   case 1:
+	     								   	classToUse="ui-block-a"
+	     									   	break;
+	     							   case 2:
+	     								   classToUse="ui-block-b"
+	     									   	break;   
+	     							   }
+	     							//  container.append($('<td>'+'<input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label>'+'</td>'));
+	     							//addIssueTag('grid'+thisSubCategory.subCategoryID+categoryID,thisSubCategory.allTags[m].displayName,thisSubCategory.allTags[m].tagID);
+	     							   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
+	     							   
+	     							   $('#divtest'+issuetagID).change(function(){  
+
+	     								   var issueID= $(this).attr("issueid");
+	     								   var docID=window.curDocID;
+	     								   var ischecked=$('#'+issueID).prop('checked');
+	     								   $.post("applytag",
+	     										    {
+	     									    	  applied:ischecked,
+	     										      tag:issueID,
+	     										      docid:docID
+	     										    });
+	     							   });
+	     							   $('#divtest'+issuetagID).attr("issueid",issuetagID);
+	     							   
 	     						}
 	     			}
 	     }
 	     
-	      container.trigger("create");
+	     
 	 }
+	 container.append($('</tr></table>'));
+	 container.trigger("create");
 }
 </script>
 <script>
@@ -505,6 +611,18 @@ function addIssuePanel(clienttaglist)
 	  $('#nextdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
+			
+				 var interval = setInterval(function(){
+	        $.mobile.loading('show',{
+	        	 text: "Loading",
+	        	  textVisible: true,
+	        	  theme: "a",
+	        	  textonly: true,
+	        	  html: ""
+	        });
+	        clearInterval(interval);
+	    },1); 
+			
 			$.get('doc?currentDocID='+window.curDocID+'&folder='+sessvars.selectedFolder+'&docdirection=next', function( data ) {				
 				updateEverythingBasedOnDocJSONResponse(data);
 			}); 
@@ -513,6 +631,19 @@ function addIssuePanel(clienttaglist)
 	  $('#prevdoc').click(function(e){
 		  var test=window.curDocID;
 			//first, call next document
+			
+				 var interval = setInterval(function(){
+	        $.mobile.loading('show',{
+	        	 text: "Loading",
+	        	  textVisible: true,
+	        	  theme: "a",
+	        	  textonly: true,
+	        	  html: ""
+	        });
+	        clearInterval(interval);
+	    },1); 
+			
+			
 			$.get('doc?currentDocID='+window.curDocID+'&folder='+sessvars.selectedFolder+'&docdirection=prev', function( data ) {				 
 				updateEverythingBasedOnDocJSONResponse(data);		
 			}); 
@@ -599,6 +730,7 @@ function addIssuePanel(clienttaglist)
 			</ul>
 		</div><!-- /navbar -->  
 	 <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+	 <a  data-ajax="false" href="settings.html" data-role="button" data-icon="gear" >Settings</a>
 	    <a  data-ajax="false" href="highlights.html" data-role="button" data-icon="pencil" >Highlighting</a>
 	    <a  data-ajax="false" href="panels.html" data-role="button" data-icon="list" >Panels</a>
 		<a data-ajax="false" data-role="button" data-icon="book" href="index.html" class="ui-btn-active ">Review</a>
@@ -640,44 +772,50 @@ function addIssuePanel(clienttaglist)
 
 
 
-<div id="docwrapper" style="border:3px solid black">
+<div id="docwrapper">
 
     
     <div id="topwrapper" >
     	
-    </div>
+ 
     <div id="controlwrapper" class=ui-grid-c>
-    <div class="ui-block-a">    
-	    <fieldset data-role="controlgroup" data-type="horizontal">
-	    <input type="radio" name="viewerselect" id="radio-choice-h-2a" value="text" checked="checked">
-	    <label for="radio-choice-h-2a">Text</label>
-	    <input type="radio" name="viewerselect" id="radio-choice-h-2b" value="pdf">
-	    <label for="radio-choice-h-2b">PDF</label>
-		</fieldset>
-	</div>
-	<div class="ui-block-b"></div>
-	<div class="ui-block-c"></div>
+		    <div class="ui-block-a">    
+			    <fieldset data-role="controlgroup" data-type="horizontal">
+			    <input type="radio" name="viewerselect" id="radio-choice-h-2a" value="doc" checked="checked">
+			    <label for="radio-choice-h-2a">Doc</label>
+			    <input type="radio" name="viewerselect" id="radio-choice-h-2b" value="text" >
+			    <label for="radio-choice-h-2b">Text</label>
+			    <input type="radio" name="viewerselect" id="radio-choice-h-2c" value="bates">
+			    <label for="radio-choice-h-2c">Bates</label>
+			    <input type="radio" name="viewerselect" id="radio-choice-h-2d" value="native">
+			    <label for="radio-choice-h-2d">Native</label>
+				</fieldset>
+			</div>
+			<div class="ui-block-b"></div>
+			<div class="ui-block-c"></div>
 	
-    <div class="ui-block-d">
-    	<div data-role="controlgroup" data-type="horizontal">
-		<button id="prevdoc">Prev</button>
-		<button id="nextdoc">Next</button>
-		<a href="#rightpanel2" id="doclistbutton" data-role="button" >Doc List</a>
-		</div>
-    </div>
+		    <div class="ui-block-d">
+		    	<div data-role="controlgroup" data-type="horizontal">
+				<button id="prevdoc">Prev</button>
+				<button id="nextdoc">Next</button>
+				<a href="#rightpanel2" id="doclistbutton" data-role="button" >Doc List</a>
+				</div>
+		    </div>
     
     </div>
 
+
 	
 	
-	
-	<div id="docinfo">
-			</div>
-    		<div id="viewerdiv" style="border:1px solid black"> 
+	<div id="docinfo"></div>
+    </div>	
+    	  		
+    		
+    		<div id="viewerdiv" > 
     		</div>
     		
 </div>
-    		
+  
 		
            
             

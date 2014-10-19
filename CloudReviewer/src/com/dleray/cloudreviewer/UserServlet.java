@@ -7,9 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.CloudReviewerUserEndpoint;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 
+/**Adding a user
+ * 
+ * @author David
+ *
+ */
 public class UserServlet extends HttpServlet {
 
 	@Override
@@ -30,12 +34,7 @@ public class UserServlet extends HttpServlet {
         CloudReviewerUser user=new CloudReviewerUser();
         user.setUserEmail(req.getUserPrincipal().getName());
         user.setCurrentPanelID(panelID);
-        CloudReviewerUserEndpoint endpoint=new CloudReviewerUserEndpoint();
-        try {
-			endpoint.insertCloudReviewerUser(user);
-		} catch (Exception e) {
-			endpoint.updateCloudReviewerUser(user);
-		}
+        PMFManager.updateAddUser(user);
         
 	}
 }

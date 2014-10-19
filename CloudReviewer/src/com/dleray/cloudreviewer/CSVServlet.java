@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
-import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
-import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.IssueTag;
 import com.dleray.cloudreviewer.structures.UserTag;
@@ -37,12 +34,9 @@ public class CSVServlet extends HttpServlet {
 		resp.setContentType("application/download");
 		resp.setHeader("Content-Disposition","attachment;filename=\"" + "test.csv" + "\"");
 	
-		    	DocumentEndpoint endpoint=new DocumentEndpoint();
-		    	CollectionResponse<Document> output=endpoint.listDocument("", 1000);
-		    	
-		    	IssueTagEndpoint issues=new IssueTagEndpoint();
-		    	CollectionResponse<IssueTag> tags=issues.listIssueTag("", 1000);
-		    	ArrayList<IssueTag> allIssues=new ArrayList(tags.getItems());
+
+
+		    	ArrayList<IssueTag> allIssues=new ArrayList(PMFManager.getIssueTags());
 		    	Collections.sort(allIssues,new IssueComparator());
 		    	String outputString="";
 		        for(IssueTag t: allIssues)
@@ -50,11 +44,10 @@ public class CSVServlet extends HttpServlet {
 		        	outputString=outputString+","+t.getDisplayName();
 		        }
 		        System.out.println("done issue tagging list");
-		        UserTagEndpoint userEndpoint=new UserTagEndpoint();
-		        for(Document d: output.getItems())
+		        for(Document d: PMFManager.getDocuments())
 		        {
 		        	outputString=outputString+"\n"+d.getDocumentIdentifier()+",";
-		        	ArrayList<UserTag> doctags=userEndpoint.getUserTagsByDoc(d.getDocumentIdentifier());
+		        	ArrayList<UserTag> doctags=PMFManager.getUserTagsForDoc(d.getDocumentIdentifier());
 		        	System.out.println(doctags.size() + " doctags detected for " + d.getDocumentIdentifier());
 		        	for(IssueTag t: allIssues)
 		        	{		

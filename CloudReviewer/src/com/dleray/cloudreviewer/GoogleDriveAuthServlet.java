@@ -6,12 +6,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashSet;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.structures.CloudReviewerProject;
+import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
@@ -23,8 +27,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.About;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 public class GoogleDriveAuthServlet extends HttpServlet {
 
@@ -40,23 +42,9 @@ public class GoogleDriveAuthServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-      UserService userService = UserServiceFactory.getUserService();
-
-      String thisURL = req.getRequestURI();
-      
-      System.out.println("REQUEST FOR PDF");
-      System.out.println("PRINCIPAL USER:" + req.getUserPrincipal());
-      if(req.getUserPrincipal()==null)
-      {
-      	resp.setContentType("text/plain");
-  		resp.getWriter().println("PLEASE SIGN IN");
-      	return;
-      }
-      
+		      
       GoogleAuthorizationCodeFlow flow=getGlobalFlow();
-      Credential loadedCredential=flow.loadCredential(req.getUserPrincipal().getName());
-      
+      Credential loadedCredential=flow.loadCredential(req.getUserPrincipal().getName());     
       if(loadedCredential==null)
       {
       	if(req.getParameter("code")!=null)
@@ -70,8 +58,7 @@ public class GoogleDriveAuthServlet extends HttpServlet {
       	{
       		//go to client and ask for auth
       	  	GoogleAuthorizationCodeRequestUrl url=flow.newAuthorizationUrl();
-      	  	url.setRedirectUri(req.getRequestURL().toString());
-      	  	
+      	  	url.setRedirectUri(req.getRequestURL().toString());  	  	
       	  	System.out.println("SENDING REDIRECT FOR AUTH:" + url.getRedirectUri());
           	resp.sendRedirect(url.build());
           	return;
@@ -85,16 +72,34 @@ public class GoogleDriveAuthServlet extends HttpServlet {
       Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, loadedCredential).setApplicationName(
               "DAVIDLERAY").build();
       About about=service.about();
+      
+      PersistenceManager pm=PMF.get().getPersistenceManager();
+      CloudReviewerProject project=pm.getObjectById(CloudReviewerProject.class,req.getUserPrincipal().getName());
+      if(project==null)
+      {
+    	  project=new CloudReviewerProject();
+    	  project.setSharedDriveAccount(req.getUserPrincipal().getName());
+    	  HashSet<String> adminUsers=new HashSet();
+    	  adminUsers.add(req.getUserPrincipal().getName());
+    	  project.getPermissionsUsersMap().put(Auth.AccessLevel.ADMIN, adminUsers);
+    	  pm.makePersistent(project);
+    	  System.out.println("Added project:" + req.getUserPrincipal().getName());
+      }
+      CloudReviewerUser user=pm.getObjectById(CloudReviewerUser.class,req.getUserPrincipal().getName());
+      if(user==null)
+      {
+    	  user=new CloudReviewerUser();
+    	  user.setUserEmail(req.getUserPrincipal().getName());
+    	  user.setCurrentPanelID("taggingPanel-1");
+    	  user.setActiveProject(project.getSharedDriveAccount());
+    	  pm.makePersistent(user);
+    	  System.out.println("Added user:" + req.getUserPrincipal().getName());
+      }
+      pm.close();
       resp.getWriter().println(about.toString());
       
       
-/*       resp.setContentType("text/html");
-      if (req.getUserPrincipal() != null) {
-      	resp.setContentType("text/plain");
-  		resp.getWriter().println("IMSEDPA01815640.pdf");
-      } else {
-          resp.getWriter().println("Not signed in");
-      }*/
+
       
 	}
 

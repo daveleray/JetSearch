@@ -1,12 +1,14 @@
 package com.dleray.cloudreviewer;
 
+import javax.jdo.PersistenceManager;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class Auth {
 
-	public static boolean isAuthorized(AccessLevel level)
+	public static boolean isAuthorized(PersistenceManager pm,AccessLevel level)
 	{
 	       UserService userService = UserServiceFactory.getUserService();
 	        User user = userService.getCurrentUser();
@@ -26,6 +28,8 @@ public class Auth {
 	}
 	
 	public enum AccessLevel{
-		ADMIN,USER,PUBLIC;
+
+			ADMIN,TECH,MANAGER,REVIEWER,BASIC,OTHER
+	
 	}
 }

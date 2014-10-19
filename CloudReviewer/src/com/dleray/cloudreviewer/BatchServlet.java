@@ -1,10 +1,8 @@
 package com.dleray.cloudreviewer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.jdo.PersistenceManager;
@@ -13,10 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.DocumentBatchEndpoint;
-import com.dleray.cloudreviewer.endpoints.DocumentEndpoint;
 import com.dleray.cloudreviewer.responses.ClientBatchMetadata;
-import com.dleray.cloudreviewer.responses.DocJSONResponse;
 import com.dleray.cloudreviewer.responses.ClientBatchMetadata.ClientBatchMetadataRow;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
@@ -30,8 +25,12 @@ public class BatchServlet extends HttpServlet{
 			throws ServletException, IOException {
 		
 		 String selectedFolder=req.getParameter("batch");
-		 DocumentBatchEndpoint endpoint=new DocumentBatchEndpoint();
-		 DocumentBatch batch=endpoint.getDocumentBatch(selectedFolder);
+		 
+		 PersistenceManager pm=PMF.get().getPersistenceManager();
+		 DocumentBatch batch=pm.getObjectById(DocumentBatch.class,selectedFolder);
+		 HashSet<String> docSet=batch.getDocIDCollection();
+
+		 
 		 ArrayList<String> docIDs=DocumentHandler.getSortedDocIDs(batch);
 		 
 		 ClientBatchMetadata output=new ClientBatchMetadata();
@@ -41,10 +40,10 @@ public class BatchServlet extends HttpServlet{
 		 
 		 HashSet<String> allHeaders=new HashSet();
 		 
-		 DocumentEndpoint docendpoint=new DocumentEndpoint();
+
 		 ArrayList<Document> allDocs=new ArrayList();
 		 System.out.println("Collecting Docs");
-		 PersistenceManager pm=PMF.get().getPersistenceManager();
+
 		 
 		 for(String doc: docIDs)
 		 {
@@ -178,9 +177,8 @@ public class BatchServlet extends HttpServlet{
 		documentbatch.setDocbatchID(docbatchID);
 		documentbatch.setDocIDCollection(docIDCollection);
 		documentbatch.setFolderID(folderID);
-		
-		DocumentBatchEndpoint batchEndpoint=new DocumentBatchEndpoint();
-		batchEndpoint.insertDocumentBatch(documentbatch);
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		pm.makePersistent(documentbatch);
 		System.out.println("Successfully created:" + batchName + " in folder:"+folderID);
 
 	}

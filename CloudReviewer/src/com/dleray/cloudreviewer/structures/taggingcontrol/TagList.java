@@ -6,16 +6,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
+import com.dleray.cloudreviewer.PMF;
 import com.dleray.cloudreviewer.responses.ClientIssueTagCategory;
 import com.dleray.cloudreviewer.responses.ClientIssueTagSubCategory;
 import com.dleray.cloudreviewer.responses.ClientTagList;
-import com.dleray.cloudreviewer.responses.ClientTaggingControl;
 import com.dleray.cloudreviewer.structures.IssueTag;
 
 @PersistenceCapable
@@ -61,11 +61,11 @@ public class TagList {
 	public ClientTagList toClient() {
 		
 		ClientTagList output=new ClientTagList();
-		IssueTagEndpoint endpoint=new IssueTagEndpoint();
+		PersistenceManager pm=PMF.get().getPersistenceManager();
 		HashMap<String,HashMap<String,HashSet<IssueTag>>> allIssues=new HashMap();
 		for(String s: issueTagIDs)
 		{
-			IssueTag tag=endpoint.getIssueTag(Long.parseLong(s));
+			IssueTag tag=pm.getObjectById(IssueTag.class,Long.parseLong(s));
 			HashMap<String,HashSet<IssueTag>> subCategoryMap=allIssues.get(tag.getCategoryDisplay());
 			if(subCategoryMap==null)
 			{

@@ -3,18 +3,19 @@ package com.dleray.cloudreviewer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.HighlightingList;
-import com.dleray.cloudreviewer.structures.HighlightingListEndpoint;
-import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.services.drive.Drive;
 
 public class TextServlet extends HttpServlet {
@@ -37,6 +38,9 @@ public class TextServlet extends HttpServlet {
 		String type="txt";
         Document d=DocumentHandler.getDocument(currentID);
        
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		CloudReviewerUser userFromDB=pm.getObjectById(CloudReviewerUser.class,req.getUserPrincipal().getName());
+		
         //has access
         String googleDriveName="imsquinn@gmail.com";       
         Drive googleDrive=CredentialsHandler.getGoogleDrive(this, googleDriveName);
@@ -48,6 +52,7 @@ public class TextServlet extends HttpServlet {
         	System.out.println("weird char detected");
         }
 
+        
         text=text.replace("\r", "");
         text=text.replace("  ", "  ");
       
@@ -72,37 +77,34 @@ public class TextServlet extends HttpServlet {
         }
         String headerColor="#FFFFCC";
         boolean foundFrom=false;
+        
+        ArrayList<ArrayList<String>> emailChunks=new ArrayList();
+        int currentChunkIndex=0;
+        emailChunks.add(new ArrayList<String>());
+        
         for(int i=0;i<alllines.size();i++)
         {
         	String s=alllines.get(i);
-        	if(s.equals(""))
-        	{
-        		s="&nbsp";
-        		System.out.println("Line " + i + " is BLANK LINE");
-        	}
-        	else
-        	{
-        		System.out.println("Line " + i + " is NOT BLANK LINE");
-        	}
-
         	if(s.contains("From:") || foundFrom)
         	{
         		if(s.contains("From:"))
         		{
-        			System.out.println("\tLine " + i + " starts FROM block:" + s);
+        			currentChunkIndex+=1;
+        			emailChunks.add(new ArrayList<String>());
+        			//System.out.println("\tLine " + i + " starts FROM block:" + s);
         		}
         		else
         		{
-        			System.out.println("\tLine " + i + " continues FROM block:" + s);
+        			//System.out.println("\tLine " + i + " continues FROM block:" + s);
         		}
         		s="<div class=\"email_line\" style=\"width:100%; background-color:"+headerColor+"\">"+s+"</div>";
         		foundFrom=true;
         		if(s.contains("Subject:") || s.contains("Attachment"))
         		{
-        			if(!alllines.get(i+1).contains("Attachment"))
+        			if(i!=alllines.size()-1 && !alllines.get(i+1).contains("Attachment"))
         			{
         				foundFrom=false;
-            			System.out.println("\tLine " + i + " ends FROM block:" + s);
+            			//System.out.println("\tLine " + i + " ends FROM block:" + s);
         			}
         	
         		}
@@ -111,15 +113,28 @@ public class TextServlet extends HttpServlet {
         	{
         		s="<div>"+s+"</div>";	
         	}
+        	emailChunks.get(currentChunkIndex).add(s);
         	alllines.set(i, s);
         }
         resp.setContentType("text/html; charset=UTF-8");
-        for(String s: alllines)
+        if(userFromDB.getInvertEmails())
         {
-        	  resp.getWriter().println(s);
-        	  //resp.getWriter().println("<br>");
+        //	System.out.println("reverse detected");
+        	Collections.reverse(emailChunks);
         }
-      
+        
+        for(ArrayList<String> chunk1: emailChunks)
+        {
+        	for(String s: chunk1)
+        	{
+        		 resp.getWriter().println(s);
+        	} 	 
+        	resp.getWriter().println("<br>");
+        }
+      /*  for(String s: alllines)
+        {
+        	resp.getWriter().println(s);
+        }*/
         resp.setHeader("docID", d.getDocumentIdentifier());
         return;
 
@@ -152,10 +167,10 @@ public class TextServlet extends HttpServlet {
 		
 		HashMap<String,ArrayList<String>> output=new HashMap();
 		
-		HighlightingListEndpoint endpoint=new HighlightingListEndpoint();
-		CollectionResponse<HighlightingList> lists=endpoint.listHighlightingList("", 1000);
+
+		List<HighlightingList> allHighlights=PMFManager.getHighlightingLists();
 		
-		for(HighlightingList list: lists.getItems())
+		for(HighlightingList list: allHighlights)
 		{
 			ArrayList<String> firstList=new ArrayList();
 			for(String kw: list.getKeywords())

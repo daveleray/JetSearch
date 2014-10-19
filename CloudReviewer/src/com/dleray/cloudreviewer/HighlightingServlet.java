@@ -1,20 +1,17 @@
 package com.dleray.cloudreviewer;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
-import com.dleray.cloudreviewer.responses.ClientHighlightingList;
-import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.HighlightingList;
-import com.dleray.cloudreviewer.structures.HighlightingListEndpoint;
-import com.dleray.cloudreviewer.structures.TaggingPanel;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.gson.Gson;
 
@@ -34,16 +31,14 @@ public class HighlightingServlet extends HttpServlet {
 	        }
 	        CloudReviewerUser progUser=UserHandler.getCurrentUser();
 			System.out.println("got user");
-	        HighlightingListEndpoint endpoint=new HighlightingListEndpoint();
+	      
 	        CollectionResponse<HighlightingList> lists;
 		
-			lists = endpoint.listHighlightingList("", 1000);
+	        PersistenceManager mgr=PMF.get().getPersistenceManager();
+			Query query = mgr.newQuery(HighlightingList.class);
+			List<HighlightingList> options = (List<HighlightingList>) query.execute();
 				
-			ArrayList<ClientHighlightingList> options=new ArrayList();
-			for(HighlightingList p: lists.getItems())
-			{
-				options.add(p.toClient());
-			}
+
 	        
 	        
 	    	resp.setContentType("application/json");

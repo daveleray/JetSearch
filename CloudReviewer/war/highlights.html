@@ -135,7 +135,7 @@ function createOnOffOptionsPanel()
 	
 			 for(var i=0;i<data.length;i++)
 			 {
-			 	var id=data[i].highlightListID;
+			 	var id=data[i].id;
 			 	var name=data[i].highlightListDisplayName;
 			 	var color=data[i].hexColor;
 				container.append($('<div class="ui-block-a" id='+id+'-a ><h3>'+name+'</h3></div>'));
@@ -148,7 +148,7 @@ function createOnOffOptionsPanel()
 		  	 
 			 for(var i=0;i<data.length;i++)
 			 {
-				 var id=data[i].highlightListID;
+				 var id=data[i].id;
 				 var name=data[i].highlightListDisplayName;
 				 var color=data[i].hexColor;
 			 	   

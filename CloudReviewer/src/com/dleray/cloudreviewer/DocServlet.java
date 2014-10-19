@@ -1,21 +1,17 @@
 package com.dleray.cloudreviewer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.util.ajax.JSON;
-
-import com.dleray.cloudreviewer.endpoints.UserTagEndpoint;
 import com.dleray.cloudreviewer.responses.DocJSONResponse;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.Document;
 import com.dleray.cloudreviewer.structures.DocumentBatch;
-import com.dleray.cloudreviewer.structures.UserTag;
 import com.google.gson.Gson;
 
 public class DocServlet extends HttpServlet  {
@@ -52,8 +48,12 @@ public class DocServlet extends HttpServlet  {
         {
         	currentID=user.getCurrentDoc();
         }
+		
         
-        DocumentBatch batch=BatchHandler.getBatchByID(selectedFolder);
+        PersistenceManager pm=PMF.get().getPersistenceManager();
+        DocumentBatch batch=pm.getObjectById(DocumentBatch.class,selectedFolder);
+		pm.close();
+     
        
         System.out.println("Identified Batch Size of:"+batch.getDocIDCollection().size());
    

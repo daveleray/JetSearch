@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.DocumentHandler.DocTypes;
 import com.dleray.cloudreviewer.structures.Document;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files;
@@ -33,13 +34,20 @@ public class PDFServlet extends HttpServlet {
         
 		//user sends a docID.  send back the relevant PDF.
 		String currentID=req.getParameter("docID");
-		String type=req.getParameter("doctype");
-		if(type==null)
+		String doctype=req.getParameter("doctype");
+		
+		DocumentHandler.DocTypes type=DocTypes.TEXT;
+		if(doctype.contentEquals("bates"))
 		{
-			resp.setContentType("text/plain");
-			System.out.println("NO FILE TYPE");
-			resp.sendError(500, "SEND FILE TYPE");
-			return;
+			type=DocTypes.PRODUCED;
+		}
+		else if(doctype.contentEquals("native"))
+		{
+			type=DocTypes.NATIVE;
+		}
+		else if(doctype.contentEquals("tiff"))
+		{
+			type=DocTypes.TIFF;
 		}
         Document d=DocumentHandler.getDocument(currentID);
        
@@ -49,10 +57,12 @@ public class PDFServlet extends HttpServlet {
         
 
         //get file list
-        String googleID=d.getTypesTogoogleDriveIDMap().get(type);
+        String googleID=d.getTypesTogoogleDriveIDMap().get(type.toString());
+        System.out.println("request google doc #:" + googleID);
         Get request = googleDrive.files().get(googleID);
         File file = request.execute();
-
+        String a=file.getEmbedLink();
+        System.out.println(a);
         DocHelper.sendPDFFileToBrowser(file, googleDrive, resp);
         resp.setHeader("docID", d.getDocumentIdentifier());
         return;

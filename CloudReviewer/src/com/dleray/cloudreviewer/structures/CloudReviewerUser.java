@@ -15,6 +15,9 @@ public class CloudReviewerUser {
     private String userEmail;
 	
 	@Persistent
+	private String activeProject;
+	
+	@Persistent
 	private String currentPanelID;
 	
 	@Persistent 
@@ -24,8 +27,27 @@ public class CloudReviewerUser {
 	private String currentDoc;
 	
 	@Persistent
+	private Boolean invertEmails;
+	
+	@Persistent
 	private HashSet<String> highlightingIDs;
 	
+
+	public String getActiveProject() {
+		return activeProject;
+	}
+
+	public void setActiveProject(String activeProject) {
+		this.activeProject = activeProject;
+	}
+
+	public Boolean getInvertEmails() {
+		return invertEmails;
+	}
+
+	public void setInvertEmails(Boolean invertEmails) {
+		this.invertEmails = invertEmails;
+	}
 
 	public HashSet<String> getHighlightingIDs() {
 		return highlightingIDs;

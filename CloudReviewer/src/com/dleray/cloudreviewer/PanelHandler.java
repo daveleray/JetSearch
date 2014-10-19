@@ -1,10 +1,11 @@
 package com.dleray.cloudreviewer;
 
-import javax.jdo.PersistenceManager;
+import java.util.List;
 
-import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
-import com.dleray.cloudreviewer.endpoints.TagListEndpoint;
-import com.dleray.cloudreviewer.endpoints.TaggingPanelEndpoint;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
+import com.dleray.cloudreviewer.structures.BatchFolder;
 import com.dleray.cloudreviewer.structures.IssueTag;
 import com.dleray.cloudreviewer.structures.TaggingPanel;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
@@ -15,25 +16,30 @@ public class PanelHandler {
 	public static Long initDefaultPanel()
 	{
 		System.out.println("initializing default panel");
-		TaggingPanelEndpoint endpoint=new TaggingPanelEndpoint();
-		CollectionResponse<TaggingPanel> output=endpoint.listTaggingPanel("", 1000);
-		if(output.getItems().size()>0)
+	
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(TaggingPanel.class);
+		
+		List<TaggingPanel> output=(List<TaggingPanel>) q.execute();
+		
+		if(output.size()>0)
 		{
 			System.out.println("TaggingPanel already found. no need to init.  ");
-			return output.getItems().iterator().next().getTaggingID();
+			pm.close();
+			return output.iterator().next().getTaggingID();
 		}
 		else			
 		{
-			IssueTagEndpoint tagEndpoint=new IssueTagEndpoint();
-			CollectionResponse<IssueTag> allIssueTags=tagEndpoint.listIssueTag("",1000);
+		
+			Query q2 = pm.newQuery(IssueTag.class);
 			
+			List<IssueTag> allIssueTags=(List<IssueTag>) q2.execute();
 			
 			TaggingPanel defaultPanel=new TaggingPanel();
-			PersistenceManager pm=PMF.get().getPersistenceManager();
-				
+
 					TagList taglist=new TagList();
 					taglist.setControlID("taggingList-1");
-					for(IssueTag issetag: allIssueTags.getItems())
+					for(IssueTag issetag: allIssueTags)
 					{
 						taglist.getIssueTagIDs().add(issetag.getId()+"");
 					}

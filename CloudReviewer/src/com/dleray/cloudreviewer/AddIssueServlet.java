@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.endpoints.IssueTagEndpoint;
 import com.dleray.cloudreviewer.structures.IssueTag;
 
 public class AddIssueServlet extends HttpServlet {

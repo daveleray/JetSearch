@@ -2,6 +2,7 @@ package com.dleray.cloudreviewer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,7 +33,14 @@ public class SyncWorker extends HttpServlet {
 	        FileList files = request.execute();
 	        result.addAll(files.getItems());		
 	        System.out.println("detected this many GDrive Files:" + result.size());
-			DocumentHandler.processDriveFileList(result,googleDrive);
+	        
+	    	List<File> allfolders=new ArrayList<File>();
+			Files.List folderrequest=googleDrive.files().list();
+			folderrequest.setQ("trashed=false AND mimeType='application/vnd.google-apps.folder'");
+			FileList allFolders=folderrequest.execute();
+			List<File> folderList=new ArrayList<File>();
+			folderList.addAll(allFolders.getItems());
+			DocumentHandler.processDriveFileList(result,folderList,googleDrive);
 			System.out.println("SyncWorker has finished:" + pageToken);
 	}
 }
