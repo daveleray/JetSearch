@@ -8,7 +8,7 @@ public class ClientTagList extends ClientTaggingControl {
 	private String displayName;
 	
 	
-	private ArrayList<ClientIssueTagCategory> categoryList=new ArrayList();
+	private ArrayList<ClientIssueTag> tagList=new ArrayList();
 
 	
 	public String getId() {
@@ -19,13 +19,6 @@ public class ClientTagList extends ClientTaggingControl {
 		this.id = id;
 	}
 
-	public ArrayList<ClientIssueTagCategory> getCategories() {
-		return categoryList;
-	}
-
-	public void setTagList(ArrayList<ClientIssueTagCategory> tagList) {
-		this.categoryList = tagList;
-	}
 
 	public String getDisplayName() {
 		return displayName;
@@ -33,6 +26,14 @@ public class ClientTagList extends ClientTaggingControl {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+
+	public ArrayList<ClientIssueTag> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(ArrayList<ClientIssueTag> tagList) {
+		this.tagList = tagList;
 	}
 
 	

@@ -1,6 +1,7 @@
 package com.dleray.cloudreviewer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -31,6 +32,31 @@ public class PMFManager {
 		return output;
 	}
 	
+	public static ArrayList<TagList> getTaggingPanelsForProject(String projectID)
+	{
+		PersistenceManager mgr = getPersistenceManager();
+		ArrayList<TagList> output=new ArrayList();
+	
+			Query q = mgr.newQuery(TagList.class);
+			q.setFilter("projectID == projectIDParam");
+			
+			q.declareParameters("String projectIDParam");
+		
+			try {
+				  List<TagList> results = (List<TagList>) q.execute(projectID);
+				  if (!results.isEmpty()) {
+				    for (TagList p : results) {
+				      output.add(p);
+				    }
+				  } else {
+				    // Handle "no results" case
+				  }
+				} finally {
+				  q.closeAll();
+				}
+			return output;
+			
+	}
 	public static ArrayList<UserTag> getUserTagsForDoc(String docID)
 	{
 		PersistenceManager mgr = getPersistenceManager();
@@ -100,13 +126,26 @@ public class PMFManager {
 		pm.close();
 		return output;
 	}
-
+	public static List<CloudReviewerUser> getUsers()
+	{
+		
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		Query q = pm.newQuery(CloudReviewerUser.class);
+		
+		List<CloudReviewerUser> output=(List<CloudReviewerUser>) q.execute();
+		pm.close();
+		return output;
+	}
 	public static CloudReviewerUser getUser()
 	{
 		  UserService userService = UserServiceFactory.getUserService();
 	        User user = userService.getCurrentUser();
 		PersistenceManager pm=PMF.get().getPersistenceManager();
 		CloudReviewerUser output=pm.getObjectById(CloudReviewerUser.class,user.getEmail());
+		output.setActiveProject("imsquinn@gmail.com");
+		HashSet<String> tagPanelsForce=output.getActiveTaggingPanels();
+		HashSet<String> highlightForce=output.getHighlightingIDs();
+		pm.makePersistent(output);
 		pm.close();
 		return output;
 	}
@@ -115,5 +154,29 @@ public class PMFManager {
 		PersistenceManager pm=PMF.get().getPersistenceManager();
 		pm.makePersistent(user);
 		pm.close();
+	}
+
+	public static List<IssueTag> getIssueTagsForProject(String activeProject) {
+		PersistenceManager mgr = getPersistenceManager();
+		ArrayList<IssueTag> output=new ArrayList();
+	
+			Query q = mgr.newQuery(IssueTag.class);
+			q.setFilter("projectID == projectIDParam");
+			
+			q.declareParameters("String projectIDParam");
+		
+			try {
+				  List<IssueTag> results = (List<IssueTag>) q.execute(activeProject);
+				  if (!results.isEmpty()) {
+				    for (IssueTag p : results) {
+				      output.add(p);
+				    }
+				  } else {
+				    // Handle "no results" case
+				  }
+				} finally {
+				  q.closeAll();
+				}
+			return output;
 	}
 }

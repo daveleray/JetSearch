@@ -13,22 +13,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.dleray.cloudreviewer.responses.ClientIssueTag;
 import com.dleray.cloudreviewer.structures.BatchFolder;
+import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.IssueTag;
 import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.gson.Gson;
 
+
 public class IssueTagServlet extends HttpServlet {
 
 	@Override
+	/** get issue tags associated with current project
+	 * 
+	 * @author David
+	 *
+	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		PersistenceManager pm=PMF.get().getPersistenceManager();
-		Query q = pm.newQuery(IssueTag.class);
-	
-		List<IssueTag> output=(List<IssueTag>) q.execute();
-		
+		System.out.println("Issue Tags Get");
+	      if(req.getUserPrincipal()==null || !req.getUserPrincipal().getName().contains("daveleray"))
+	        {
+	        	System.out.println("logging in from:" + req.getUserPrincipal());
+	        	resp.setContentType("text/plain");
+	    		resp.getWriter().println("PLEASE SIGN IN");
+	        	return;
+	        }
+	        CloudReviewerUser progUser=UserHandler.getCurrentUser();
+	        progUser.setActiveProject("imsquinn@gmail.com");
+	        
+		List<IssueTag> output=PMFManager.getIssueTagsForProject(progUser.getActiveProject());
 		
 		ArrayList<ClientIssueTag> toClient=new ArrayList();
 		for(IssueTag t: output)
@@ -46,7 +60,7 @@ public class IssueTagServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		String taglistid=req.getParameter("taglistid");
+		long taglistid=Long.parseLong(req.getParameter("taglistid"));
 		String issueid=req.getParameter("issueid");
 		 String status=req.getParameter("status");
 		 PersistenceManager pm=PMF.get().getPersistenceManager();

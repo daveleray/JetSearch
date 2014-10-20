@@ -33,7 +33,6 @@ public class UserServlet extends HttpServlet {
         
         CloudReviewerUser user=new CloudReviewerUser();
         user.setUserEmail(req.getUserPrincipal().getName());
-        user.setCurrentPanelID(panelID);
         PMFManager.updateAddUser(user);
         
 	}

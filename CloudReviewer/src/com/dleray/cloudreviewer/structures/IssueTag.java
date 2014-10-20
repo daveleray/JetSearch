@@ -15,14 +15,28 @@ public class IssueTag {
 	    private Long id;
 	
 	@Persistent
+	private String projectID;
+	
+	public String getProjectID() {
+		return projectID;
+	}
+
+
+
+
+
+	public void setProjectID(String projectID) {
+		this.projectID = projectID;
+	}
+
+
+
+
+
+	@Persistent
 	private String displayName;
 	
-	@Persistent
-	private String categoryDisplay;
-	
-	@Persistent 
-	private String subCategoryDisplay;
-	
+
 
 
 
@@ -66,34 +80,6 @@ public class IssueTag {
 
 
 
-	public String getCategoryDisplay() {
-		return categoryDisplay;
-	}
-
-
-
-
-
-	public void setCategoryDisplay(String categoryDisplay) {
-		this.categoryDisplay = categoryDisplay;
-	}
-
-
-
-
-
-	public String getSubCategoryDisplay() {
-		return subCategoryDisplay;
-	}
-
-
-
-
-
-	public void setSubCategoryDisplay(String subCategoryDisplay) {
-		this.subCategoryDisplay = subCategoryDisplay;
-	}
-
 
 
 
@@ -101,11 +87,9 @@ public class IssueTag {
 	public ClientIssueTag toClientIssueTag() {
 		
 		ClientIssueTag output=new ClientIssueTag();
-		output.setCategoryDisplayName(categoryDisplay);
+
 	
 		output.setDisplayName(displayName);
-
-		output.setSubCategoryDisplayName(subCategoryDisplay);
 		output.setTagID(id+"");
 		return output;
 	}

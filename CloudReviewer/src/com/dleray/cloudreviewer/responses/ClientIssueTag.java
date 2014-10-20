@@ -7,8 +7,7 @@ public class ClientIssueTag {
     private String tagID;
 	private String displayName;
 
-	private String categoryDisplayName;
-	private String subCategoryDisplayName;
+
 	public String getTagID() {
 		return tagID;
 	}
@@ -22,18 +21,6 @@ public class ClientIssueTag {
 		this.displayName = displayName;
 	}
 
-	public String getCategoryDisplayName() {
-		return categoryDisplayName;
-	}
-	public void setCategoryDisplayName(String categoryDisplayName) {
-		this.categoryDisplayName = categoryDisplayName;
-	}
-	public String getSubCategoryDisplayName() {
-		return subCategoryDisplayName;
-	}
-	public void setSubCategoryDisplayName(String subCategoryDisplayName) {
-		this.subCategoryDisplayName = subCategoryDisplayName;
-	}
 
 	
 	

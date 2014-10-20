@@ -1,6 +1,8 @@
 package com.dleray.cloudreviewer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -8,10 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.responses.ClientTaggingControl;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
-import com.dleray.cloudreviewer.structures.TaggingPanel;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
 import com.google.gson.Gson;
 
 public class PanelServlet extends HttpServlet {
@@ -29,40 +30,32 @@ public class PanelServlet extends HttpServlet {
         	return;
         }
         CloudReviewerUser progUser=UserHandler.getCurrentUser();
-/*		System.out.println("got user");
-        TaggingPanelEndpoint tagPanelEndpoint=new TaggingPanelEndpoint();
-        TaggingPanel panel;
-        
-        String panelID;
-        if(req.getParameter("panelid")==null || req.getParameter("panelid").contentEquals("undefined"))
-        {
-        	panelID=progUser.getCurrentPanelID();
-        }
-        else
-        {
-        	panelID=req.getParameter("panelid");
-        	progUser.setCurrentPanelID(panelID);
-        	PersistenceManager pm=PMF.get().getPersistenceManager();
-        	pm.makePersistent(progUser);
-        	pm.close();
-        }
-		try {
-			panel = tagPanelEndpoint.getTaggingPanel(progUser.getCurrentPanelID());
-		} catch (Exception e) {*/
-			Long defaultID=PanelHandler.initDefaultPanel();
-			Key k=KeyFactory.createKey(TaggingPanel.class.getSimpleName(), defaultID);
-			System.out.println("Default Panel ID:" + defaultID);
-			progUser.setCurrentPanelID(defaultID+"");
-			PersistenceManager pm=PMF.get().getPersistenceManager();
-			pm.makePersistent(progUser);
-			
-			TaggingPanel panel = pm.getObjectById(TaggingPanel.class,k);
+
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		ArrayList<ClientTaggingControl> output=new ArrayList();
+		
+		HashSet<String> toRemove=new HashSet();
+		for(String s: progUser.getActiveTaggingPanels())
+		{
+			try {
+				TagList tagList=pm.getObjectById(TagList.class,Long.parseLong(s));
+				output.add(tagList.toClient());
+			} catch (Exception e) {
+				System.out.println("something went wrong with panel:" + s);
+				toRemove.add(s);
+			}
+		}
+		for(String s: toRemove)
+		{
+			progUser.getActiveTaggingPanels().remove(s);
+		}
+		pm.makePersistent(progUser);
 		//}
 			pm.close();
         
     	resp.setContentType("application/json");
     	Gson gson=new Gson();
-    	String sending=gson.toJson(panel.toClient());
+    	String sending=gson.toJson(output);
   
 		resp.getWriter().println(sending);
 		System.out.println("\tRESPONSE:"+sending);

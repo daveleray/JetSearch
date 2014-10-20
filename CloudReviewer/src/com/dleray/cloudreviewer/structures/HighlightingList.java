@@ -1,7 +1,6 @@
 package com.dleray.cloudreviewer.structures;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -9,7 +8,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.dleray.cloudreviewer.responses.ClientHighlightingList;
-import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
 
 @PersistenceCapable
 public class HighlightingList {

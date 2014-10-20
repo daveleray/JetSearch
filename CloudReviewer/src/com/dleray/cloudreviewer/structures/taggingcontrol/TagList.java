@@ -23,13 +23,24 @@ public class TagList {
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private String controlID;
+    private Long controlID;
+	
+	@Persistent
+	private String projectID;
 	
 	@Persistent
 	private String displayName;
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	public String getProjectID() {
+		return projectID;
+	}
+
+	public void setProjectID(String projectID) {
+		this.projectID = projectID;
 	}
 
 	public void setDisplayName(String displayName) {
@@ -50,11 +61,13 @@ public class TagList {
 	
 
 
-	public String getControlID() {
+
+
+	public Long getControlID() {
 		return controlID;
 	}
 
-	public void setControlID(String controlID) {
+	public void setControlID(Long controlID) {
 		this.controlID = controlID;
 	}
 
@@ -66,21 +79,9 @@ public class TagList {
 		for(String s: issueTagIDs)
 		{
 			IssueTag tag=pm.getObjectById(IssueTag.class,Long.parseLong(s));
-			HashMap<String,HashSet<IssueTag>> subCategoryMap=allIssues.get(tag.getCategoryDisplay());
-			if(subCategoryMap==null)
-			{
-				subCategoryMap=new HashMap();
-			}
-			HashSet<IssueTag> issueSet=subCategoryMap.get(tag.getSubCategoryDisplay());
-			if(issueSet==null)
-			{
-				issueSet=new HashSet();
-			}
-			issueSet.add(tag);
-			subCategoryMap.put(tag.getSubCategoryDisplay(), issueSet);
-			allIssues.put(tag.getCategoryDisplay(), subCategoryMap);
+			output.getTagList().add(tag.toClientIssueTag());
 		}
-		output.setId(this.controlID);
+		output.setId(this.controlID+"");
 		
 		if(displayName!=null)
 		{
@@ -88,32 +89,9 @@ public class TagList {
 		}
 		else
 		{
-			output.setDisplayName(this.controlID);
+			output.setDisplayName(this.controlID+"");
 		}
-		ArrayList<String> allCategories=new ArrayList(allIssues.keySet());
-		Collections.sort(allCategories);
-		issueTagComparator comparator=new issueTagComparator();
 		
-		for(String category: allCategories)
-		{
-			ClientIssueTagCategory outputCategory=new ClientIssueTagCategory();
-			outputCategory.setCategoryName(category);
-			ArrayList<String> subCategories=new ArrayList(allIssues.get(category).keySet());
-			Collections.sort(subCategories);
-			for(String subCategory: subCategories)
-			{
-				ClientIssueTagSubCategory outputSubCategory=new ClientIssueTagSubCategory();
-				outputSubCategory.setSubCategoryName(subCategory);
-				ArrayList<IssueTag> issueTags=new ArrayList(allIssues.get(category).get(subCategory));
-				Collections.sort(issueTags,comparator);
-				for(IssueTag t: issueTags)
-				{
-					outputSubCategory.getAllTags().add(t.toClientIssueTag());
-				}
-				outputCategory.getSubcategories().add(outputSubCategory);			
-			}
-			output.getCategories().add(outputCategory);
-		}
 		return output;
 	}
 	

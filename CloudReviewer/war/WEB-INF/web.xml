@@ -34,6 +34,16 @@
 		<url-pattern>/highlights</url-pattern>
 		</servlet-mapping>
 		
+								<servlet>
+		<servlet-name>AdminServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.AdminServlet</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>AdminServlet</servlet-name>
+		<url-pattern>/admin</url-pattern>
+		</servlet-mapping>
+		
 		
 								<servlet>
 		<servlet-name>FileURLServlet</servlet-name>
@@ -93,7 +103,7 @@
 		
 				<servlet-mapping>
 		<servlet-name>GoogleDriveAuthServlet</servlet-name>
-		<url-pattern>/init</url-pattern>
+		<url-pattern>/googledriveauth</url-pattern>
 	</servlet-mapping>
 	
 			<servlet-mapping>
@@ -135,6 +145,15 @@
 		<servlet-mapping>
 		<servlet-name>IssueTagServlet</servlet-name>
 		<url-pattern>/issuetags</url-pattern>
+		</servlet-mapping>
+		
+		<servlet>
+		<servlet-name>TagListServlet</servlet-name>
+		<servlet-class>com.dleray.cloudreviewer.TagListServlet</servlet-class>
+		</servlet>
+		<servlet-mapping>
+		<servlet-name>TagListServlet</servlet-name>
+		<url-pattern>/taglist</url-pattern>
 		</servlet-mapping>
 		
 		

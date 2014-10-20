@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dleray.cloudreviewer.structures.CloudReviewerUser;
 import com.dleray.cloudreviewer.structures.IssueTag;
 
 public class AddIssueServlet extends HttpServlet {
@@ -16,16 +17,23 @@ public class AddIssueServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		
+		System.out.println("Issue Tags Get");
+	      if(req.getUserPrincipal()==null || !req.getUserPrincipal().getName().contains("daveleray"))
+	        {
+	        	System.out.println("logging in from:" + req.getUserPrincipal());
+	        	resp.setContentType("text/plain");
+	    		resp.getWriter().println("PLEASE SIGN IN");
+	        	return;
+	        }
+	        CloudReviewerUser progUser=UserHandler.getCurrentUser();
+	        
 		String displayName=req.getParameter("displayName");
-		String subCategoryDisplay=req.getParameter("subCategoryDisplay");
-		String categoryDisplay=req.getParameter("categoryDisplay");
+
 		
 	
 		IssueTag newTag=new IssueTag();
 		newTag.setDisplayName(displayName);
-		newTag.setSubCategoryDisplay(subCategoryDisplay);
-		newTag.setCategoryDisplay(categoryDisplay);
+		newTag.setProjectID(progUser.getActiveProject());
 		
 		try {
 			PersistenceManager pm=PMF.get().getPersistenceManager();

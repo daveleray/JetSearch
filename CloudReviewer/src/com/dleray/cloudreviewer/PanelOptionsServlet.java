@@ -4,17 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dleray.cloudreviewer.responses.ClientTaggingPanel;
+import com.dleray.cloudreviewer.responses.ClientTaggingControl;
 import com.dleray.cloudreviewer.structures.CloudReviewerUser;
-import com.dleray.cloudreviewer.structures.TaggingPanel;
-import com.google.api.server.spi.response.CollectionResponse;
+import com.dleray.cloudreviewer.structures.taggingcontrol.TagList;
 import com.google.gson.Gson;
 
 public class PanelOptionsServlet extends HttpServlet {
@@ -34,14 +31,11 @@ public class PanelOptionsServlet extends HttpServlet {
 	        CloudReviewerUser progUser=UserHandler.getCurrentUser();
 			System.out.println("got user");
 
-			PersistenceManager pm=PMF.get().getPersistenceManager();
-			Query q = pm.newQuery(TaggingPanel.class);
+
 		
-			List<TaggingPanel> output=(List<TaggingPanel>) q.execute();
-			
-				
-			ArrayList<ClientTaggingPanel> options=new ArrayList();
-			for(TaggingPanel p: output)
+			List<TagList> output=PMFManager.getTaggingPanelsForProject(progUser.getActiveProject());
+			ArrayList<ClientTaggingControl> options=new ArrayList();
+			for(TagList p: output)
 			{
 				options.add(p.toClient());
 			}
@@ -52,7 +46,6 @@ public class PanelOptionsServlet extends HttpServlet {
 	    	String sending=gson.toJson(options);
 	  
 			resp.getWriter().println(sending);
-			System.out.println("\tRESPONSE IS SIZE " + options.size() + " PANELS");
 	    	return;
 	}
 

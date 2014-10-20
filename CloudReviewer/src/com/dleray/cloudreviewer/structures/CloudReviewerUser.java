@@ -18,7 +18,7 @@ public class CloudReviewerUser {
 	private String activeProject;
 	
 	@Persistent
-	private String currentPanelID;
+	private HashSet<String> activeTaggingPanels=new HashSet();
 	
 	@Persistent 
 	private String currentBatch;
@@ -33,6 +33,7 @@ public class CloudReviewerUser {
 	private HashSet<String> highlightingIDs;
 	
 
+	
 	public String getActiveProject() {
 		return activeProject;
 	}
@@ -57,12 +58,13 @@ public class CloudReviewerUser {
 		this.highlightingIDs = highlightingIDs;
 	}
 
-	public String getCurrentPanelID() {
-		return currentPanelID;
+
+	public HashSet<String> getActiveTaggingPanels() {
+		return activeTaggingPanels;
 	}
 
-	public void setCurrentPanelID(String currentPanelID) {
-		this.currentPanelID = currentPanelID;
+	public void setActiveTaggingPanels(HashSet<String> activeTaggingPanels) {
+		this.activeTaggingPanels = activeTaggingPanels;
 	}
 
 	public String getUserEmail() {

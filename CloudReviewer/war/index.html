@@ -481,10 +481,11 @@ function updateTable()
 	   			var inputs = container.find('input');
 	   		 for (var i = 0; i < inputs.length; i++) {
 	   			 var thisInput=inputs[i];
+	   			 var thisIssueID=$('#'+thisInput.id).attr("issueid");
 	   			 var inputIsApplied=false;
 	   			 for(var j=0;j<data.appliedTags.length;j++)
 	   			 {
-	   				if (data.appliedTags[j]==thisInput.id)
+	   				if (data.appliedTags[j]==thisIssueID)
 	   				 {
 	   					inputIsApplied=true;
 	   				 	$(thisInput).prop("checked",true).checkboxradio('refresh');
@@ -507,46 +508,36 @@ function updateTable()
 function addIssuePanel(clienttaglist)
 {
 	 var container = $('#cblist');
-	 var arrayLength = clienttaglist.taggingControls.length;
+	 container.empty();
+	 var arrayLength = clienttaglist.length;
 	 
 	 container.append($('<table><tr>'));
 	 
+	 //ArrayList<ClientTaggingControl> 
 	 for (var i = 0; i < arrayLength; i++) {
-	     var taggingControl=clienttaglist.taggingControls[i];
-	     var controlLength=taggingControl.categoryList.length;
+	     var taggingControl=clienttaglist[i];
 	     
-	     //<h2 style="text-align: center">'+taggingControl.displayName+'</h2>
-	     //style="border:1px solid black"
-	    // container.append($('<div id='+taggingControl.id+'><div>'));
-	     
-	  //   controlcontainer=$('#'+taggingControl.id);
-	  //   controlcontainer.trigger("create");
-	     
-	     for(var j=0;j<controlLength;j++){
-	     	  var categoryID=taggingControl.categoryList[j].categoryID;
-	     	  var categoryName=taggingControl.categoryList[j].categoryName;
-	     	 //  controlcontainer.append($('<div id='+categoryID+' data-role=collapsible><h3>'+categoryName+'</h3></div>'));
-	     	
-	     	    var categoryHolder=$('#'+categoryID);
-	     		var thisCategoryList=taggingControl.categoryList[j];
-	     		var subCategoryLength=thisCategoryList.subcategories.length;
-	     		for(var k=0;k<subCategoryLength;k++)
+	     //private String id;
+		//private String displayName;
+		//private ArrayList<ClientIssueTag> tagList=new ArrayList();
+		container.append($('<td><div class=subcategory_display id='+taggingControl.id+'><div class=subcategory_header>'+taggingControl.displayName+'</div></div></td>')); 			
+		
+		var panelHolder=$('#'+taggingControl.id);
+		panelHolder.append($('<div id=grid'+taggingControl.id+' class="buttonholder ui-grid-b"></div>'));
+			
+		
+		var controlLength=taggingControl.tagList.length;
+
+	     		for(var k=0;k<controlLength;k++)
 	     			{
-	     					var thisSubCategory=thisCategoryList.subcategories[k];
-	     					container.append($('<td><div class=subcategory_display id='+thisSubCategory.subCategoryID+categoryID+'><div class=subcategory_header>'+thisSubCategory.subCategoryName+'</div></div></td>'));
-	     			
-	     					var subcategoryHolder=$('#'+thisSubCategory.subCategoryID+categoryID);
-	     					subcategoryHolder.append($('<div id=grid'+thisSubCategory.subCategoryID+categoryID+' class="buttonholder ui-grid-b"></div>'));
-	     					
-	     					var numIssues=thisSubCategory.allTags.length;
-	     					for(var m=0;m<numIssues;m++)
-	     						{
-	     							var issuetagdisplay=thisSubCategory.allTags[m].displayName;
-	     							var issuetagID=thisSubCategory.allTags[m].tagID;
-	     							var containername='grid'+thisSubCategory.subCategoryID+categoryID;
+	     		    //private String tagID;
+	     			//private String displayName;
+	     							var issuetagdisplay=taggingControl.tagList[k].displayName;
+	     							var issuetagID=taggingControl.tagList[k].tagID;
+	     							var containername='grid'+taggingControl.id;
 	     							
-	     							 var container = $('#'+containername);
-	     							   var inputs = container.find('input');
+	     							 var containinggrid = $('#'+containername);
+	     							   var inputs = containinggrid.find('input');
 	     							   var id = inputs.length+1;
 	     							   
 	     							   var column=id % 3;
@@ -565,13 +556,14 @@ function addIssuePanel(clienttaglist)
 	     							   }
 	     							//  container.append($('<td>'+'<input type=checkbox id='+issuetagID+' value='+issuetagdisplay+'><label for='+issuetagID+'>'+issuetagdisplay+'<label>'+'</td>'));
 	     							//addIssueTag('grid'+thisSubCategory.subCategoryID+categoryID,thisSubCategory.allTags[m].displayName,thisSubCategory.allTags[m].tagID);
-	     							   container.append($('<div id=divtest'+issuetagID+' class='+classToUse+'><input type=checkbox id='+issuetagID+'><label for='+issuetagID+'>'+issuetagdisplay+'<label></div>'));
-	     							   
-	     							   $('#divtest'+issuetagID).change(function(){  
+	     							   containinggrid.append($('<div id=divtest'+taggingControl.id+issuetagID+' class='+classToUse+'><input type=checkbox id='+taggingControl.id+issuetagID+'><label for='+taggingControl.id+issuetagID+'>'+issuetagdisplay+'<label></div>'));
+	     							  
+	     							   $('#divtest'+taggingControl.id+issuetagID).change(function(){  
 
 	     								   var issueID= $(this).attr("issueid");
+	     								   var controlID=$(this).attr("controlid");
 	     								   var docID=window.curDocID;
-	     								   var ischecked=$('#'+issueID).prop('checked');
+	     								   var ischecked=$('#'+controlID+issueID).prop('checked');
 	     								   $.post("applytag",
 	     										    {
 	     									    	  applied:ischecked,
@@ -579,14 +571,15 @@ function addIssuePanel(clienttaglist)
 	     										      docid:docID
 	     										    });
 	     							   });
-	     							   $('#divtest'+issuetagID).attr("issueid",issuetagID);
-	     							   
-	     						}
+	     							   $('#divtest'+taggingControl.id+issuetagID).attr("issueid",issuetagID);
+	     							  $('#'+taggingControl.id+issuetagID).attr("issueid",issuetagID);
+	     							   $('#divtest'+taggingControl.id+issuetagID).attr("controlid",taggingControl.id);
+	     					
 	     			}
 	     }
 	     
 	     
-	 }
+	 
 	 container.append($('</tr></table>'));
 	 container.trigger("create");
 }

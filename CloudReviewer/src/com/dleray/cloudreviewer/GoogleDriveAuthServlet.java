@@ -44,6 +44,7 @@ public class GoogleDriveAuthServlet extends HttpServlet {
 			throws ServletException, IOException {
 		      
       GoogleAuthorizationCodeFlow flow=getGlobalFlow();
+      System.out.println("building attempt from:" + req.getUserPrincipal().getName());
       Credential loadedCredential=flow.loadCredential(req.getUserPrincipal().getName());     
       if(loadedCredential==null)
       {
@@ -74,28 +75,34 @@ public class GoogleDriveAuthServlet extends HttpServlet {
       About about=service.about();
       
       PersistenceManager pm=PMF.get().getPersistenceManager();
-      CloudReviewerProject project=pm.getObjectById(CloudReviewerProject.class,req.getUserPrincipal().getName());
-      if(project==null)
-      {
-    	  project=new CloudReviewerProject();
-    	  project.setSharedDriveAccount(req.getUserPrincipal().getName());
-    	  HashSet<String> adminUsers=new HashSet();
-    	  adminUsers.add(req.getUserPrincipal().getName());
-    	  project.getPermissionsUsersMap().put(Auth.AccessLevel.ADMIN, adminUsers);
-    	  pm.makePersistent(project);
-    	  System.out.println("Added project:" + req.getUserPrincipal().getName());
-      }
-      CloudReviewerUser user=pm.getObjectById(CloudReviewerUser.class,req.getUserPrincipal().getName());
-      if(user==null)
-      {
-    	  user=new CloudReviewerUser();
-    	  user.setUserEmail(req.getUserPrincipal().getName());
-    	  user.setCurrentPanelID("taggingPanel-1");
-    	  user.setActiveProject(project.getSharedDriveAccount());
-    	  pm.makePersistent(user);
-    	  System.out.println("Added user:" + req.getUserPrincipal().getName());
-      }
+      
+      CloudReviewerProject project;
+	try {
+		project = pm.getObjectById(CloudReviewerProject.class,req.getUserPrincipal().getName());
+		 resp.getWriter().println("Project already exists for account:" + req.getUserPrincipal().getName());
+	} catch (Exception e) {
+  	  project=new CloudReviewerProject();
+  	  project.setSharedDriveAccount(req.getUserPrincipal().getName());
+  	  project.getUserToPermissionsMap().put(req.getUserPrincipal().getName(),Auth.AccessLevel.ADMIN.toString());
+  	  pm.makePersistent(project);
+  	  System.out.println("Added project:" + req.getUserPrincipal().getName());
+	}
+ 
+      CloudReviewerUser user;
+	try {
+		user = pm.getObjectById(CloudReviewerUser.class,req.getUserPrincipal().getName());
+	} catch (Exception e) {
+	 
+	    	  user=new CloudReviewerUser();
+	    	  user.setUserEmail(req.getUserPrincipal().getName());
+	    	  user.setActiveProject(project.getSharedDriveAccount());
+	    	  pm.makePersistent(user);
+	    	  System.out.println("Added user:" + req.getUserPrincipal().getName());
+	      
+	}
+
       pm.close();
+      resp.getWriter().println("Setup new project for account:" + req.getUserPrincipal().getName());
       resp.getWriter().println(about.toString());
       
       
@@ -132,6 +139,7 @@ public class GoogleDriveAuthServlet extends HttpServlet {
 			        httpTransport, JSON_FACTORY, clientSecrets, scopes).setAccessType("offline").setCredentialStore(new CredentialsHandler())
 			        .build();
 			    // authorize
+			    System.out.println("successfully built google authorization flow");
 			    return flow;
 		} catch (IOException e) {
 			return null;
